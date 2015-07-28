@@ -1,0 +1,11 @@
+*.pyo
+*.pyc
+*~
+*.swp
+*.log
+*.class
+.tern-project
+
+.settings/
+build/
+

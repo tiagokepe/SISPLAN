@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+    version="1.2">
+    
+    <application>
+	 	<locale-config><default-locale>pt_BR</default-locale></locale-config>
+		<el-resolver>  org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>   
+	    <message-bundle>br.ufrn.arq.web.jsf.Mensagens_pt_br</message-bundle>
+	</application>
+	
+    <managed-bean>
+		<managed-bean-name>acessoMenu</managed-bean-name>
+		<managed-bean-class>br.ufrn.admin.jsf.AcessoMenu</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+
+</faces-config>

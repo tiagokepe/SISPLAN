@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+       		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<context:component-scan base-package="br.ufrn.sisplan.jsf"/>
+	<bean id="logon" class="br.ifpr.sisplan.jsf.LogonSisplanBean"/>
+	<bean id="pdiControllerBean" class="br.ifpr.sisplan.controller.bean.PDIControllerBean"/>
+	
+	<context:component-scan base-package="br.ufrn.comum.jsf"/>
+	<context:component-scan base-package="br.ifpr.sisplan.controller.bean"/>
+	<context:component-scan base-package="br.ifpr.sisplan.model.dao"/>
+
+	<!-- import resource="classpath:br/ufrn/integracao/seguranca/ws-config.xml" />
+	<import resource="remote-services.xml" />
+
+	<context:component-scan base-package="br.ufrn.arq.tasks"/>
+	<context:component-scan base-package="br.ufrn.arq.aop"/>
+	<context:component-scan base-package="br.ufrn.arq.dao"/>
+	<context:component-scan base-package="br.ufrn.comum.dao"/>
+	<context:component-scan base-package="br.ufrn.admin.dao"/>
+	<context:component-scan base-package="br.ufrn.ambientes.web"/>	
+	<context:component-scan base-package="br.ufrn.comum.jsf"/>
+	<context:component-scan base-package="br.com.sigsoftware.ldap"/>
+	<context:component-scan base-package="br.ufrn.admin.jsf"/>
+	<context:component-scan base-package="br.ufrn.admin.services"/>
+	<context:component-scan base-package="br.ufrn.arq.usuarios.jsf"/>
+	<context:component-scan base-package="br.ufrn.services.wireless.jsf"/>
+	<context:component-scan base-package="br.ufrn.admin.questionario.jsf"/>
+	<context:component-scan base-package="br.ufrn.admin.chamado.jsf"/>
+	<context:component-scan base-package="br.ufrn.admin.chamado.jsf"/>
+	<context:component-scan base-package="br.ifpr.admin.comunicacao.jsf"/>
+
+
+	<bean id="ldapMBean" class="br.com.sigsoftware.ldap.LdapMBean"/>
+
+	<bean id="textoConverter" class="br.ufrn.arq.web.jsf.TextoConverter"/>
+	<bean id="cadastroUsuarioServiceImpl" class="br.ufrn.admin.negocio.UsuarioRemoteServiceImpl"/>
+	<bean id="envioNotificacoesServiceImpl" class="br.ufrn.admin.negocio.EnvioNotificacoesServiceImpl"/>
+	<bean id="unidadesOrganizacionaisServiceImpl" class="br.ufrn.admin.negocio.UnidadesOrganizacionaisServiceImpl"/>
+	<bean id="servicosRemotosMBean" class="br.ufrn.admin.jsf.ServicosRemotosMBean">
+		<property name="servicosSigaa" ref="servicosRemotosSigaa"/>
+		<property name="servicosSiged" ref="servicosRemotosSiged"/>
+		<property name="servicosSipac" ref="servicosRemotosSipac"/>
+		<property name="servicosSigrh" ref="servicosRemotosSigrh"/>
+		<property name="servicosSigadmin" ref="servicosRemotosSigadmin"/>
+		<property name="servicosServicosIntegrados" ref="servicosRemotosServicosIntegrados"/>
+	</bean>
+	<bean id="servicosRemotosSigadmin" class="br.ufrn.admin.negocio.BuscaServicosRemotosRemoteServiceImpl"/-->
+
+</beans>

@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">		 
+		 
+  <display-name>SISPLAN</display-name>
+    <welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+    	<welcome-file>index.htm</welcome-file>
+    	<welcome-file>index.jsp</welcome-file>
+    	<welcome-file>default.html</welcome-file>
+    	<welcome-file>default.htm</welcome-file>
+    	<welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+    
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+	<!-- context-param>
+		<param-name>com.sun.faces.verifyObjects</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>com.sun.faces.validateXml</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+    
+    <context-param>
+      <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
+      <param-value>true</param-value>
+	</context-param-->
+    
+    <servlet>
+    	<servlet-name>Faces Servlet</servlet-name>
+    	<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet>
+		<servlet-name>scriptCompressor</servlet-name>
+		<servlet-class>br.ufrn.arq.web.ScriptCompressorServlet</servlet-class>
+	</servlet>
+	
+	<!-- Standard Action Servlet Mapping -->
+	<servlet-mapping>
+		<servlet-name>scriptCompressor</servlet-name>
+		<url-pattern>/loadScript</url-pattern>
+	</servlet-mapping>
+		
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+		<filter-name>extensionsFilter</filter-name>
+		<!-- filter-class>org.apache.myfaces.component.html.util.ExtensionsFilter</filter-class-->
+		<filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+		<init-param>
+			<description>
+				Set the size limit for uploaded files. Format: 10 - 10
+				bytes 10k - 10 KB 10m - 10 MB 1g - 1 GB
+			</description>
+			<param-name>uploadMaxFileSize</param-name>
+			<param-value>100m</param-value>
+		</init-param>
+		<init-param>
+			<description>
+				Set the threshold size - files below this limit are
+				stored in memory, files above this limit are stored on
+				disk.
+
+				Format: 10 - 10 bytes 10k - 10 KB 10m - 10 MB 1g - 1 GB
+			</description>
+			<param-name>uploadThresholdSize</param-name>
+			<param-value>100k</param-value>
+		</init-param>
+	</filter>
+		
+  	<filter>
+		<filter-name>ViewFilter</filter-name>
+		<filter-class>br.ufrn.arq.web.ViewFilter</filter-class>
+
+		<init-param>
+			<description>
+				Parametro do Sistema - Constantes Sistema em Arq
+			</description>
+			<param-name>sistema</param-name>
+			<param-value>8</param-value>
+		</init-param>
+		<init-param>
+			<description>Nome do EJB Facade</description>
+			<param-name>jndiName</param-name>
+			<param-value>ejb/AdminFacade</param-value>
+		</init-param>
+		<init-param>
+			<param-name>paginasPermitidas</param-name>
+			<param-value>
+				/index.jsf,/index.jsp,/login.jsf,/ldap/form_ldap_auto_cadastro.jsf,/auto_cadastro/form.jsf,/alterarSenha,/auto_cadastro/confirmar.jsf,/logonUnificado,/auto_cadastro/confirmacao.jsf,/auto_cadastro/autorizacao.jsf,/logar.jsf,/javascript/public/menu.jsp,/logon_unificado.jsf,/wireless/index.jsp,/wireless/index.jsf,/wireless/visitante_ext.jsf,/wireless/autenticaWireless,/wireless/autenticado.jsf,/sistemas.jsp,/chat/index.jsf,/view_usuario.jsp,/EntrarChat,/PostChat,/ListMembers,/ReceiveChat,/SairChat,/verFotoIdentificacao,/expirada.jsp,/buscaUnidade,/voltarSIGADMIN.jsf,/formChamadoAdmin.jsf
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>extensoesIgnoradas</param-name>
+			<param-value>jpg,gif,doc,xls,png,js,css,ico</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+    	<filter-name>ViewFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	<filter-mapping>
+    	<filter-name>ViewFilter</filter-name>
+    	<url-pattern>*.*</url-pattern>
+  	</filter-mapping>
+  	
+	
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<filter-mapping>
+		<filter-name>extensionsFilter</filter-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>extensionsFilter</filter-name>
+		<url-pattern>/faces/*</url-pattern>
+	</filter-mapping>
+	
+	<!--
+		extension mapping for serving page-independent resources (javascript,
+		stylesheets, images, etc.)
+	-->
+	<filter-mapping>
+		<filter-name>extensionsFilter</filter-name>
+		<url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+	</filter-mapping>
+	
+	
+	<!--  FIREFOX FILTER TO FIX: "Error decode resource data" -->
+	<filter>
+    	<filter-name>RichFacesFirefox11Filter</filter-name>
+    	<filter-class>br.ifpr.sisplan.util.RichFacesFirefox11Filter</filter-class>
+  	</filter>
+  	<filter-mapping>
+    	<filter-name>RichFacesFirefox11Filter</filter-name>
+    	<url-pattern>/a4j/*</url-pattern>
+  	</filter-mapping>
+	
+  	<!-- Configurações do RichFaces -->
+	<context-param>
+		<param-name>org.richfaces.SKIN</param-name>
+		<param-value>blueSky</param-value>
+	</context-param>
+
+	<filter>
+		<display-name>RichFaces Filter</display-name>
+		<filter-name>richfaces</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>richfaces</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
+
+	<context-param>
+		<param-name>org.richfaces.LoadScriptStrategy</param-name>
+		<param-value>DEFAULT</param-value>
+	</context-param>
+	
+    <servlet>
+		<servlet-name>Captcha</servlet-name>
+		<servlet-class>br.ufrn.arq.web.captcha.CaptchaServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>Captcha</servlet-name>
+		<url-pattern>/captcha.jpg</url-pattern>
+	</servlet-mapping>
+	
+	<!-- PAREI em BuscaUnidadesServlet  -->
+		<servlet>
+		<servlet-name>BuscaUnidadesServlet</servlet-name>
+		<servlet-class>br.ufrn.admin.jsf.BuscaUnidadesServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>BuscaUnidadesServlet</servlet-name>
+		<url-pattern>/buscaUnidade</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>verFoto</servlet-name>
+		<servlet-class>br.ufrn.arq.arquivos.VerArquivoServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>verFoto</servlet-name>
+		<url-pattern>/verFoto</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>logonUnificado</servlet-name>
+		<servlet-class>br.ufrn.admin.jsf.LogonUnificadoServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>logonUnificado</servlet-name>
+		<url-pattern>/logonUnificado</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>CewolfServlet</servlet-name>
+		<servlet-class>de.laures.cewolf.CewolfRenderer</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CewolfServlet</servlet-name>
+		<url-pattern>/cewolf/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>KeepAlive Servlet</servlet-name>
+		<servlet-class>br.ufrn.arq.web.KeepAliveServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>KeepAlive Servlet</servlet-name>
+		<url-pattern>/keepAlive</url-pattern>
+	</servlet-mapping>
+	
+    <servlet>
+		<servlet-name>RecuperaSenhaServlet</servlet-name>
+		<servlet-class>br.ufrn.admin.jsf.AlterarSenhaServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>RecuperaSenhaServlet</servlet-name>
+		<url-pattern>/alterarSenha</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>ValidaParametrosServlet</servlet-name>
+		<servlet-class>br.ufrn.admin.jsf.ValidaParametrosServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ValidaParametrosServlet</servlet-name>
+		<url-pattern>/validarParametros</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>LimparCacheHibernateServlet</servlet-name>
+		<servlet-class>br.ufrn.comum.web.LimparCacheHibernateServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>LimparCacheHibernateServlet</servlet-name>
+		<url-pattern>/limparCache</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>500</error-code>
+		<location>/500.jsp</location>
+	</error-page>
+
+	<error-page>
+		<error-code>503</error-code>
+		<location>/503.jsp</location>
+	</error-page>
+	
+	<!-- PrettyFaces -->
+	<filter>
+		<filter-name>Pretty Filter</filter-name>
+		<filter-class>com.ocpsoft.pretty.PrettyFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Pretty Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+	<!-- Fim PrettyFaces -->
+	
+  	<!-- Tag Libraries -->
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/tags/tomahawk</taglib-uri>
+			<taglib-location>/WEB-INF/tld/tomahawk.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/ufrn</taglib-uri>
+			<taglib-location>/WEB-INF/tld/sipac.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/ufrnFunctions</taglib-uri>
+			<taglib-location>/WEB-INF/tld/ufrn-functions.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/rich</taglib-uri>
+			<taglib-location>/WEB-INF/tld/rich.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/a4j</taglib-uri>
+			<taglib-location>/WEB-INF/tld/a4j.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/jawr</taglib-uri>
+			<taglib-location>/WEB-INF/tld/jawr.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/cewolf</taglib-uri>
+			<taglib-location>/WEB-INF/tld/cewolf.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/tags/primefaces-p</taglib-uri>
+			<taglib-location>/WEB-INF/tld/primefaces-p.tld</taglib-location>
+		</taglib>
+		
+		<!-- taglib>
+			<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
+			<taglib-location>/WEB-INF/lib/jstl.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>http://java.sun.com/jstl/core</taglib-uri>
+			<taglib-location>/WEB-INF/lib/standard.tld</taglib-location>
+		</taglib--> 
+		
+	</jsp-config>
+</web-app>
