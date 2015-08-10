@@ -12,11 +12,13 @@ import br.ifpr.sisplan.model.table.Unidade;
 import br.ifpr.sisplan.util.ConverterToList;
 import br.ufrn.arq.web.jsf.AbstractController;
 
-@Component
+@Component("sisplanUser")
 @Scope("session")
 public class SisplanUser extends AbstractController {
 	private static final long serialVersionUID = 940364573344164102L;
 	List<Unidade> unidades;
+	private boolean planningManager;
+	
 	public SisplanUser() throws Exception {
 		this.setUnidades();
 	}
@@ -28,9 +30,11 @@ public class SisplanUser extends AbstractController {
 		if(Permission.PLANNING_MANAGER.checkPermission(this.getUsuarioLogado().getPapeis())) {
 			this.unidades = ConverterToList.convertListMappedToList(getDAO(UnidadeDao.class).
 													selectAll(), Unidade.class);
+			this.setPlanningManager(true);
 			
 		}
 		else if (Permission.CAMPUS_MANAGER.checkPermission(this.getUsuarioLogado().getPapeis())) {
+			this.setPlanningManager(false);
 			final int id_unidade = this.getUsuarioLogado().getUnidade().getId();
 			this.unidades = ConverterToList.convertListMappedToList(getDAO(UnidadeDao.class).selectUnidade(id_unidade), Unidade.class);
 			if(unidades.isEmpty())
@@ -38,7 +42,16 @@ public class SisplanUser extends AbstractController {
 		
 		}
 		else {
+			this.setPlanningManager(false);
 			this.unidades = new ArrayList<Unidade>();
 		}
+	}
+
+	public boolean isPlanningManager() {
+		return planningManager;
+	}
+
+	private void setPlanningManager(boolean planningManager) {
+		this.planningManager = planningManager;
 	}
 }

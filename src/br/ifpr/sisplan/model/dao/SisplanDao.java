@@ -60,4 +60,8 @@ public class SisplanDao {
 	 public Object query(final String sql, final ResultSetExtractor rse) throws DataAccessException {
 		 return this.jt.query(sql, rse);
 	 }
+	 
+	 public void update(String sql) {
+		 this.jt.update(sql);
+	 }
 }

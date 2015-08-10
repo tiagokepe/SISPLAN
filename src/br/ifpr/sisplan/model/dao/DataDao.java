@@ -43,4 +43,13 @@ public class DataDao extends GenericDAOImpl {
 		String sql_id_data = "SELECT id_data FROM sisplan.projeto_datas WHERE id_projeto="+projeto_id+" order by id_data desc limit 1";
 		return this.selectDataById(sisplanDao.queryForInt(sql_id_data));
 	}
+	
+	public void updateData(Data dt) {
+		String update = "UPDATE sisplan.data SET "
+					  + "data_inicio_prevista='"+dt.getDataInicioPrevista()+"' "
+					  + "data_inicio_efetiva='"+dt.getDataInicioEfetiva()+"' "
+					  + "data_fim_prevista='"+dt.getDataFimPrevista()+"' "
+					  + "data_fim_efetiva='"+dt.getDataFimEfetiva()+"'";
+		this.update(update);
+	}
 }

@@ -6,12 +6,10 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.Permission;
+import br.ifpr.sisplan.controller.bean.SisplanUser;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
-import br.ifpr.sisplan.model.dao.UnidadeDao;
 import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
 import br.ifpr.sisplan.model.table.Unidade;
-import br.ifpr.sisplan.util.ConverterToList;
 import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
@@ -34,10 +32,14 @@ public class ObjetivoEstrategicoTreeNode extends AbstractController implements T
 	}
 
 	private void setUnidadesTree() throws Exception {
-		System.out.println("ID Unidade= "+this.getUsuarioLogado().getUnidade().getId());
-		System.out.println("Nome Unidade= "+this.getUsuarioLogado().getUnidade().getNome());
+		final List<Unidade> unidades = ((SisplanUser)this.getMBean("sisplanUser")).getUnidades();
+		for(Unidade u: unidades) {
+			final UnidadeTreeNode unidadeTree = new UnidadeTreeNode(this, u);
+			this.unidadesTree.add(unidadeTree);
+		}
+		
 		/* Check if the user is a planning manager or a campus manager*/
-		if(Permission.PLANNING_MANAGER.checkPermission(this.getUsuarioLogado().getPapeis())) {
+/*		if(Permission.PLANNING_MANAGER.checkPermission(this.getUsuarioLogado().getPapeis())) {
 			final List<Unidade> unidades = ConverterToList.convertListMappedToList(getDAO(UnidadeDao.class).
 													selectUnidadesByObjetivoEstrategico(this.myObjetivo.getId()), Unidade.class);
 			for(Unidade u: unidades) {
@@ -56,7 +58,7 @@ public class ObjetivoEstrategicoTreeNode extends AbstractController implements T
 				final UnidadeTreeNode unidadeTree = new UnidadeTreeNode(this, unidades.get(0));
 				this.unidadesTree.add(unidadeTree);
 			}
-		}
+		}*/
 	}
 	
 	public List<UnidadeTreeNode> getUnidadesTree() throws Exception {

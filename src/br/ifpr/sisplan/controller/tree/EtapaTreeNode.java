@@ -1,19 +1,24 @@
 package br.ifpr.sisplan.controller.tree;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
 
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.ifaces.TreeNodeActions;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeEvents;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.util.NameNode;
 import br.ufrn.arq.web.jsf.AbstractController;
 
-public class EtapaTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeDetails, TreeNodeActions {
+public class EtapaTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeDetails, TreeNodeActions, TreeNodeEvents {
 	private static final long serialVersionUID = -9205942028545960131L;
 	private ProjetoTreeNode parentProjeto;
 	private Etapa myEtapa;
@@ -80,6 +85,10 @@ public class EtapaTreeNode extends AbstractController implements TreeNode, TreeN
 		return this.myEtapa.getDescricao();
 	}
 	
+	public void setDescricao(String desc) {
+		this.myEtapa.setDescricao(desc);
+	}
+	
 	public boolean isRenderedDescription() {
 		return false;
 	}
@@ -92,24 +101,94 @@ public class EtapaTreeNode extends AbstractController implements TreeNode, TreeN
 		Date dt = this.myEtapa.getData().getDataInicioPrevista();
 		return dt != null? new SimpleDateFormat(NameNode.DefaultDateFormat).format(dt): "";
 	}
+	
+	public void setDataInicioPrevista(String strData) {
+		if(!strData.isEmpty()) {
+			Date dt=null;
+			try {
+				dt = new SimpleDateFormat(NameNode.DefaultDateFormat).parse(strData);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.myEtapa.getData().setDataInicioPrevista(dt);
+		}
+	}
 
 	public String getDataInicioEfetiva() {
 		Date dt = this.myEtapa.getData().getDataInicioEfetiva();
 		return dt != null? new SimpleDateFormat(NameNode.DefaultDateFormat).format(dt): "";
+	}
+	
+	public void setDataInicioEfetiva(String strData) {
+		if(!strData.isEmpty()) {
+			Date dt=null;
+			try {
+				dt = new SimpleDateFormat(NameNode.DefaultDateFormat).parse(strData);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.myEtapa.getData().setDataInicioEfetiva(dt);
+		}
 	}
 
 	public String getDataFimPrevista() {
 		Date dt = this.myEtapa.getData().getDataFimPrevista();
 		return dt != null? new SimpleDateFormat(NameNode.DefaultDateFormat).format(dt): "";
 	}
+	
+	public void setDataFimPrevista(String strData) {
+		if(!strData.isEmpty()) {
+			Date dt=null;
+			try {
+				dt = new SimpleDateFormat(NameNode.DefaultDateFormat).parse(strData);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.myEtapa.getData().setDataFimPrevista(dt);
+		}
+	}
 
 	public String getDataFimEfetiva() {
 		Date dt = this.myEtapa.getData().getDataFimEfetiva();
 		return dt != null? new SimpleDateFormat(NameNode.DefaultDateFormat).format(dt): "";
 	}
+	
+	public void setDataFimEfetiva(String strData) {
+		if(!strData.isEmpty()) {
+			Date dt=null;
+			try {
+				dt = new SimpleDateFormat(NameNode.DefaultDateFormat).parse(strData);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.myEtapa.getData().setDataFimEfetiva(dt);
+		}
+	}
 
-	public void changeDate() {
-		System.out.println(this.getClass().getName());
-		return;
+	public void save() {
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/SISPLAN/portal/index.jsf");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void cancel() {
+		try {
+			FacesContext.getCurrentInstance().getExternalContext().redirect("/SISPLAN/portal/index.jsf");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void valueChangeListener(ValueChangeEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

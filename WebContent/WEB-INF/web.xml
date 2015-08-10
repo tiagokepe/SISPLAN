@@ -105,7 +105,7 @@
 		<init-param>
 			<param-name>paginasPermitidas</param-name>
 			<param-value>
-				/index.jsf,/index.jsp,/login.jsf,/ldap/form_ldap_auto_cadastro.jsf,/auto_cadastro/form.jsf,/alterarSenha,/auto_cadastro/confirmar.jsf,/logonUnificado,/auto_cadastro/confirmacao.jsf,/auto_cadastro/autorizacao.jsf,/logar.jsf,/javascript/public/menu.jsp,/logon_unificado.jsf,/wireless/index.jsp,/wireless/index.jsf,/wireless/visitante_ext.jsf,/wireless/autenticaWireless,/wireless/autenticado.jsf,/sistemas.jsp,/chat/index.jsf,/view_usuario.jsp,/EntrarChat,/PostChat,/ListMembers,/ReceiveChat,/SairChat,/verFotoIdentificacao,/expirada.jsp,/buscaUnidade,/voltarSIGADMIN.jsf,/formChamadoAdmin.jsf
+				/portal/alterar_projeto_etapa.jsf,/index.jsf,/index.jsp,/login.jsf,/ldap/form_ldap_auto_cadastro.jsf,/auto_cadastro/form.jsf,/alterarSenha,/auto_cadastro/confirmar.jsf,/logonUnificado,/auto_cadastro/confirmacao.jsf,/auto_cadastro/autorizacao.jsf,/logar.jsf,/javascript/public/menu.jsp,/logon_unificado.jsf,/wireless/index.jsp,/wireless/index.jsf,/wireless/visitante_ext.jsf,/wireless/autenticaWireless,/wireless/autenticado.jsf,/sistemas.jsp,/chat/index.jsf,/view_usuario.jsp,/EntrarChat,/PostChat,/ListMembers,/ReceiveChat,/SairChat,/verFotoIdentificacao,/expirada.jsp,/buscaUnidade,/voltarSIGADMIN.jsf,/formChamadoAdmin.jsf
 			</param-value>
 		</init-param>
 		<init-param>
