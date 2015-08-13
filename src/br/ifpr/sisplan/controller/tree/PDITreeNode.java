@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.EixoDao;
 import br.ifpr.sisplan.model.table.Eixo;
@@ -15,7 +16,7 @@ import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class PDITreeNode extends AbstractController implements TreeNode, TreeNodeInfo {
+public class PDITreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
 	private static final long serialVersionUID = -1835441558926237938L;
 
 	private List<EixoTreeNode> eixosTree = new ArrayList<EixoTreeNode>();

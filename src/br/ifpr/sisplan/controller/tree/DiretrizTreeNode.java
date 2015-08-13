@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.ObjetivoEstrategicoDao;
 import br.ifpr.sisplan.model.table.Diretriz;
@@ -16,7 +16,7 @@ import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class DiretrizTreeNode extends AbstractController implements TreeNode, TreeNodeInfo {
+public class DiretrizTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
 	private static final long serialVersionUID = 8418909430752199490L;
 	private EixoTreeNode eixoParent;
 	private Diretriz myDiretriz;

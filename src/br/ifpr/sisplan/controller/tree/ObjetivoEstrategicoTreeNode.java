@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.bean.SisplanUser;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
 import br.ifpr.sisplan.model.table.Unidade;
@@ -14,7 +15,7 @@ import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class ObjetivoEstrategicoTreeNode extends AbstractController implements TreeNode, TreeNodeInfo {
+public class ObjetivoEstrategicoTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
 	private static final long serialVersionUID = -4321723297704261633L;
 
 	private DiretrizTreeNode diretrizParent;

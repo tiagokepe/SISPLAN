@@ -6,18 +6,18 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.Estrategia;
-import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.model.table.Projeto;
 import br.ifpr.sisplan.util.ConverterToList;
 import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class EstrategiaTreeNode extends AbstractController implements TreeNode, TreeNodeInfo {
+public class EstrategiaTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
 	private static final long serialVersionUID = 3708717812208996777L;
 	private ObjetivoEspecificoTreeNode parentObjetivo;
 	private Estrategia myEstrategia;

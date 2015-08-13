@@ -36,7 +36,7 @@
 
 	                			</f:facet>
 	                			
-								<h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.dataInicioPrevista}" />
+								<h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.dataInicioPrevista}"/>
 								<br/>
 								<h:outputText value="Efetiva: #{pdiControllerBean.currentNodeSelection.dataInicioEfetiva}"/>
 							</rich:panel>

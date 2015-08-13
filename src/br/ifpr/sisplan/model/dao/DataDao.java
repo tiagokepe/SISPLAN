@@ -45,11 +45,29 @@ public class DataDao extends GenericDAOImpl {
 	}
 	
 	public void updateData(Data dt) {
-		String update = "UPDATE sisplan.data SET "
-					  + "data_inicio_prevista='"+dt.getDataInicioPrevista()+"' "
-					  + "data_inicio_efetiva='"+dt.getDataInicioEfetiva()+"' "
-					  + "data_fim_prevista='"+dt.getDataFimPrevista()+"' "
-					  + "data_fim_efetiva='"+dt.getDataFimEfetiva()+"'";
-		this.update(update);
+		String update = "UPDATE sisplan.data SET ";
+		update += "data_inicio_prevista=";
+		update += (dt.getDataInicioPrevista() != null &&
+				   !dt.getDataInicioPrevista().toString().isEmpty())
+				   ? "'"+dt.getDataInicioPrevista()+"', " : "null, ";
+		
+		update += "data_inicio_efetiva=";
+		update += (dt.getDataInicioEfetiva() != null &&
+				   !dt.getDataInicioEfetiva().toString().isEmpty())
+				   ? "'"+dt.getDataInicioEfetiva()+"', " : "null, ";
+
+		update += "data_fim_prevista=";
+		update += (dt.getDataFimPrevista() != null &&
+				   !dt.getDataFimPrevista().toString().isEmpty())
+				   ? "'"+dt.getDataFimPrevista()+"', " : "null, ";
+		
+		update += "data_fim_efetiva=";
+		update += (dt.getDataFimEfetiva() != null &&
+				   !dt.getDataFimEfetiva().toString().isEmpty())
+				   ? "'"+dt.getDataFimEfetiva()+"'" : "null";
+		
+		update += " WHERE id="+dt.getId();
+		
+		this.sisplanDao.update(update);
 	}
 }

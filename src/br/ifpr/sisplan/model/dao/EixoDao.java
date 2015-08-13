@@ -2,7 +2,6 @@ package br.ifpr.sisplan.model.dao;
 
 import java.util.List;
 
-import br.ifpr.sisplan.model.table.Eixo;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class EixoDao extends GenericDAOImpl {

@@ -1,7 +1,6 @@
-package br.ifpr.sisplan.util;
+package br.ifpr.sisplan.model.table.parent;
 
 public class NameNode {
-	public static String DefaultDateFormat = "yyyy-MM-dd";
 	protected String type;
 	private int id;
 	protected String name;

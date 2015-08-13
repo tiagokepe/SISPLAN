@@ -17,5 +17,10 @@
 		<managed-bean-class>br.ufrn.admin.jsf.AcessoMenu</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-
+	
+    <validator>
+        <validator-id>dateValidator</validator-id>
+        <validator-class>br.ifpr.sisplan.util.DateValidator</validator-class>
+    </validator>
+	
 </faces-config>

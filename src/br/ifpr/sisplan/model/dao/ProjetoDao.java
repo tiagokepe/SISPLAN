@@ -2,7 +2,7 @@ package br.ifpr.sisplan.model.dao;
 
 import java.util.List;
 
-import br.ifpr.sisplan.model.table.Projeto;
+import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class ProjetoDao extends GenericDAOImpl {
@@ -18,7 +18,7 @@ public class ProjetoDao extends GenericDAOImpl {
 		return sisplanDao.queryForList(sql);	
 	}
 	
-	public void updateDescricao(Projeto p) {
+	public void updateDescricao(DateDescriptionNode p) {
 		String update = "UPDATE sisplan.projeto SET descricao='"+p.getDescricao()+"' where id="+p.getId();
 		sisplanDao.update(update);
 	}

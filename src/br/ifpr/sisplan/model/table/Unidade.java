@@ -2,7 +2,7 @@ package br.ifpr.sisplan.model.table;
 
 import java.io.Serializable;
 
-import br.ifpr.sisplan.util.NameNode;
+import br.ifpr.sisplan.model.table.parent.NameNode;
 
 public class Unidade extends NameNode implements Serializable {
 	private static final long serialVersionUID = -8530969036750687780L;

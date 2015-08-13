@@ -3,7 +3,7 @@ package br.ifpr.sisplan.model.table;
 import java.io.Serializable;
 import java.util.Date;
 
-import br.ifpr.sisplan.util.NameNode;
+import br.ifpr.sisplan.model.table.parent.NameNode;
 
 public class Data extends NameNode implements Serializable {
 	private Date dataInicioPrevista, dataInicioEfetiva, dataFimPrevista, dataFimEfetiva;
