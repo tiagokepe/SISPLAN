@@ -84,4 +84,8 @@ public class DiretrizTreeNode extends AbstractController implements TreeNode, Tr
 	public String getHint() {
 		return this.myDiretriz.getName();
 	}
+
+	public String getIconPath() {
+		return "";
+	}
 }

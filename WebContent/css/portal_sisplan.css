@@ -172,3 +172,8 @@ table tr.nivel td{
 	font-weight: bold;
 	padding-left: 20px;
 }
+
+.top{
+	vertical-align: top;
+	width: 50%;
+}
