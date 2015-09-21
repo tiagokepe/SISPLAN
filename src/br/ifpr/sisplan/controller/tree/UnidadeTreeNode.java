@@ -6,31 +6,27 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
+import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastro;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ifpr.sisplan.model.table.Unidade;
 import br.ifpr.sisplan.util.ConverterToList;
-import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class UnidadeTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
+public class UnidadeTreeNode extends TreeNodeCadastro {
 	private static final long serialVersionUID = -7309785687849179855L;
-	private ObjetivoEstrategicoTreeNode objParent;
-	private Unidade myUnidade;
 	private List<ObjetivoEspecificoTreeNode> objetivosTree = new ArrayList<ObjetivoEspecificoTreeNode>();
 	
-	public UnidadeTreeNode(ObjetivoEstrategicoTreeNode objParent, Unidade unidade) {
-		this.objParent = objParent;
-		this.myUnidade = unidade;
+	public UnidadeTreeNode(TreeNodeGeneric objParent, Unidade unidade) {
+		super(objParent, unidade);
 		this.setObjetivosTree();
 	}
 	
 	public void setObjetivosTree() {
 		final List<ObjetivoEspecifico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-													selectObjetivosByUnidade(this.myUnidade.getId(), this.objParent.getMyObjetivo().getId()), ObjetivoEspecifico.class);
+													selectObjetivosByUnidadeObjEstrategico(this.nameNode.getId(), this.parentNode.getMyID()), ObjetivoEspecifico.class);
 		int order=0;
 		
 		for(ObjetivoEspecifico o: objetivos) {
@@ -60,7 +56,7 @@ public class UnidadeTreeNode extends AbstractController implements TreeNode, Tre
 	}
 	
 	public TreeNode getParent() {
-		return this.objParent;
+		return this.parentNode;
 	}
 
 	public boolean isLeaf() {
@@ -69,18 +65,36 @@ public class UnidadeTreeNode extends AbstractController implements TreeNode, Tre
 	
 	@Override
 	public String toString() {
-		return myUnidade.toString();
+		return this.nameNode.toString();
 	}
 	
 	public String getType() {
-		return this.myUnidade.getType();
+		return this.nameNode.getType();
 	}
 	
 	public String getName() {
-		return this.myUnidade.getName();
+		return this.nameNode.getName();
 	}
 
-	public String getHint() {
-		return "Unidade Hint!";
+	public String getDesc() {
+		return "";
+	}
+	
+	public int getMyID() {
+		return this.nameNode.getId();
+	}
+	
+	@Override
+	public void addTreeNodeChild(TreeNodeGeneric child) {
+		this.objetivosTree.add((ObjetivoEspecificoTreeNode)child);
+	}
+
+	public String getCadastroURL() {
+		((NovoObjetivoBean)this.getMBean("novoObjetivoBean")).setTreeNodeParent(this);
+		return "/SISPLAN/portal/novo_objetivo.jsf";
+	}
+
+	public String getCadastroTitle() {
+		return "Cadastrar Objetivo Específico";
 	}
 }

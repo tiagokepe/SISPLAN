@@ -13,7 +13,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.table.Etapa;
@@ -22,17 +21,15 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNode, TreeNodeInfo, TreeNodeDetails {
+public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeDetails {
 	private static final long serialVersionUID = -7787388029320598005L;
-	private EstrategiaTreeNode parentEstrategia;
 	
 	private List<EtapaTreeNode> etapasTree = new ArrayList<EtapaTreeNode>();
 	private Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 
 	
-	public ProjetoTreeNode(EstrategiaTreeNode parent, DateDescriptionNode projeto) {
-		super(projeto);
-		this.parentEstrategia = parent;
+	public ProjetoTreeNode(TreeNodeGeneric parent, DateDescriptionNode projeto) {
+		super(parent, projeto);
 		this.setEtapasTree();
 	}
 	
@@ -45,7 +42,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNode, TreeN
 	}
 
 	public TreeNode getParent() {
-		return this.parentEstrategia;
+		return this.parentNode;
 	}
 
 	public int getIndex(TreeNode paramTreeNode) {
@@ -60,7 +57,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNode, TreeN
 		return this.etapasTree.isEmpty();
 	}
 
-	public Enumeration children() {
+	public Enumeration<EtapaTreeNode> children() {
 		return Iterators.asEnumeration(this.etapasTree.iterator());
 	}
 	
@@ -127,5 +124,14 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNode, TreeN
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	}
+
+	public int getMyID() {
+		return this.nameNode.getId();
+	}
+
+	public String getDesc() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

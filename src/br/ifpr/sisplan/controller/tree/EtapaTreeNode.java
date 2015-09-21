@@ -4,20 +4,14 @@ import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeActions;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
-import br.ifpr.sisplan.model.dao.DataDao;
-import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.Etapa;
 
-public class EtapaTreeNode extends TreeNodeCallBack implements TreeNode, TreeNodeInfo, TreeNodeDetails {
+public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeDetails {
 	private static final long serialVersionUID = -9205942028545960131L;
-	private ProjetoTreeNode parentProjeto;
 	
-	public EtapaTreeNode(ProjetoTreeNode parent, Etapa etapa) {
-		super(etapa);
-		this.parentProjeto = parent;
+	public EtapaTreeNode(TreeNodeGeneric parent, Etapa etapa) {
+		super(parent, etapa);
 	}
 	
 	public TreeNode getChildAt(int paramInt) {
@@ -29,7 +23,7 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNode, TreeNod
 	}
 
 	public TreeNode getParent() {
-		return this.parentProjeto;
+		return this.parentNode;
 	}
 
 	public int getIndex(TreeNode paramTreeNode) {
@@ -77,75 +71,12 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNode, TreeNod
 		return "Informações de Etapa";
 	}
 
-/*	public String getDataInicioPrevista() {
-		Date dt = this.dataNode.getData().getDataInicioPrevista();
-		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
-	}
-	
-	public void setDataInicioPrevista(String strData) {
-		if(!strData.isEmpty()) {
-			Date dt=null;
-			try {
-				dt = new SimpleDateFormat(DateUtil.DefaultDateFormat).parse(strData);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.dataNode.getData().setDataInicioPrevista(dt);
-		}
+	public int getMyID() {
+		return this.getDataNode().getId();
 	}
 
-	public String getDataInicioEfetiva() {
-		Date dt = this.dataNode.getData().getDataInicioEfetiva();
-		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
+	public String getDesc() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	public void setDataInicioEfetiva(String strData) {
-		if(!strData.isEmpty()) {
-			Date dt=null;
-			try {
-				dt = new SimpleDateFormat(DateUtil.DefaultDateFormat).parse(strData);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.dataNode.getData().setDataInicioEfetiva(dt);
-		}
-	}
-
-	public String getDataFimPrevista() {
-		Date dt = this.dataNode.getData().getDataFimPrevista();
-		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
-	}
-	
-	public void setDataFimPrevista(String strData) {
-		if(!strData.isEmpty()) {
-			Date dt=null;
-			try {
-				dt = new SimpleDateFormat(DateUtil.DefaultDateFormat).parse(strData);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.dataNode.getData().setDataFimPrevista(dt);
-		}
-	}
-
-	public String getDataFimEfetiva() {
-		Date dt = this.dataNode.getData().getDataFimEfetiva();
-		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
-	}
-	
-	public void setDataFimEfetiva(String strData) {
-		if(!strData.isEmpty()) {
-			Date dt=null;
-			try {
-				dt = new SimpleDateFormat(DateUtil.DefaultDateFormat).parse(strData);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.dataNode.getData().setDataFimEfetiva(dt);
-		}
-	}*/
 }

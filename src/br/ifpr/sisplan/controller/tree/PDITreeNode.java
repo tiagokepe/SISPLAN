@@ -6,25 +6,20 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.EixoDao;
 import br.ifpr.sisplan.model.table.Eixo;
 import br.ifpr.sisplan.model.table.PDI;
 import br.ifpr.sisplan.util.ConverterToList;
-import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class PDITreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
+public class PDITreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = -1835441558926237938L;
 
 	private List<EixoTreeNode> eixosTree = new ArrayList<EixoTreeNode>();
 
-	private PDI myPdi;
-	
 	public PDITreeNode(PDI pdi) {
-		this.myPdi = pdi;
+		super(null, pdi);
 		this.setEixosTree();
 	}
 	
@@ -51,7 +46,7 @@ public class PDITreeNode extends AbstractController implements TreeNode, TreeNod
 	}
 
 	public void setEixosTree() {
-		final List<Eixo> eixos = ConverterToList.convertListMappedToList(getDAO(EixoDao.class).selectEixosByPDI(myPdi.getId()), Eixo.class);
+		final List<Eixo> eixos = ConverterToList.convertListMappedToList(getDAO(EixoDao.class).selectEixosByPDI(this.nameNode.getId()), Eixo.class);
 		for(Eixo e: eixos) {
 			final EixoTreeNode eixoTree = new EixoTreeNode(this, e);
 			this.eixosTree.add(eixoTree);
@@ -68,20 +63,23 @@ public class PDITreeNode extends AbstractController implements TreeNode, TreeNod
 
 	@Override
 	public String toString() {
-		return myPdi.toString();
+		return this.nameNode.toString();
 	}
 	
 	public String getType() {
-		return this.myPdi.getType();
+		return this.nameNode.getType();
 	}
 	
 	public String getName() {
-		return this.myPdi.getName();
+		return this.nameNode.getName();
+	}
+	
+	public String getDesc() {
+		return "PDI Hint!!!!";
 	}
 
-	
-	public String getHint() {
-		return "PDI Hint!!!!";
+	public int getMyID() {
+		return this.nameNode.getId();
 	}
 	
 }

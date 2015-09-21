@@ -15,4 +15,9 @@ public class ObjetivoEstrategicoDao extends GenericDAOImpl {
 		String sql = "SELECT * FROM ("+sqlObjetivos+") AS objetivos_ids, sisplan.objetivo_estrategico AS objetivo WHERE objetivo.id=objetivos_ids.id_objetivo ORDER BY id ASC";
 		return sisplanDao.queryForList(sql);
 	}
+	
+	public List selectAll() {
+		String sql = "SELECT * FROM sisplan.objetivo_estrategico";
+		return sisplanDao.queryForList(sql);
+	}
 }

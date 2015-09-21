@@ -64,4 +64,11 @@ public class SisplanDao {
 	 public void update(String sql) {
 		 this.jt.update(sql);
 	 }
+	 
+	 public void insert(String sql, Object[] args) {
+		 if(args.length == 0)
+			 this.jt.update(sql);
+		 else
+			 this.jt.update(sql, args);
+	 }
 }

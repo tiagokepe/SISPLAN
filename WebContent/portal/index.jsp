@@ -5,18 +5,19 @@
 
 <f:view>
 	<h:form>
-	   <h:panelGrid columns="2" columnClasses="top, top" width="100%">
+        <rich:panel header="Visão Geral do Planejamento Estratégico" style="text-align: center;">
+	    <h:panelGrid columns="2" columnClasses="columnTop, columnTop" width="100%">
 	        <rich:tree id="id_tree" var="node" value="#{pdiControllerBean.pdis}" nodeFace="#{node.type}" nodeSelectListener="#{pdiControllerBean.nodeSelected}" 
-	            		    reRender="id_detalhes, id_panel_hint" ajaxSubmitSelection="true" switchType="client">
+	            		    reRender="id_detalhes, id_panel_desc, id_panel_unidade" ajaxSubmitSelection="true" switchType="client">
             	<rich:treeNode  type="#{node.type}">
-            		<h:outputText value="#{node.name}" /> <h:graphicImage  value="/img/icons/red.png" style="width:20px; height:20px"/>
+            		<h:outputText value="#{node.name}" /> <%-- <h:graphicImage  value="/img/icons/red.png" style="width:20px; height:20px"/> --%>
             	</rich:treeNode>
             </rich:tree>
             <h:panelGroup>
 	            <a4j:outputPanel ajaxRendered="true" layout="block" >
-		            <rich:panel id="id_panel_hint" header="#{pdiControllerBean.currentNodeSelection.name}" rendered="#{pdiControllerBean.renderedHintPanel}">
+		            <rich:panel id="id_panel_desc" header="#{pdiControllerBean.currentNodeSelection.name}" rendered="#{pdiControllerBean.renderedDescPanel}">
 		                 <h:outputText value="Descrição: " />
-		                 <h:outputText value="#{pdiControllerBean.currentNodeSelection.hint}" />
+		                 <h:outputText value="#{pdiControllerBean.currentNodeSelection.desc}" />
 		            </rich:panel>
 	            </a4j:outputPanel>
 		        <a4j:outputPanel ajaxRendered="true" layout="block">                    
@@ -64,8 +65,23 @@
 		                
 		            </rich:panel>
 		        </a4j:outputPanel>
+		        
+                <a4j:outputPanel ajaxRendered="true" layout="block" >
+                    <rich:panel id="id_panel_unidade" header="#{pdiControllerBean.currentNodeSelection.name}" rendered="#{pdiControllerBean.renderedCadastroPanel}">
+                        <h:panelGroup rendered="#{not empty pdiControllerBean.currentNodeSelection.desc}">
+                            <h:outputText value="Descrição: #{pdiControllerBean.currentNodeSelection.desc}" />
+                            <br/>
+                            <br/>
+                        </h:panelGroup>
+                        <h:outputText value="#{pdiControllerBean.currentNodeSelection.cadastroTitle}: " />
+                        <h:outputLink  value="#{pdiControllerBean.currentNodeSelection.cadastroURL}" >
+                            <f:verbatim><img src="/shared/img/adicionar.gif" alt="Cadastrar" title="Cadastrar"/></f:verbatim>
+                        </h:outputLink>
+                    </rich:panel>
+                </a4j:outputPanel>
 	        </h:panelGroup>     
-         </h:panelGrid>
-       </h:form>
+        </h:panelGrid>
+        </rich:panel>
+    </h:form>
 </f:view>
 <%@include file="/WEB-INF/jsp/include/rodape.jsp"%>

@@ -6,26 +6,19 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.DiretrizDao;
 import br.ifpr.sisplan.model.table.Diretriz;
 import br.ifpr.sisplan.model.table.Eixo;
 import br.ifpr.sisplan.util.ConverterToList;
-import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class EixoTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
+public class EixoTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = 4712680632403538439L;
 	private List<DiretrizTreeNode> diretrizesTree = new ArrayList<DiretrizTreeNode>();
-	private PDITreeNode pdiParent;
 
-	private Eixo myEixo;
-	
-	public EixoTreeNode(PDITreeNode pdiParent, Eixo eixo) {
-		this.pdiParent = pdiParent;
-		this.myEixo = eixo;
+	public EixoTreeNode(TreeNodeGeneric pdiParent, Eixo eixo) {
+		super(pdiParent, eixo);
 		this.setDiretrizesTree();
 	}
 	
@@ -45,14 +38,14 @@ public class EixoTreeNode extends AbstractController implements TreeNode, TreeNo
 		return diretrizesTree.indexOf(node);
 	}
 	public TreeNode getParent() {
-		return pdiParent;
+		return this.parentNode;
 	}
 	public boolean isLeaf() {
 		return diretrizesTree.isEmpty();
 	}
 
 	public void setDiretrizesTree() {
-		final List<Diretriz> diretrizes = ConverterToList.convertListMappedToList(getDAO(DiretrizDao.class).selectDiretrizesByEixo(myEixo.getId()), Diretriz.class);
+		final List<Diretriz> diretrizes = ConverterToList.convertListMappedToList(getDAO(DiretrizDao.class).selectDiretrizesByEixo(this.nameNode.getId()), Diretriz.class);
 		for(Diretriz d: diretrizes) {
 			final DiretrizTreeNode diretrizTree = new DiretrizTreeNode(this, d);
 			this.diretrizesTree.add(diretrizTree);
@@ -69,19 +62,23 @@ public class EixoTreeNode extends AbstractController implements TreeNode, TreeNo
 
 	@Override
 	public String toString() {
-		return myEixo.toString();
+		return this.nameNode.toString();
 	}
 	
 	public String getType() {
-		return this.myEixo.getType();
+		return this.nameNode.getType();
 	}
 	
 	public String getName() {
-		return "Eixo Estratégico "+this.myEixo.getId();
+		return "Eixo Estratégico "+this.nameNode.getId();
 	}
 
-	public String getHint() {
-		return this.myEixo.getName();
+	public String getDesc() {
+		return this.nameNode.getName();
+	}
+
+	public int getMyID() {
+		return this.nameNode.getId();
 	}
 
 }

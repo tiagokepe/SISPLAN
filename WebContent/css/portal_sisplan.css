@@ -173,7 +173,12 @@ table tr.nivel td{
 	padding-left: 20px;
 }
 
-.top{
+.columnTop{
 	vertical-align: top;
 	width: 50%;
+}
+
+.teste2{
+    vertical-align: top;
+    width: 50%;
 }

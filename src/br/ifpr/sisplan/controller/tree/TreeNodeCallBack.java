@@ -18,16 +18,16 @@ import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
 import br.ifpr.sisplan.util.DateUtil;
-import br.ufrn.arq.web.jsf.AbstractController;
 
-public abstract class TreeNodeCallBack extends AbstractController implements TreeNodeCallBackIface, TreeNodeEvents, TreeNodeActions {
+public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNodeCallBackIface, TreeNodeEvents, TreeNodeActions {
 	private static final long serialVersionUID = 1L;
 	protected Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 	protected boolean changedDatas = false;
 	protected boolean changedDescricao = false;
 	protected DateDescriptionNode dataNode;
 
-	public TreeNodeCallBack(DateDescriptionNode kidNode) {
+	public TreeNodeCallBack(TreeNodeGeneric parent, DateDescriptionNode kidNode) {
+		super(parent, kidNode);
 		this.dataNode = kidNode;
 	}
 	
@@ -189,6 +189,7 @@ public abstract class TreeNodeCallBack extends AbstractController implements Tre
 			this.getDAO(ProjetoDao.class).updateDescricao(this.dataNode);
 		if(this.changedDatas)
 			this.getDAO(DataDao.class).updateData(this.dataNode.getData());
+		this.returnMainPage();
 	}
 
 	public void cancel() {
@@ -198,5 +199,9 @@ public abstract class TreeNodeCallBack extends AbstractController implements Tre
 	
 	public void returnMainPage() {
 		this.redirect("/portal/index.jsf");
+	}
+
+	public DateDescriptionNode getDataNode() {
+		return dataNode;
 	}
 }

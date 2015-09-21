@@ -18,6 +18,12 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
+<!--     <managed-bean>
+        <managed-bean-name>novoObjetivoBean2</managed-bean-name>
+        <managed-bean-class>br.ifpr.sisplan.controller.bean.NovoObjetivoBean2</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean> -->
+    
     <validator>
         <validator-id>dateValidator</validator-id>
         <validator-class>br.ifpr.sisplan.util.DateValidator</validator-class>

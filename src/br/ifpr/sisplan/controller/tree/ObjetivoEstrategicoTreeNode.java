@@ -7,24 +7,17 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.bean.SisplanUser;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
 import br.ifpr.sisplan.model.table.Unidade;
-import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class ObjetivoEstrategicoTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
+public class ObjetivoEstrategicoTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = -4321723297704261633L;
-
-	private DiretrizTreeNode diretrizParent;
-	private ObjetivoEstrategico myObjetivo;
 	private List<UnidadeTreeNode> unidadesTree = new ArrayList<UnidadeTreeNode>();
 	
-	public ObjetivoEstrategicoTreeNode(DiretrizTreeNode diretrizParent, ObjetivoEstrategico myObjetivo) {
-		this.diretrizParent = diretrizParent;
-		this.myObjetivo = myObjetivo;
+	public ObjetivoEstrategicoTreeNode(TreeNodeGeneric diretrizParent, ObjetivoEstrategico myObjetivo) {
+		super(diretrizParent, myObjetivo);
 		try {
 			this.setUnidadesTree();
 		} catch (Exception e) {
@@ -63,10 +56,12 @@ public class ObjetivoEstrategicoTreeNode extends AbstractController implements T
 	}
 	
 	public List<UnidadeTreeNode> getUnidadesTree() throws Exception {
-		if(!this.unidadesTree.isEmpty()) {
+/*		if(!this.unidadesTree.isEmpty()) {
 			this.unidadesTree.clear();
 		}
-		this.setUnidadesTree();
+		this.setUnidadesTree();*/
+		if(this.unidadesTree.isEmpty())
+			this.setUnidadesTree();
 		return this.unidadesTree;
 	}
 
@@ -93,31 +88,31 @@ public class ObjetivoEstrategicoTreeNode extends AbstractController implements T
 	}
 
 	public TreeNode getParent() {
-		return diretrizParent;
+		return this.parentNode;
 	}
 
 	public boolean isLeaf() {
 		return this.unidadesTree.isEmpty();
 	}
-	
-	public ObjetivoEstrategico getMyObjetivo() {
-		return myObjetivo;
-	}
 
 	@Override
 	public String toString() {
-		return myObjetivo.toString();
+		return this.nameNode.toString();
 	}
 	
 	public String getType() {
-		return this.myObjetivo.getType();
+		return this.nameNode.getType();
 	}
 	
 	public String getName() {
-		return "Objetico Estratégico " + this.myObjetivo.getId();
+		return "Objetico Estratégico " + this.getMyID();
 	}
 
-	public String getHint() {
-		return this.myObjetivo.getName();
+	public String getDesc() {
+		return this.nameNode.getName();
+	}
+	
+	public int getMyID() {
+		return this.nameNode.getId();
 	}
 }

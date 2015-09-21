@@ -6,26 +6,22 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
+import br.ifpr.sisplan.controller.bean.NovaEstrategiaBean;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastro;
 import br.ifpr.sisplan.model.dao.EstrategiaDao;
 import br.ifpr.sisplan.model.table.Estrategia;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ifpr.sisplan.util.ConverterToList;
-import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class ObjetivoEspecificoTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
+public class ObjetivoEspecificoTreeNode extends TreeNodeCadastro {
 	private static final long serialVersionUID = 4568288872051168852L;
-	private UnidadeTreeNode unidadeParent;
-	private ObjetivoEspecifico myObjetivo;
 	private List<EstrategiaTreeNode> estrategiasTree = new ArrayList<EstrategiaTreeNode>();
 	private int order;
 	
-	public ObjetivoEspecificoTreeNode(UnidadeTreeNode parent, ObjetivoEspecifico objetivo, int order) {
-		this.unidadeParent = parent;
-		this.myObjetivo  = objetivo;
+	public ObjetivoEspecificoTreeNode(TreeNodeGeneric parent, ObjetivoEspecifico objetivo, int order) {
+		super(parent, objetivo);
 		this.order = order;
 		this.setEstrategiasTree();
 	}
@@ -39,7 +35,7 @@ public class ObjetivoEspecificoTreeNode extends AbstractController implements Tr
 	}
 
 	public TreeNode getParent() {
-		return this.unidadeParent;
+		return this.parentNode;
 	}
 
 	public int getIndex(TreeNode paramTreeNode) {
@@ -60,7 +56,7 @@ public class ObjetivoEspecificoTreeNode extends AbstractController implements Tr
 	
 	@Override
 	public String toString() {
-		return myObjetivo.getName();
+		return this.nameNode.getName();
 	}
 
 	public List<EstrategiaTreeNode> getEstrategiasTree() {
@@ -68,7 +64,7 @@ public class ObjetivoEspecificoTreeNode extends AbstractController implements Tr
 	}
 
 	private void setEstrategiasTree() {
-		final List<Estrategia> estrategias = ConverterToList.convertListMappedToList(getDAO(EstrategiaDao.class).selectEstrategiaByObjetivo(myObjetivo.getId()), Estrategia.class);
+		final List<Estrategia> estrategias = ConverterToList.convertListMappedToList(getDAO(EstrategiaDao.class).selectEstrategiaByObjetivo(this.nameNode.getId()), Estrategia.class);
 		int order=0;
 		for(Estrategia e: estrategias) {
 			final EstrategiaTreeNode estrategiaTree = new EstrategiaTreeNode(this, e, ++order);
@@ -77,14 +73,32 @@ public class ObjetivoEspecificoTreeNode extends AbstractController implements Tr
  	}
 
 	public String getType() {
-		return this.myObjetivo.getType();
+		return this.nameNode.getType();
 	}
 	
 	public String getName() {
-		return this.myObjetivo.getName();
+		return "Objetivo Especifico "+this.order;
 	}
 
-	public String getHint() {
-		return "Objetivo Especifico "+this.order;
+	public String getDesc() {
+		return this.nameNode.getName();
+	}
+
+	public String getCadastroURL() {
+		((NovaEstrategiaBean)this.getMBean("novaEstrategiaBean")).setTreeNodeParent(this);
+		return "/SISPLAN/portal/nova_estrategia.jsf";
+	}
+
+	public String getCadastroTitle() {
+		return "Cadastrar Estratégia";
+	}
+
+	public int getMyID() {
+		return this.nameNode.getId();
+	}
+
+	@Override
+	public void addTreeNodeChild(TreeNodeGeneric child) {
+		this.estrategiasTree.add((EstrategiaTreeNode)child);
 	}
 }

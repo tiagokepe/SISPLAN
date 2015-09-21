@@ -13,10 +13,12 @@ public class DateValidator implements Validator {
 	
 	private FacesMessage dispatchMessage(UIComponent component) {
 		String id = (String) component.getAttributes().get("id");
-		id = id.replace("id_set", "").replace("_", " ");
+		UIComponent sibling =  component.getParent().getChildren().get(0);
+		String label = (String) component.getAttributes().get("label");
+		//id = id.replace("id_set", "").replace("_", " ");
         FacesMessage message = new FacesMessage(
-                FacesMessage.SEVERITY_ERROR, id+" inválida.", null);
-        FacesContext.getCurrentInstance().addMessage(null, message);
+                FacesMessage.SEVERITY_ERROR, "Data inválida, deve seguir a seguinte formatação 'dia/mês/ano'.", null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
         return message;
 	}
 

@@ -6,25 +6,19 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeHint;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeInfo;
 import br.ifpr.sisplan.model.dao.ObjetivoEstrategicoDao;
 import br.ifpr.sisplan.model.table.Diretriz;
 import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
 import br.ifpr.sisplan.util.ConverterToList;
-import br.ufrn.arq.web.jsf.AbstractController;
 
 import com.google.common.collect.Iterators;
 
-public class DiretrizTreeNode extends AbstractController implements TreeNode, TreeNodeInfo, TreeNodeHint {
+public class DiretrizTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = 8418909430752199490L;
-	private EixoTreeNode eixoParent;
-	private Diretriz myDiretriz;
 	private List<ObjetivoEstrategicoTreeNode> objetivosTree = new ArrayList<ObjetivoEstrategicoTreeNode>();
 	
-	public DiretrizTreeNode(EixoTreeNode eixoParent, Diretriz myDiretriz) {
-		this.eixoParent = eixoParent;
-		this.myDiretriz = myDiretriz;
+	public DiretrizTreeNode(TreeNodeGeneric eixoParent, Diretriz myDiretriz) {
+		super(eixoParent, myDiretriz);
 		this.setObjetivosTree();
 	}
 
@@ -49,7 +43,7 @@ public class DiretrizTreeNode extends AbstractController implements TreeNode, Tr
 	}
 
 	public TreeNode getParent() {
-		return eixoParent;
+		return this.parentNode;
 	}
 
 	public boolean isLeaf() {
@@ -58,7 +52,7 @@ public class DiretrizTreeNode extends AbstractController implements TreeNode, Tr
 	
 	public void setObjetivosTree() {
 		final List<ObjetivoEstrategico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEstrategicoDao.class).
-													selectObjetivosByDiretriz(myDiretriz.getId()), ObjetivoEstrategico.class);
+													selectObjetivosByDiretriz(this.nameNode.getId()), ObjetivoEstrategico.class);
 		for(ObjetivoEstrategico o: objetivos) {
 			final ObjetivoEstrategicoTreeNode objetivoTree = new ObjetivoEstrategicoTreeNode(this, o);
 			this.objetivosTree.add(objetivoTree);
@@ -74,18 +68,18 @@ public class DiretrizTreeNode extends AbstractController implements TreeNode, Tr
 	}
 	
 	public String getType() {
-		return this.myDiretriz.getType();
+		return this.nameNode.getType();
 	}
 	
 	public String getName() {
-		return "Diretriz Organizacional " + this.myDiretriz.getId();
+		return "Diretriz Organizacional " + this.getMyID();
 	}
 	
-	public String getHint() {
-		return this.myDiretriz.getName();
+	public String getDesc() {
+		return this.nameNode.getName();
 	}
 
-	public String getIconPath() {
-		return "";
+	public int getMyID() {
+		return this.nameNode.getId();
 	}
 }
