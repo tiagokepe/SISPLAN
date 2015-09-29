@@ -13,11 +13,16 @@ public class DateValidator implements Validator {
 	
 	private FacesMessage dispatchMessage(UIComponent component) {
 		String id = (String) component.getAttributes().get("id");
-		UIComponent sibling =  component.getParent().getChildren().get(0);
-		String label = (String) component.getAttributes().get("label");
-		//id = id.replace("id_set", "").replace("_", " ");
         FacesMessage message = new FacesMessage(
                 FacesMessage.SEVERITY_ERROR, "Data inválida, deve seguir a seguinte formatação 'dia/mês/ano'.", null);
+        FacesContext.getCurrentInstance().addMessage(id, message);
+        return message;
+	}
+	
+	private FacesMessage dispatchMessage(UIComponent component, Object value) {
+		String id = (String) component.getAttributes().get("id");
+        FacesMessage message = new FacesMessage(
+                FacesMessage.SEVERITY_ERROR, "Data vazia, este campo deve seguir a seguinte formatação 'dia/mês/ano'.", null);
         FacesContext.getCurrentInstance().addMessage(id, message);
         return message;
 	}
@@ -26,7 +31,7 @@ public class DateValidator implements Validator {
 			throws ValidatorException {
 		String strDate = String.valueOf(value);
 		if(strDate.isEmpty()) {
-			throw new ValidatorException(this.dispatchMessage(component));
+			throw new ValidatorException(this.dispatchMessage(component, value));
 		}
 		Pattern p = Pattern.compile("^[0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9]$");
 		Matcher m = p.matcher(strDate);

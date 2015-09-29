@@ -4,10 +4,9 @@ import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
 import br.ifpr.sisplan.model.table.Etapa;
 
-public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeDetails {
+public class EtapaTreeNode extends TreeNodeCallBack {
 	private static final long serialVersionUID = -9205942028545960131L;
 	
 	public EtapaTreeNode(TreeNodeGeneric parent, Etapa etapa) {
@@ -76,7 +75,10 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeDetails {
 	}
 
 	public String getDesc() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getDescricao();
+	}
+
+	public boolean isRenderedCadastrar() {
+		return false;
 	}
 }

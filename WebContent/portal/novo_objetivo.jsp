@@ -9,21 +9,21 @@
             <h:panelGrid columns="2" >
 
 	            <h:outputText style="color:blue" value="Unidade Responsável: "/>
-                <h:outputText value="#{novoObjetivoBean2.unidadeName}"/>
+                <h:outputText value="#{novoObjetivoBean.unidadeName}"/>
                 
-                <h:outputText style="color:blue" value="#{novoObjetivoBean2.objetivoEstrategicoName}: "/>
-                <h:outputText value="#{novoObjetivoBean2.objetivoEstrategicoDesc}"/>
+                <h:outputText style="color:blue" value="#{novoObjetivoBean.objetivoEstrategicoName}: "/>
+                <h:outputText value="#{novoObjetivoBean.objetivoEstrategicoDesc}"/>
                             
                 <h:outputText style="color:blue" value="Descrição do Objetivo: "/>
-                <h:inputText size="70" value="#{novoObjetivoBean2.name}"/>
+                <h:inputText size="70" value="#{novoObjetivoBean.name}"/>
 
             </h:panelGrid>
             <br/>
-            <h:commandButton action="#{novoObjetivoBean2.save}" style="horizontal-align:center;" type="submit" value="Salvar"  />
-            <h:commandButton action="#{novoObjetivoBean2.cancel}" style="horizontal-align:center;" type="submit" value="Cancelar" />
+            <h:commandButton action="#{novoObjetivoBean.save}" style="horizontal-align:center;" type="submit" value="Salvar"  />
+            <h:commandButton action="#{novoObjetivoBean.cancel}" style="horizontal-align:center;" type="submit" value="Cancelar" />
         </rich:panel>
         <br/>
-        <h:commandLink value="Página Principal"  action="#{novoObjetivoBean2.returnMainPage}"></h:commandLink>
+        <h:commandLink value="Página Principal"  action="#{novoObjetivoBean.returnMainPage}"></h:commandLink>
     </h:form>
 
 <%--     </a4j:outputPanel> --%>

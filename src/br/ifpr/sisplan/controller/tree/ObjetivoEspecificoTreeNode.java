@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.bean.NovaEstrategiaBean;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastro;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.EstrategiaDao;
 import br.ifpr.sisplan.model.table.Estrategia;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
@@ -15,7 +15,7 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class ObjetivoEspecificoTreeNode extends TreeNodeCadastro {
+public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = 4568288872051168852L;
 	private List<EstrategiaTreeNode> estrategiasTree = new ArrayList<EstrategiaTreeNode>();
 	private int order;
@@ -97,7 +97,6 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastro {
 		return this.nameNode.getId();
 	}
 
-	@Override
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.estrategiasTree.add((EstrategiaTreeNode)child);
 	}

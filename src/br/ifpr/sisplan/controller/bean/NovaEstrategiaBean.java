@@ -3,6 +3,7 @@ package br.ifpr.sisplan.controller.bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
 import br.ifpr.sisplan.controller.tree.UnidadeTreeNode;
 import br.ifpr.sisplan.model.dao.EstrategiaDao;
@@ -10,7 +11,7 @@ import br.ifpr.sisplan.model.table.Estrategia;
 
 @Component
 @Scope("session")
-public class NovaEstrategiaBean extends NovoCadastro {
+public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	private static final long serialVersionUID = 7471068395949877404L;
 	private static NovaEstrategiaBean instance;
 	

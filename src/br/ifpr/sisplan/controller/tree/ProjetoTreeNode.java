@@ -12,7 +12,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
+import br.ifpr.sisplan.controller.bean.NovaEtapaBean;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.table.Etapa;
@@ -21,7 +23,7 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeDetails {
+public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastroIface {
 	private static final long serialVersionUID = -7787388029320598005L;
 	
 	private List<EtapaTreeNode> etapasTree = new ArrayList<EtapaTreeNode>();
@@ -115,7 +117,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeDetails
 		String methodName = id_value.replace("id_", "").replace("_", "");
 		
 		try {
-			this.mapOfUpdateCallBack.put(TreeNodeDetails.class.getMethod(methodName, String.class),
+			this.mapOfUpdateCallBack.put(TreeNodeDetailsIface.class.getMethod(methodName, String.class),
 										newValue);
 		} catch (NoSuchMethodException e1) {
 			// TODO Auto-generated catch block
@@ -130,8 +132,24 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeDetails
 		return this.nameNode.getId();
 	}
 
+	public boolean isRenderedCadastrar() {
+		return true;
+	}
+
 	public String getDesc() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getDescricao();
+	}
+
+	public String getCadastroURL() {
+		((NovaEtapaBean)this.getMBean("novaEtapaBean")).setTreeNodeParent(this);
+		return "/SISPLAN/portal/nova_etapa.jsf";
+	}
+
+	public String getCadastroTitle() {
+		return "Cadastrar Etapa";
+	}
+
+	public void addTreeNodeChild(TreeNodeGeneric child) {
+		this.etapasTree.add((EtapaTreeNode)child);		
 	}
 }

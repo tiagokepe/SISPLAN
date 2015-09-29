@@ -6,6 +6,8 @@ import java.util.Date;
 import br.ifpr.sisplan.model.table.parent.NameNode;
 
 public class Data extends NameNode implements Serializable {
+	private static final long serialVersionUID = -8792724081912006165L;
+	
 	private Date dataInicioPrevista, dataInicioEfetiva, dataFimPrevista, dataFimEfetiva;
 	public Data() {
 		this.setType("data");

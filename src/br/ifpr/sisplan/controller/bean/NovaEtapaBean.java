@@ -6,43 +6,34 @@ import java.util.Date;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
+import br.ifpr.sisplan.controller.tree.EtapaTreeNode;
 import br.ifpr.sisplan.controller.tree.ProjetoTreeNode;
 import br.ifpr.sisplan.model.dao.DataDao;
-import br.ifpr.sisplan.model.dao.EstrategiaDao;
+import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.Data;
-import br.ifpr.sisplan.model.table.Projeto;
+import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.util.DateUtil;
 
 @Component
 @Scope("session")
-public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
+public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	private static final long serialVersionUID = 7157061703783244442L;
-	private static NovoProjetoBean instance;
+	private static NovaEtapaBean instance;
 	
-	private String name;
 	private String desc;
 	private Date dataInicioPrevista;
 	private Date dataInicioEfetiva;
 	private Date dataFimPrevista;
 	private Date dataFimEfetiva;
 	
-	public static NovoProjetoBean getInstance() {
+	public static NovaEtapaBean getInstance() {
 		if(instance == null)
-			instance = new NovoProjetoBean();
+			instance = new NovaEtapaBean();
 		
 		return instance;
 	}
 	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public String getDesc() {
 		return desc;
 	}
@@ -91,22 +82,21 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 		return DateUtil.stringToDate(strDate);
 	}
 	
-	public String getEstrategiaName() {
+	public String getProjetoName() {
 		return this.parent.getName();
 	}
 
-	public String getEstrategiaDesc() {
+	public String getProjetoDesc() {
 		return this.parent.getDesc();
 	}
-	
+
 	public void save() {
 		Data dt =  getDAO(DataDao.class).insertData(dataInicioPrevista, dataInicioEfetiva,
-													dataFimPrevista, dataFimEfetiva);
-		Projeto proj = getDAO(ProjetoDao.class).insertProjeto(name, desc);
-		proj.setData(dt);
-		getDAO(ProjetoDao.class).insertProjetoAndData(proj.getId(), dt.getId());
-		getDAO(EstrategiaDao.class).insertLinkEstrategiaProjeto(parent.getMyID(), proj.getId());
-		this.parent.addTreeNodeChild(new ProjetoTreeNode(this.parent, proj));
+				dataFimPrevista, dataFimEfetiva);
+		Etapa etapa = getDAO(EtapaDao.class).insertEtapa(desc, parent.getMyID());
+		etapa.setData(dt);
+		getDAO(EtapaDao.class).insertEtapaAndData(etapa.getId(), dt.getId());
+		this.parent.addTreeNodeChild(new EtapaTreeNode(this.parent, etapa));
 		this.returnMainPage();
 	}
 }

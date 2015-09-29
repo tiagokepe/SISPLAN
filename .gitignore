@@ -8,4 +8,5 @@
 
 .settings/
 build/
-
+WebContent/portal/novo_objetivo-test.jsp
+src/br/ifpr/sisplan/controller/bean/NovoObjetivoBeanTest.java

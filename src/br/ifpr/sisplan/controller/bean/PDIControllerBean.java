@@ -10,7 +10,7 @@ import org.richfaces.event.NodeSelectedEvent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
 import br.ifpr.sisplan.controller.tree.PDITreeNode;
@@ -49,7 +49,7 @@ public class PDIControllerBean extends AbstractController {
 	public void nodeSelected(NodeSelectedEvent event) {
 		HtmlTree tree = (HtmlTree)event.getSource();
 		this.currentNodeSelection = (TreeNode)tree.getRowData();
-		if(this.currentNodeSelection instanceof TreeNodeDetails) {
+		if(this.currentNodeSelection instanceof TreeNodeDetailsIface) {
 			this.rendered = true;
 			this.renderedDescPanel = false;
 			this.renderedCadastroPanel = false;

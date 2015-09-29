@@ -1,15 +1,14 @@
 package br.ifpr.sisplan.controller.bean;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeActions;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastro;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeActionsIface;
 import br.ufrn.arq.web.jsf.AbstractController;
 
-public abstract class NovoCadastro extends AbstractController implements TreeNodeActions {
+public abstract class NovoCadastro<P> extends AbstractController implements TreeNodeActionsIface {
 	private static final long serialVersionUID = -7552682724209700348L;
-	protected TreeNodeCadastro parent;
+	protected P parent;
 	protected String name;
 
-	public void setTreeNodeParent(TreeNodeCadastro parent) {
+	public void setTreeNodeParent(P parent) {
 		this.parent = parent;
 	}
 

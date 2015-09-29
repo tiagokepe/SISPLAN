@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastro;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ifpr.sisplan.model.table.Unidade;
@@ -15,7 +15,7 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class UnidadeTreeNode extends TreeNodeCadastro {
+public class UnidadeTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = -7309785687849179855L;
 	private List<ObjetivoEspecificoTreeNode> objetivosTree = new ArrayList<ObjetivoEspecificoTreeNode>();
 	
@@ -84,7 +84,6 @@ public class UnidadeTreeNode extends TreeNodeCadastro {
 		return this.nameNode.getId();
 	}
 	
-	@Override
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.objetivosTree.add((ObjetivoEspecificoTreeNode)child);
 	}

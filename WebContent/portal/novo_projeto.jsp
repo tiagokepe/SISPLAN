@@ -19,33 +19,37 @@
                     
                     <h:outputText value="Data Início Prevista: "/>
                     <h:panelGroup>
-	                    <h:inputText id="id_data_ini_prevista" label="Data Início Prevista">
+	                    <h:inputText id="id_data_ini_prevista" label="Data Início Prevista"
+	                                 value="#{novoProjetoBean.dataInicioPrevista}">
 	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText value="#{novoProjetoBean.dataInicioPrevista}">
+	                    </h:inputText>
 	                    <h:message for="id_data_ini_prevista" style="color: red; font-weight:bold"/>
                     </h:panelGroup>
                     
                     <h:outputText value="Data Fim Prevista: " />
                     <h:panelGroup>
-	                    <h:inputText id="id_data_fim_prevista" label="Data Fim Prevista">
+	                    <h:inputText id="id_data_fim_prevista" label="Data Fim Prevista"
+	                                 value="#{novoProjetoBean.dataFimPrevista}">
 	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText value="#{novoProjetoBean.dataFimPrevista}">
+	                    </h:inputText>
 	                    <h:message for="id_data_fim_prevista" style="color: red"/>
                     </h:panelGroup>
                     
                     <h:outputText value="Data Início Efetiva: " />
                     <h:panelGroup>
-	                    <h:inputText id="id_data_ini_efetiva" label="Data Início Efetiva">
+	                    <h:inputText id="id_data_ini_efetiva" label="Data Início Efetiva"
+	                                 value="#{novoProjetoBean.dataInicioEfetiva}">
 	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText value="#{novoProjetoBean.dataInicioEfetiva}">
+	                    </h:inputText>
                         <h:message for="id_data_ini_efetiva" style="color: red"/>
                     </h:panelGroup>
                                         
                     <h:outputText value="Data Fim Efetiva: " />
                     <h:panelGroup>
-	                    <h:inputText id="id_data_fim_efetiva" label="Data Fim Efetiva">
+	                    <h:inputText id="id_data_fim_efetiva" label="Data Fim Efetiva"
+	                                 value="#{novoProjetoBean.dataFimEfetiva}">
 	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText value="#{novoProjetoBean.dataFimEfetiva}">
+	                    </h:inputText>
                         <h:message for="id_data_fim_efetiva" style="color: red"/>
                     </h:panelGroup>
                 </h:panelGrid>

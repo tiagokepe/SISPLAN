@@ -105,7 +105,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeGeneric {
 	}
 	
 	public String getName() {
-		return "Objetico Estratégico " + this.getMyID();
+		return "Objetivo Estratégico " + this.getMyID();
 	}
 
 	public String getDesc() {

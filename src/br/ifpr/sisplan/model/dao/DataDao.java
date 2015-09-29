@@ -2,11 +2,13 @@ package br.ifpr.sisplan.model.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import br.ifpr.sisplan.model.table.Data;
+import br.ifpr.sisplan.util.DateUtil;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class DataDao extends GenericDAOImpl {
@@ -69,5 +71,30 @@ public class DataDao extends GenericDAOImpl {
 		update += " WHERE id="+dt.getId();
 		
 		this.sisplanDao.update(update);
+	}
+	
+	public Data insertData(Date dataInicioPrevista, Date dataInicioEfetiva, Date dataFimPrevista, Date dataFimEfetiva) {
+		String sql = "INSERT INTO sisplan.data(data_inicio_prevista, data_inicio_efetiva, data_fim_prevista, data_fim_efetiva) VALUES(?,?,?,?)";
+		this.sisplanDao.insert(sql, new Object[] {dataInicioPrevista, dataInicioEfetiva, dataFimPrevista, dataFimEfetiva});
+		sql = "select * from sisplan.data where id=(select max(id) from sisplan.data)";
+		Data data = 
+				(Data)this.sisplanDao.query(sql, new ResultSetExtractor() {
+					public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+						Data result = new Data();
+						while(rs.next()) {
+							final int id = rs.getInt(rs.findColumn("id"));
+							final String dataInicioPrevista = rs.getString(rs.findColumn("data_inicio_prevista"));
+							final String dataInicioEfetiva = rs.getString(rs.findColumn("data_inicio_efetiva"));
+							final String dataFimPrevista = rs.getString(rs.findColumn("data_fim_prevista"));
+							final String dataFimEfetiva = rs.getString(rs.findColumn("data_fim_efetiva"));
+							result.setId(id);
+							result.setDataInicioPrevista(DateUtil.stringFromDBToDate(dataInicioPrevista));
+							result.setDataInicioEfetiva(DateUtil.stringFromDBToDate(dataInicioEfetiva));
+							result.setDataFimPrevista(DateUtil.stringFromDBToDate(dataFimPrevista));
+							result.setDataFimEfetiva(DateUtil.stringFromDBToDate(dataFimEfetiva));
+						}
+						return result;
+					}});
+		return data;
 	}
 }

@@ -10,16 +10,16 @@ import java.util.Map.Entry;
 
 import javax.faces.event.ValueChangeEvent;
 
-import br.ifpr.sisplan.controller.ifaces.TreeNodeActions;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeActionsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCallBackIface;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeDetails;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeEvents;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeEventsIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
 import br.ifpr.sisplan.util.DateUtil;
 
-public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNodeCallBackIface, TreeNodeEvents, TreeNodeActions {
+public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNodeCallBackIface, TreeNodeEventsIface, TreeNodeActionsIface, TreeNodeDetailsIface {
 	private static final long serialVersionUID = 1L;
 	protected Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 	protected boolean changedDatas = false;
@@ -172,7 +172,7 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		String methodName = id_value.replace("id_", "").replace("_", "");
 		
 		try {
-			this.mapOfUpdateCallBack.put(TreeNodeDetails.class.getMethod(methodName, String.class),
+			this.mapOfUpdateCallBack.put(TreeNodeDetailsIface.class.getMethod(methodName, String.class),
 										newValue);
 		} catch (NoSuchMethodException e1) {
 			// TODO Auto-generated catch block

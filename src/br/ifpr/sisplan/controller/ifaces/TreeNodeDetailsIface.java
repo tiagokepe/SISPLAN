@@ -1,9 +1,10 @@
 package br.ifpr.sisplan.controller.ifaces;
 
-public interface TreeNodeDetails {
+public interface TreeNodeDetailsIface {
 	public String getDescricao();
 	public void setDescricao(String desc);
 	public boolean isRenderedDescription();
+	public boolean isRenderedCadastrar();
 	public String getHeaderDetails();
 	public String getDataInicioPrevista();
 	public void setDataInicioPrevista(String strData); 

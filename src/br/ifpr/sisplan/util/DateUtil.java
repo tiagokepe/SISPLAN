@@ -32,4 +32,19 @@ public class DateUtil {
 		}
 		return dt;
 	}
+	
+	public static Date stringFromDBToDate(String strDate) {
+		String dia, mes, ano;
+		dia = strDate.split("-")[2];
+		mes = strDate.split("-")[1];
+		ano = strDate.split("-")[0];
+		Date dt=null;
+		try {
+			dt = new SimpleDateFormat(DateUtil.DefaultDateFormat).parse(dia+"/"+mes+"/"+ano);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dt;
+	}
 }

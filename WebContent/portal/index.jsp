@@ -52,7 +52,6 @@
 		                        </rich:panel>
 		                                                                                                                                            
 		                    </h:panelGrid>
-		                    <h:form>
 		                    
 		                    <h:panelGroup>
 		                        <h:outputText value="Alterar: "/>
@@ -60,10 +59,17 @@
 		                            <f:verbatim><img src="/shared/img/alterar.gif" alt="Alterar" title="Alterar"/></f:verbatim>
 		                        </h:outputLink>
 		                    </h:panelGroup>
-		                    </h:form>                       
 		                </fieldset>
 		                
+	                    <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.renderedCadastrar}">
+	                       <br/>
+	                        <h:outputText value="#{pdiControllerBean.currentNodeSelection.cadastroTitle}: " />
+	                        <h:outputLink  value="#{pdiControllerBean.currentNodeSelection.cadastroURL}" >
+	                            <f:verbatim><img src="/shared/img/adicionar.gif" alt="Cadastrar" title="Cadastrar"/></f:verbatim>
+	                        </h:outputLink>
+	                    </h:panelGroup>		                
 		            </rich:panel>
+
 		        </a4j:outputPanel>
 		        
                 <a4j:outputPanel ajaxRendered="true" layout="block" >

@@ -41,4 +41,9 @@ public class EstrategiaDao extends GenericDAOImpl {
 					}});
 		return est;
 	}
+	
+	public void insertLinkEstrategiaProjeto(int id_estrategia, int id_projeto) {
+		String sql = "INSERT INTO sisplan.estrategia_projetos VALUES(?,?)";
+		this.sisplanDao.insert(sql, new Object[] {id_estrategia, id_projeto});
+	}
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.bean.NovoProjetoBean;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastro;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.Estrategia;
@@ -16,7 +16,7 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class EstrategiaTreeNode extends TreeNodeCadastro {
+public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = 3708717812208996777L;
 	private List<ProjetoTreeNode> projetosTree = new ArrayList<ProjetoTreeNode>();
 	private int order;
@@ -90,18 +90,15 @@ public class EstrategiaTreeNode extends TreeNodeCadastro {
 		return this.nameNode.getId();
 	}
 
-	@Override
 	public String getCadastroURL() {
 		((NovoProjetoBean)this.getMBean("novoProjetoBean")).setTreeNodeParent(this);
 		return "/SISPLAN/portal/novo_projeto.jsf";
 	}
 
-	@Override
 	public String getCadastroTitle() {
 		return "Cadastrar Projeto";
 	}
 
-	@Override
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.projetosTree.add((ProjetoTreeNode)child);		
 	}
