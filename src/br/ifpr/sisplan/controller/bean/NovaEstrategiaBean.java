@@ -5,9 +5,10 @@ import org.springframework.stereotype.Component;
 
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
-import br.ifpr.sisplan.controller.tree.UnidadeTreeNode;
+import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
 import br.ifpr.sisplan.model.dao.EstrategiaDao;
 import br.ifpr.sisplan.model.table.Estrategia;
+import br.ifpr.sisplan.model.table.Unidade;
 
 @Component
 @Scope("session")
@@ -23,7 +24,7 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	}
 
 	public String getUnidadeName() {
-		return ((UnidadeTreeNode)this.parent.getParent()).getName();
+		return ((ObjetivoEspecificoTreeNode)this.parent).getUnidadeName();
 	}
 	
 	public String getObjetivoName() {

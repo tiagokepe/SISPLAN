@@ -9,7 +9,9 @@
             <h:panelGrid columns="2" >
 
 	            <h:outputText style="color:blue" value="Unidade Responsável: "/>
-                <h:outputText value="#{novoObjetivoBean.unidadeName}"/>
+	            <rich:comboBox width="200px" value="#{novoObjetivoBean.unidadeName}" valueChangeListener="#{novoObjetivoBean.unidadeSelectedListener}">
+	               <f:selectItems value="#{novoObjetivoBean.listUnidades}"/>
+	            </rich:comboBox>
                 
                 <h:outputText style="color:blue" value="#{novoObjetivoBean.objetivoEstrategicoName}: "/>
                 <h:outputText value="#{novoObjetivoBean.objetivoEstrategicoDesc}"/>

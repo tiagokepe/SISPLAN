@@ -18,6 +18,18 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	
+	<managed-bean>
+        <managed-bean-name>pdiControllerBean</managed-bean-name>
+        <managed-bean-class>br.ifpr.sisplan.controller.bean.PDIControllerBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+    <managed-bean>
+        <managed-bean-name>sisplanUser</managed-bean-name>
+        <managed-bean-class>br.ifpr.sisplan.controller.bean.SisplanUser</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+	
 <!--     <managed-bean>
         <managed-bean-name>novoObjetivoBean2</managed-bean-name>
         <managed-bean-class>br.ifpr.sisplan.controller.bean.NovoObjetivoBean2</managed-bean-class>

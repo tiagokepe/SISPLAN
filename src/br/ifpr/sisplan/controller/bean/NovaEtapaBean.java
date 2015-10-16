@@ -2,6 +2,8 @@ package br.ifpr.sisplan.controller.bean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -10,7 +12,6 @@ import br.ifpr.sisplan.controller.tree.EtapaTreeNode;
 import br.ifpr.sisplan.controller.tree.ProjetoTreeNode;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
-import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.Data;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.util.DateUtil;
@@ -91,8 +92,16 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	}
 
 	public void save() {
-		Data dt =  getDAO(DataDao.class).insertData(dataInicioPrevista, dataInicioEfetiva,
-				dataFimPrevista, dataFimEfetiva);
+/*		Data dt =  getDAO(DataDao.class).insertData(dataInicioPrevista, dataInicioEfetiva,
+				dataFimPrevista, dataFimEfetiva);*/
+		Map<String, Date> mapFieldValue = new HashMap<String, Date>();
+		if(dataInicioPrevista != null) mapFieldValue.put("data_inicio_prevista", dataInicioPrevista);
+		if(dataInicioEfetiva != null) mapFieldValue.put("data_inicio_efetiva", dataInicioEfetiva);
+		if(dataFimPrevista != null) mapFieldValue.put("data_fim_prevista", dataFimPrevista);
+		if(dataFimEfetiva != null) mapFieldValue.put("data_fim_efetiva", dataFimEfetiva);
+		
+		Data dt =  getDAO(DataDao.class).insertData(mapFieldValue);
+		
 		Etapa etapa = getDAO(EtapaDao.class).insertEtapa(desc, parent.getMyID());
 		etapa.setData(dt);
 		getDAO(EtapaDao.class).insertEtapaAndData(etapa.getId(), dt.getId());

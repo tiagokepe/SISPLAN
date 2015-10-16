@@ -1,7 +1,7 @@
 <!-- DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd"-->
-   
-<%@page contentType="text/html; charset=ISO-8859-1" %>
+<!--    charset=ISO-8859-1 -->
+<%@page contentType="text/html; charset=UTF-8" %>
 
 <%-- Tags --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -22,7 +22,7 @@
 
 <%@taglib tagdir="/WEB-INF/tags" prefix="admin"%>
 
-<%-- Variáveis globais --%>
+<%-- VariÃ¡veis globais --%>
 <jsp:useBean id="dataAtual" class="java.util.Date" scope="page" />
 
 <c:set var="contexto" value="${pageContext.request.contextPath}" scope="application"/>
@@ -71,8 +71,8 @@
 			</span>
 			</c:if>
 		</div>
-		<c:set var="confirm" value="if (!confirm('Deseja cancelar a Operação? Todos os dados digitados serão perdidos!')) return false" scope="application"/>
-		<c:set var="confirmDelete" value="if (!confirm('Confirma a remoção desta informação?')) return false" scope="application"/>
+		<c:set var="confirm" value="if (!confirm('Deseja cancelar a OperaÃ§Ã£o? Todos os dados digitados serÃ£o perdidos!')) return false" scope="application"/>
+		<c:set var="confirmDelete" value="if (!confirm('Confirma a remoÃ§Ã£o desta informaÃ§Ã£o?')) return false" scope="application"/>
 
 		<div id="painel-usuario" <c:if test="${empty sessionScope.usuario}"> style="height: 20px;" </c:if>>
 			<c:if test="${not empty sessionScope.usuario}">
@@ -156,7 +156,7 @@
 					<c:if test="${not empty sessionScope.usuario}">
 			 			${sessionScope.usuario.pessoa.nome }
 			 			<c:if test="${ acesso.multiplosVinculos }">
-			 			&nbsp;<a href="${ctx}/vinculos.jsf"><img src="/shared/img/group_go.png" alt="Alterar vínculo" title="Alterar vínculo"/></a>
+			 			&nbsp;<a href="${ctx}/vinculos.jsf"><img src="/shared/img/group_go.png" alt="Alterar vÃ­nculo" title="Alterar vÃ­nculo"/></a>
 			 			</c:if>
 			 			<c:if test="${sessionScope.usuarioAnterior != null}">
 			 				<a href="/sigrh/retornarUsuario.jsf">(Deslogar)</a>

@@ -6,69 +6,71 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.bean.SisplanUser;
+import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
+import br.ifpr.sisplan.controller.bean.PDIControllerBean;
+import br.ifpr.sisplan.controller.bean.PDIControllerCached;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
+import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
+import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
 import br.ifpr.sisplan.model.table.Unidade;
+import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class ObjetivoEstrategicoTreeNode extends TreeNodeGeneric {
+public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = -4321723297704261633L;
-	private List<UnidadeTreeNode> unidadesTree = new ArrayList<UnidadeTreeNode>();
+	private List<ObjetivoEspecificoTreeNode> objetivosEspecificoTree = new ArrayList<ObjetivoEspecificoTreeNode>();
 	
 	public ObjetivoEstrategicoTreeNode(TreeNodeGeneric diretrizParent, ObjetivoEstrategico myObjetivo) {
 		super(diretrizParent, myObjetivo);
 		try {
-			this.setUnidadesTree();
+			this.setObjetivosTree();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setObjetivosTree() {
+		Unidade unidadeSelected = ((PDIControllerBean)this.getMBean("pdiControllerBean")).getUnidadeSelected();
+		List<ObjetivoEspecifico> objetivos = null;
+		if(unidadeSelected == PDIControllerCached.getInstance().getUnidadeAll())
+			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
+							selectObjetivosEspByEstrategico(this.nameNode.getId()), ObjetivoEspecifico.class);
+		else
+			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
+					selectObjetivosByUnidadeObjEstrategico(unidadeSelected.getId(), this.getMyID()), ObjetivoEspecifico.class);;
+		int order=0;
+		
+		for(ObjetivoEspecifico o: objetivos) {
+			final ObjetivoEspecificoTreeNode objetivoTree = new ObjetivoEspecificoTreeNode(this, o, ++order);
+			this.objetivosEspecificoTree.add(objetivoTree);
+		}
+	}
 
-	private void setUnidadesTree() throws Exception {
+/*	private void setUnidadesTree() throws Exception {
 		final List<Unidade> unidades = ((SisplanUser)this.getMBean("sisplanUser")).getUnidades();
 		for(Unidade u: unidades) {
 			final UnidadeTreeNode unidadeTree = new UnidadeTreeNode(this, u);
 			this.unidadesTree.add(unidadeTree);
 		}
-		
-		/* Check if the user is a planning manager or a campus manager*/
-/*		if(Permission.PLANNING_MANAGER.checkPermission(this.getUsuarioLogado().getPapeis())) {
-			final List<Unidade> unidades = ConverterToList.convertListMappedToList(getDAO(UnidadeDao.class).
-													selectUnidadesByObjetivoEstrategico(this.myObjetivo.getId()), Unidade.class);
-			for(Unidade u: unidades) {
-				final UnidadeTreeNode unidadeTree = new UnidadeTreeNode(this, u);
-				this.unidadesTree.add(unidadeTree);
-			}
-			
-		} else if (Permission.CAMPUS_MANAGER.checkPermission(this.getUsuarioLogado().getPapeis())) {
-			final int id_unidade = this.getUsuarioLogado().getUnidade().getId();
-			final List<Unidade> unidades = ConverterToList.convertListMappedToList(getDAO(UnidadeDao.class).selectUnidade(id_unidade), Unidade.class);
-			if(unidades.isEmpty())
-				throw new Exception("The Unidade="+this.getUsuarioLogado().getUnidade().getNome()+" is not registered.");
-			
-			//It checks if Unidade implements the Objetivo 
-			if(getDAO(UnidadeDao.class).checkIfObjetivoIsBoundToUnidade(this.myObjetivo.getId(), unidades.get(0).getId())) {
-				final UnidadeTreeNode unidadeTree = new UnidadeTreeNode(this, unidades.get(0));
-				this.unidadesTree.add(unidadeTree);
-			}
-		}*/
-	}
+
+	}*/
 	
-	public List<UnidadeTreeNode> getUnidadesTree() throws Exception {
+	public List<ObjetivoEspecificoTreeNode> getUnidadesTree() throws Exception {
 /*		if(!this.unidadesTree.isEmpty()) {
 			this.unidadesTree.clear();
 		}
 		this.setUnidadesTree();*/
-		if(this.unidadesTree.isEmpty())
-			this.setUnidadesTree();
-		return this.unidadesTree;
+		if(this.objetivosEspecificoTree.isEmpty())
+			this.setObjetivosTree();
+		return this.objetivosEspecificoTree;
 	}
 
 	
 	@SuppressWarnings("unchecked")
-	public Enumeration<UnidadeTreeNode> children() {
-		return Iterators.asEnumeration(unidadesTree.iterator());
+	public Enumeration<ObjetivoEspecificoTreeNode> children() {
+		return Iterators.asEnumeration(objetivosEspecificoTree.iterator());
 	}
 
 	public boolean getAllowsChildren() {
@@ -76,15 +78,15 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeGeneric {
 	}
 
 	public TreeNode getChildAt(int arg0) {
-		return (TreeNode)unidadesTree.get(arg0);
+		return (TreeNode)objetivosEspecificoTree.get(arg0);
 	}
 
 	public int getChildCount() {
-		return unidadesTree.size();
+		return objetivosEspecificoTree.size();
 	}
 
 	public int getIndex(TreeNode arg0) {
-		return unidadesTree.indexOf(arg0);
+		return objetivosEspecificoTree.indexOf(arg0);
 	}
 
 	public TreeNode getParent() {
@@ -92,7 +94,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeGeneric {
 	}
 
 	public boolean isLeaf() {
-		return this.unidadesTree.isEmpty();
+		return this.objetivosEspecificoTree.isEmpty();
 	}
 
 	@Override
@@ -114,5 +116,18 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeGeneric {
 	
 	public int getMyID() {
 		return this.nameNode.getId();
+	}
+
+	public void addTreeNodeChild(TreeNodeGeneric child) {
+		this.objetivosEspecificoTree.add((ObjetivoEspecificoTreeNode)child);
+	}
+
+	public String getCadastroURL() {
+		((NovoObjetivoBean)this.getMBean("novoObjetivoBean")).setTreeNodeParent(this);
+		return "/SISPLAN/portal/novo_objetivo.jsf";
+	}
+
+	public String getCadastroTitle() {
+		return "Cadastrar Objetivo Específico";
 	}
 }

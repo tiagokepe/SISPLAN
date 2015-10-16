@@ -14,7 +14,7 @@
 
 	<context:component-scan base-package="br.ufrn.sisplan.jsf"/>
 	<bean id="logon" class="br.ifpr.sisplan.jsf.LogonSisplanBean"/>
-	<bean id="pdiControllerBean" class="br.ifpr.sisplan.controller.bean.PDIControllerBean"/>
+<!-- 	<bean id="pdiControllerBean" class="br.ifpr.sisplan.controller.bean.PDIControllerBean"/> -->
 	
 	<context:component-scan base-package="br.ufrn.comum.jsf"/>
 	<context:component-scan base-package="br.ifpr.sisplan.controller.bean"/>

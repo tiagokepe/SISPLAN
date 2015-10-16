@@ -20,4 +20,5 @@ public class ObjetivoEstrategicoDao extends GenericDAOImpl {
 		String sql = "SELECT * FROM sisplan.objetivo_estrategico";
 		return sisplanDao.queryForList(sql);
 	}
+	
 }

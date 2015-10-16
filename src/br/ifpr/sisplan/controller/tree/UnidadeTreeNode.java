@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ifpr.sisplan.model.table.Unidade;
@@ -15,7 +13,7 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class UnidadeTreeNode extends TreeNodeCadastroAbstract {
+public class UnidadeTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = -7309785687849179855L;
 	private List<ObjetivoEspecificoTreeNode> objetivosTree = new ArrayList<ObjetivoEspecificoTreeNode>();
 	
@@ -82,18 +80,5 @@ public class UnidadeTreeNode extends TreeNodeCadastroAbstract {
 	
 	public int getMyID() {
 		return this.nameNode.getId();
-	}
-	
-	public void addTreeNodeChild(TreeNodeGeneric child) {
-		this.objetivosTree.add((ObjetivoEspecificoTreeNode)child);
-	}
-
-	public String getCadastroURL() {
-		((NovoObjetivoBean)this.getMBean("novoObjetivoBean")).setTreeNodeParent(this);
-		return "/SISPLAN/portal/novo_objetivo.jsf";
-	}
-
-	public String getCadastroTitle() {
-		return "Cadastrar Objetivo Específico";
 	}
 }

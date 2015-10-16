@@ -55,7 +55,7 @@ public class NovoBean extends AbstractController {
 	private void fillListUnidade() {
 		this.listUnidadeTreeNode = new ArrayList<UnidadeTreeNode>();
 		try {
-			this.listUnidadeTreeNode.addAll(this.listObjEstrategicoTreeNode.get(0).getUnidadesTree());
+			//this.listUnidadeTreeNode.addAll(this.listObjEstrategicoTreeNode.get(0).getUnidadesTree());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

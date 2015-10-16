@@ -26,6 +26,12 @@ public class ObjetivoEspecificoDao extends GenericDAOImpl {
 		return sisplanDao.queryForList(sql);
 	}
 	
+	public List selectObjetivosEspByEstrategico(int id_obj_estrategico) {
+		String sqlObjetivos = "SELECT id_especifico FROM sisplan.unidade_objetivos WHERE id_estrategico="+id_obj_estrategico;
+		String sql = "SELECT * FROM ("+sqlObjetivos+") AS objetivos_ids, sisplan.objetivo_especifico AS objetivo WHERE objetivo.id=objetivos_ids.id_especifico ORDER BY id ASC";
+		return sisplanDao.queryForList(sql);
+	}
+	
 	public List selectObjetivosByUnidade(int id_unidade) {
 		String sql = "select id, name from sisplan.objetivo_especifico as A JOIN"
 			   + " (select distinct(id_especifico) from sisplan.unidade_objetivos where id_unidade="+id_unidade+") as B"

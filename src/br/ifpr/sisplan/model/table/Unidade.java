@@ -10,6 +10,10 @@ public class Unidade extends NameNode implements Serializable, Comparable<Unidad
 	public Unidade() {
 		this.setType("unidade");
 	}
+	
+	public Unidade(String unidadeName) {
+		this.name = unidadeName;
+	}
 
 	public int compareTo(Unidade o) {
 		return this.getName().compareTo(o.getName());

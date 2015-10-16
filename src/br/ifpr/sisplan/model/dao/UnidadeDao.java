@@ -1,7 +1,14 @@
 package br.ifpr.sisplan.model.dao;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
+
+import br.ifpr.sisplan.model.table.Estrategia;
+import br.ifpr.sisplan.model.table.Unidade;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 
@@ -34,6 +41,30 @@ public class UnidadeDao extends GenericDAOImpl {
 		if(sisplanDao.queryForList(sql).isEmpty())
 			return false;
 		return true;
+	}
+	
+	public List selectAllUnidades() {
+		String sql = "SELECT * FROM sisplan.unidade";
+		return this.sisplanDao.queryForList(sql);
+	}
+	
+	public Unidade selectUnidadeByObjEspecifico(int id_obj_especifico) {
+		String sqlUnidadeID = "(SELECT id_unidade AS id FROM sisplan.unidade_objetivos where id_especifico="+id_obj_especifico+")";
+		String sql = "SELECT * FROM sisplan.unidade AS unidade, "+sqlUnidadeID+" AS unidade_obj WHERE unidade.id=unidade_obj.id";
+				
+		Unidade u = 
+				(Unidade)this.sisplanDao.query(sql, new ResultSetExtractor() {
+					public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+						Unidade result = new Unidade();
+						while(rs.next()) {
+							final int id = rs.getInt(rs.findColumn("id"));
+							final String name = rs.getString(rs.findColumn("name"));
+							result.setId(id);
+							result.setName(name);
+						}
+						return result;
+					}});
+		return u;
 	}
 
 }

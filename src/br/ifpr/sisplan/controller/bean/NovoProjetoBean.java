@@ -2,6 +2,8 @@ package br.ifpr.sisplan.controller.bean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -100,8 +102,16 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	}
 	
 	public void save() {
-		Data dt =  getDAO(DataDao.class).insertData(dataInicioPrevista, dataInicioEfetiva,
-													dataFimPrevista, dataFimEfetiva);
+		Map<String, Date> mapFieldValue = new HashMap<String, Date>();
+		if(dataInicioPrevista != null) mapFieldValue.put("data_inicio_prevista", dataInicioPrevista);
+		if(dataInicioEfetiva != null) mapFieldValue.put("data_inicio_efetiva", dataInicioEfetiva);
+		if(dataFimPrevista != null) mapFieldValue.put("data_fim_prevista", dataFimPrevista);
+		if(dataFimEfetiva != null) mapFieldValue.put("data_fim_efetiva", dataFimEfetiva);
+		
+		Data dt =  getDAO(DataDao.class).insertData(mapFieldValue);
+		
+/*		Data dt =  getDAO(DataDao.class).insertData(dataInicioPrevista, dataInicioEfetiva,
+													dataFimPrevista, dataFimEfetiva);*/
 		Projeto proj = getDAO(ProjetoDao.class).insertProjeto(name, desc);
 		proj.setData(dt);
 		getDAO(ProjetoDao.class).insertProjetoAndData(proj.getId(), dt.getId());
