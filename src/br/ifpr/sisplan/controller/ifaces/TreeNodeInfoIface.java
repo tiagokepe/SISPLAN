@@ -5,5 +5,6 @@ public interface TreeNodeInfoIface {
 	public String getName();
 	public int getMyID();
 	public String getDesc();
+	public String getRowKey();
 //	public String getIconPath();
 }

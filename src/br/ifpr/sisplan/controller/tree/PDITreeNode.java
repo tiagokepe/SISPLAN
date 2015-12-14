@@ -18,8 +18,8 @@ public class PDITreeNode extends TreeNodeGeneric {
 
 	private List<EixoTreeNode> eixosTree = new ArrayList<EixoTreeNode>();
 
-	public PDITreeNode(PDI pdi) {
-		super(null, pdi);
+	public PDITreeNode(PDI pdi, int order) {
+		super(null, pdi, order);
 		this.setEixosTree();
 	}
 	
@@ -47,8 +47,9 @@ public class PDITreeNode extends TreeNodeGeneric {
 
 	public void setEixosTree() {
 		final List<Eixo> eixos = ConverterToList.convertListMappedToList(getDAO(EixoDao.class).selectEixosByPDI(this.nameNode.getId()), Eixo.class);
+		int i=0;
 		for(Eixo e: eixos) {
-			final EixoTreeNode eixoTree = new EixoTreeNode(this, e);
+			final EixoTreeNode eixoTree = new EixoTreeNode(this, e, i++);
 			this.eixosTree.add(eixoTree);
 		}
 	}
@@ -81,5 +82,19 @@ public class PDITreeNode extends TreeNodeGeneric {
 	public int getMyID() {
 		return this.nameNode.getId();
 	}
+
+	public PDI getPDI() {
+		return (PDI)this.nameNode;
+	}
 	
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof PDITreeNode) {
+			return (this.getMyID() == ((PDITreeNode)o).getMyID()) ? true : false;
+		}
+		return false;
+	}
+/*	public String getHtmlID() {
+		return "pdiID_"+this.getMyID();
+	}*/
 }

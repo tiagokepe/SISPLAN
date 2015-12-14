@@ -2,15 +2,12 @@ package br.ifpr.sisplan.model.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
-import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class ObjetivoEspecificoDao extends GenericDAOImpl {

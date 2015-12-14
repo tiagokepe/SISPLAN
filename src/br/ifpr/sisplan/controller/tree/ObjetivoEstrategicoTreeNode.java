@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
-import br.ifpr.sisplan.controller.bean.PDIControllerCached;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
@@ -20,57 +20,49 @@ import com.google.common.collect.Iterators;
 
 public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = -4321723297704261633L;
-	private List<ObjetivoEspecificoTreeNode> objetivosEspecificoTree = new ArrayList<ObjetivoEspecificoTreeNode>();
+	private List<ObjetivoEspecificoTreeNode> allObjetivos = new ArrayList<ObjetivoEspecificoTreeNode>();
+	private List<ObjetivoEspecificoTreeNode> filteredObjetivos = new ArrayList<ObjetivoEspecificoTreeNode>();
+	private String unidadeSelected;
 	
-	public ObjetivoEstrategicoTreeNode(TreeNodeGeneric diretrizParent, ObjetivoEstrategico myObjetivo) {
-		super(diretrizParent, myObjetivo);
+	public ObjetivoEstrategicoTreeNode(TreeNodeGeneric diretrizParent, ObjetivoEstrategico myObjetivo, int order) {
+		super(diretrizParent, myObjetivo, order);
 		try {
-			this.setObjetivosTree();
+			this.setAllObjetivos();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void setObjetivosTree() {
+	public void setAllObjetivos() {
 		Unidade unidadeSelected = ((PDIControllerBean)this.getMBean("pdiControllerBean")).getUnidadeSelected();
 		List<ObjetivoEspecifico> objetivos = null;
-		if(unidadeSelected == PDIControllerCached.getInstance().getUnidadeAll())
+/*		if(unidadeSelected == PDIControllerCached.getInstance().getUnidadeAll())
 			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
 							selectObjetivosEspByEstrategico(this.nameNode.getId()), ObjetivoEspecifico.class);
 		else
 			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-					selectObjetivosByUnidadeObjEstrategico(unidadeSelected.getId(), this.getMyID()), ObjetivoEspecifico.class);;
+					selectObjetivosByUnidadeObjEstrategico(unidadeSelected.getId(), this.getMyID()), ObjetivoEspecifico.class);*/
+		objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
+				selectObjetivosEspByEstrategico(this.nameNode.getId()), ObjetivoEspecifico.class);
 		int order=0;
 		
 		for(ObjetivoEspecifico o: objetivos) {
-			final ObjetivoEspecificoTreeNode objetivoTree = new ObjetivoEspecificoTreeNode(this, o, ++order);
-			this.objetivosEspecificoTree.add(objetivoTree);
+			final ObjetivoEspecificoTreeNode objetivoTree = new ObjetivoEspecificoTreeNode(this, o, order++);
+			this.allObjetivos.add(objetivoTree);
 		}
+		this.filteredObjetivos.addAll(this.allObjetivos);
 	}
 
-/*	private void setUnidadesTree() throws Exception {
-		final List<Unidade> unidades = ((SisplanUser)this.getMBean("sisplanUser")).getUnidades();
-		for(Unidade u: unidades) {
-			final UnidadeTreeNode unidadeTree = new UnidadeTreeNode(this, u);
-			this.unidadesTree.add(unidadeTree);
-		}
-
-	}*/
-	
-	public List<ObjetivoEspecificoTreeNode> getUnidadesTree() throws Exception {
-/*		if(!this.unidadesTree.isEmpty()) {
-			this.unidadesTree.clear();
-		}
-		this.setUnidadesTree();*/
-		if(this.objetivosEspecificoTree.isEmpty())
-			this.setObjetivosTree();
-		return this.objetivosEspecificoTree;
+	public List<ObjetivoEspecificoTreeNode> getAllObjetivos() {
+		if(this.allObjetivos.isEmpty())
+			this.setAllObjetivos();
+		return this.allObjetivos;
 	}
 
 	
 	@SuppressWarnings("unchecked")
 	public Enumeration<ObjetivoEspecificoTreeNode> children() {
-		return Iterators.asEnumeration(objetivosEspecificoTree.iterator());
+		return Iterators.asEnumeration(this.filteredObjetivos.iterator());
 	}
 
 	public boolean getAllowsChildren() {
@@ -78,15 +70,15 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public TreeNode getChildAt(int arg0) {
-		return (TreeNode)objetivosEspecificoTree.get(arg0);
+		return (TreeNode)filteredObjetivos.get(arg0);
 	}
 
 	public int getChildCount() {
-		return objetivosEspecificoTree.size();
+		return filteredObjetivos.size();
 	}
 
 	public int getIndex(TreeNode arg0) {
-		return objetivosEspecificoTree.indexOf(arg0);
+		return filteredObjetivos.indexOf(arg0);
 	}
 
 	public TreeNode getParent() {
@@ -94,7 +86,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public boolean isLeaf() {
-		return this.objetivosEspecificoTree.isEmpty();
+		return this.filteredObjetivos.isEmpty();
 	}
 
 	@Override
@@ -111,7 +103,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public String getDesc() {
-		return this.nameNode.getName();
+		return "O"+this.getMyID()+"."+this.nameNode.getName();
 	}
 	
 	public int getMyID() {
@@ -119,7 +111,9 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public void addTreeNodeChild(TreeNodeGeneric child) {
-		this.objetivosEspecificoTree.add((ObjetivoEspecificoTreeNode)child);
+		this.allObjetivos.add((ObjetivoEspecificoTreeNode)child);
+		if(child.getName().equals(this.unidadeSelected))
+			this.filteredObjetivos.add((ObjetivoEspecificoTreeNode)child);
 	}
 
 	public String getCadastroURL() {
@@ -130,4 +124,34 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	public String getCadastroTitle() {
 		return "Cadastrar Objetivo Específico";
 	}
+
+	public void setUnidadeSelected(String unidadeSelected) {
+		this.unidadeSelected = unidadeSelected;
+	}
+	
+	public void applyUnidadeFilter(String unidadeSelected) {
+		this.setUnidadeSelected(unidadeSelected);
+		this.filteredObjetivos.clear();
+		if(unidadeSelected.equals(PDIControllerCached.getInstance().getUnidadeAll().getName())) {
+			int order = 0;
+			for(ObjetivoEspecificoTreeNode objEsp: this.allObjetivos) {
+				objEsp.setOrder(order++);
+				this.filteredObjetivos.add(objEsp);
+			}
+//			this.filteredObjetivos.addAll(this.allObjetivos);
+		}
+		else {
+			int order = 0;
+			for(ObjetivoEspecificoTreeNode objEsp: this.allObjetivos) {
+				if(objEsp.getUnidadeName().equals(unidadeSelected)) {
+					objEsp.setOrder(order++);
+					this.filteredObjetivos.add(objEsp);
+				}
+			}
+		}
+	}
+	
+/*	public boolean equals(ObjetivoEstrategicoTreeNode o) {
+		return this.getName().equals(o.getName());
+	}*/
 }

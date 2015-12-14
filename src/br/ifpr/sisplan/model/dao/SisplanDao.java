@@ -1,5 +1,6 @@
 package br.ifpr.sisplan.model.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.naming.InitialContext;
@@ -65,7 +66,7 @@ public class SisplanDao {
 		 this.jt.update(sql);
 	 }
 	 
-	 public void insert(String sql, Object[] args) {
+	 public void insert(String sql, Object[] args) throws DataAccessException {
 		 if(args.length == 0)
 			 this.jt.update(sql);
 		 else

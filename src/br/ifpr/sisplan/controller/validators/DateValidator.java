@@ -1,7 +1,6 @@
-package br.ifpr.sisplan.util;
+package br.ifpr.sisplan.controller.validators;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Date;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -29,7 +28,11 @@ public class DateValidator implements Validator {
 
 	public void validate(FacesContext context, UIComponent component, Object value)
 			throws ValidatorException {
-		String strDate = String.valueOf(value);
+		Date dt = (Date) value;
+		String id = (String) component.getAttributes().get("id");
+		if(id.replace("_", "").contains("")); //TODO I have to finish the validation, but I need to access other fields from the origin object
+		
+/*		String strDate = String.valueOf(value);
 		if(strDate.isEmpty()) {
 			throw new ValidatorException(this.dispatchMessage(component, value));
 		}
@@ -46,6 +49,6 @@ public class DateValidator implements Validator {
 		}
 		if(month > 12) {
 			throw new ValidatorException(this.dispatchMessage(component));
-		}
+		}*/
 	}
 }

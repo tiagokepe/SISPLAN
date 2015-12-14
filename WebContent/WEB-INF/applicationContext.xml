@@ -13,7 +13,7 @@
        		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
 
 	<context:component-scan base-package="br.ufrn.sisplan.jsf"/>
-	<bean id="logon" class="br.ifpr.sisplan.jsf.LogonSisplanBean"/>
+<!-- 	<bean id="logon" class="br.ifpr.sisplan.jsf.LogonSisplanBean"/> -->
 <!-- 	<bean id="pdiControllerBean" class="br.ifpr.sisplan.controller.bean.PDIControllerBean"/> -->
 	
 	<context:component-scan base-package="br.ufrn.comum.jsf"/>

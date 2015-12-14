@@ -15,7 +15,8 @@
 	<c:if test="${hideSubsistema == null}">
 	<% if( usuario.isUserInSistema(Sistema.SIGADMIN) ) { %>	
 		<div style="width: 80%; text-align: center; margin: 0 auto;">
-			 <a href="/admin/portal/index.jsf">Portal da Administração</a>
+             <a href="/SISPLAN/portal/index.jsf">Página Principal</a>
+<!-- 			 <a href="/admin/portal/index.jsf">Portal da Administração</a> -->
 		</div>
 	<% } %>
 	</c:if>

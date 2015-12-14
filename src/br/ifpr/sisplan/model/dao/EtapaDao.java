@@ -23,9 +23,9 @@ public class EtapaDao extends GenericDAOImpl {
 		return sisplanDao.queryForList(sql);
 	}
 	
-	public Etapa insertEtapa(String desc, int id_projeto) {
-		String sql = "INSERT INTO sisplan.etapa(descricao, id_projeto) VALUES(?,?)";
-		this.sisplanDao.insert(sql, new Object[] {desc, id_projeto});
+	public Etapa insertEtapa(String desc, int id_projeto, int id_responsavel) {
+		String sql = "INSERT INTO sisplan.etapa(descricao, id_projeto, id_responsavel) VALUES(?,?,?)";
+		this.sisplanDao.insert(sql, new Object[] {desc, id_projeto, id_responsavel});
 		sql = "select * from sisplan.etapa where id=(select max(id) from sisplan.etapa)";
 		Etapa etapa = 
 				(Etapa)this.sisplanDao.query(sql, new ResultSetExtractor() {
@@ -34,10 +34,12 @@ public class EtapaDao extends GenericDAOImpl {
 						while(rs.next()) {
 							final int id = rs.getInt(rs.findColumn("id"));
 							final String desc = rs.getString(rs.findColumn("descricao"));
-							final int id_projeto = rs.getInt(rs.findColumn("id_projeto")); 
+							final int id_projeto = rs.getInt(rs.findColumn("id_projeto"));
+							final int id_res = rs.getInt(rs.findColumn("id_responsavel"));
 							result.setId(id);
 							result.setDescricao(desc);
 							result.setId_projeto(id_projeto);
+							result.setIdResponsavel(id_res);
 						}
 						return result;
 					}});

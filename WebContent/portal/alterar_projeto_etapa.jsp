@@ -7,45 +7,46 @@
     	<rich:panel id="id_panel_hint" header="#{pdiControllerBean.currentNodeSelection.name}">
     		<h:form>
 	    		<h:panelGrid columns="2">
-                    <h:outputText value="Descrição: " rendered="#{pdiControllerBean.currentNodeSelection.renderedDescription}"/>
+                    <h:outputText value="Descrição: " rendered="#{pdiControllerBean.currentNodeSelection.projectNode}"/>
 		        	<h:inputText id="id_set_Descricao" value="#{pdiControllerBean.currentNodeSelection.descricao}"
-                                 rendered="#{pdiControllerBean.currentNodeSelection.renderedDescription}" />
+                                 rendered="#{pdiControllerBean.currentNodeSelection.projectNode}" />
 		        	
- 					<h:outputText value="Data Início Prevista: " rendered="#{sisplanUser.planningManager}"/>
- 					<h:panelGroup rendered="#{sisplanUser.planningManager}">
-			        	<h:inputText id="id_set_Data_Inicio_Prevista" value="#{pdiControllerBean.currentNodeSelection.dataInicioPrevista}"
-			        	             valueChangeListener="#{pdiControllerBean.currentNodeSelection.valueChangeListener}">
+ 					<h:outputText value="Data Início Prevista: "/>
+  					<h:panelGroup>
+	                    <rich:calendar id="id_set_Data_Inicio_Prevista" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataInicioPrevista}"
+	                                   datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataInicioPrevista}">
 	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText>
-                        <h:message for="id_set_Data_Inicio_Prevista" style="color: red;font-weight:bold"/>
+	                    </rich:calendar>
+ 	                    <h:message for="id_set_Data_Inicio_Prevista" style="color: red;font-weight:bold"/>
                     </h:panelGroup>
 		        	
-		        	<h:outputText value="Data Fim Prevista: " rendered="#{sisplanUser.planningManager}"/>
-		        	<h:panelGroup rendered="#{sisplanUser.planningManager}">
-			        	<h:inputText id="id_set_Data_Fim_Prevista" value="#{pdiControllerBean.currentNodeSelection.dataFimPrevista}"
-			        	             valueChangeListener="#{pdiControllerBean.currentNodeSelection.valueChangeListener}">
-	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText>
-	                    <h:message for="id_set_Data_Fim_Prevista" style="color: red;font-weight:bold"/>
+		        	<h:outputText value="Data Fim Prevista: "/>
+                    <h:panelGroup>
+                        <rich:calendar id="id_set_Data_Fim_Prevista" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataFimPrevista}"
+                                        datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataFimPrevista}">
+                            <f:validator validatorId="dateValidator"/>
+                        </rich:calendar>
+                        <h:message for="id_set_Data_Fim_Prevista" style="color: red;font-weight:bold"/>
                     </h:panelGroup>
 		        	
-		        	<h:outputText value="Data Início Efetiva: " rendered="#{sisplanUser.planningManager}"/>
-		        	<h:panelGroup rendered="#{sisplanUser.planningManager}">
-			        	<h:inputText id="id_set_Data_Inicio_Efetiva" value="#{pdiControllerBean.currentNodeSelection.dataInicioEfetiva}"
-			        	             valueChangeListener="#{pdiControllerBean.currentNodeSelection.valueChangeListener}">
-	                        <f:validator validatorId="dateValidator"/>
-	                    </h:inputText>
+		        	<h:outputText value="Data Início Efetiva: "/>
+                    <h:panelGroup>
+                        <rich:calendar id="id_set_Data_Inicio_Efetiva" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataInicioEfetiva}"
+                                        datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataInicioEfetiva}">
+                            <f:validator validatorId="dateValidator"/>
+                        </rich:calendar>
                         <h:message for="id_set_Data_Inicio_Efetiva" style="color: red;font-weight:bold"/>
                     </h:panelGroup>
-		        	
-		        	<h:outputText value="Data Fim Efetiva: " rendered="#{sisplanUser.planningManager}"/>
-		        	<h:panelGroup rendered="#{sisplanUser.planningManager}">
-			        	<h:inputText id="id_set_Data_Fim_Efetiva" value="#{pdiControllerBean.currentNodeSelection.dataFimEfetiva}"
-			        	             valueChangeListener="#{pdiControllerBean.currentNodeSelection.valueChangeListener}">
-	                        <f:validator validatorId="dateValidator"/>
-		               </h:inputText>
+                    
+		        	<h:outputText value="Data Fim Efetiva: "/>
+		        	<h:panelGroup>
+                        <rich:calendar id="id_set_Data_Fim_Efetiva" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataFimEfetiva}"
+                                        datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataFimEfetiva}">
+                            <f:validator validatorId="dateValidator"/>
+                        </rich:calendar>
                         <h:message for="id_set_Data_Fim_Efetiva" style="color: red;font-weight:bold"/>
-	               </h:panelGroup>
+                    </h:panelGroup>
+                    
 				</h:panelGrid>
 	
 				<br/>

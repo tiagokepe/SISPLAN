@@ -1,78 +1,79 @@
 package br.ifpr.sisplan.controller.bean;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.controller.tree.EtapaTreeNode;
+import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
 import br.ifpr.sisplan.controller.tree.ProjetoTreeNode;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
+import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.table.Data;
 import br.ifpr.sisplan.model.table.Etapa;
+import br.ifpr.sisplan.model.table.Responsavel;
 import br.ifpr.sisplan.util.DateUtil;
 
 @Component
 @Scope("session")
 public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	private static final long serialVersionUID = 7157061703783244442L;
-	private static NovaEtapaBean instance;
 	
-	private String desc;
 	private Date dataInicioPrevista;
 	private Date dataInicioEfetiva;
 	private Date dataFimPrevista;
 	private Date dataFimEfetiva;
 	
-	public static NovaEtapaBean getInstance() {
-		if(instance == null)
-			instance = new NovaEtapaBean();
-		
-		return instance;
+	private List<Responsavel> responsaveis;
+	private Responsavel responsavelSelected;
+	private String responsavelNameSelected;
+	
+	public NovaEtapaBean() {
+		System.out.println("------NovaEtapaBean");
 	}
 	
-	public String getDesc() {
-		return desc;
+	public Date getDataInicioPrevista() {
+		return dataInicioPrevista;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setDataInicioPrevista(Date dataInicioPrevista) {
+		this.dataInicioPrevista = dataInicioPrevista;
 	}
 
-	public String getDataInicioPrevista() {
-		return dataInicioPrevista != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dataInicioPrevista): "";
+	public Date getDataInicioEfetiva() {
+		return dataInicioEfetiva;
 	}
 
-	public void setDataInicioPrevista(String dataInicioPrevista) {
-		this.dataInicioPrevista = this.getDateFromString(dataInicioPrevista);
+	public void setDataInicioEfetiva(Date dataInicioEfetiva) {
+		this.dataInicioEfetiva = dataInicioEfetiva;
 	}
 
-	public String getDataInicioEfetiva() {
-		return dataInicioEfetiva != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dataInicioEfetiva): "";
+	public Date getDataFimPrevista() {
+		return dataFimPrevista;
 	}
 
-	public void setDataInicioEfetiva(String dataInicioEfetiva) {
-		this.dataInicioEfetiva = this.getDateFromString(dataInicioEfetiva);
+	public void setDataFimPrevista(Date dataFimPrevista) {
+		this.dataFimPrevista = dataFimPrevista;
 	}
 
-	public String getDataFimPrevista() {
-		return dataFimPrevista != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dataFimPrevista): "";
+	public Date getDataFimEfetiva() {
+		return dataFimEfetiva;
 	}
 
-	public void setDataFimPrevista(String dataFimPrevista) {
-		this.dataFimPrevista = this.getDateFromString(dataFimPrevista);
-	}
-
-	public String getDataFimEfetiva() {
-		return dataFimEfetiva != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dataFimEfetiva): "";
-	}
-
-	public void setDataFimEfetiva(String dataFimEfetiva) {
-		this.dataFimEfetiva = this.getDateFromString(dataFimEfetiva);
+	public void setDataFimEfetiva(Date dataFimEfetiva) {
+		this.dataFimEfetiva = dataFimEfetiva;
 	}
 
 	private Date getDateFromString(String strDate) {
@@ -90,22 +91,117 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	public String getProjetoDesc() {
 		return this.parent.getDesc();
 	}
+	
+	public String getResponsavelNameSelected() {
+		return responsavelNameSelected;
+	}
+
+	public void setResponsavelNameSelected(String responsavelNameSelected) {
+		this.responsavelNameSelected = responsavelNameSelected;
+	}
+
+	public void setResponsaveis() {
+		PDIControllerCached pdiCache =  PDIControllerCached.getInstance();
+		this.responsaveis = ResponsavelDao.getInstance().selectResponsavelByUnidade(((ObjetivoEspecificoTreeNode)parent.getParent().getParent()).getUnidadeID());			
+	}
+	
+	public List<SelectItem> getResponsaveis() {
+		if(this.responsaveis == null)
+			this.setResponsaveis();
+		
+		List<SelectItem> listRes = new ArrayList<SelectItem>();
+		for(Responsavel r: this.responsaveis) {
+			listRes.add(new SelectItem(r.getName()));
+			
+		}
+		return listRes;
+	}
+	
+	public Responsavel getResponsavelSelected() {
+		if(this.responsavelSelected == null)
+			this.responsavelSelected = this.getResponsavel(responsavelNameSelected);
+		return responsavelSelected;
+	}
+
+	public void setResponsavelSelected(Responsavel responsavelSelected) {
+		this.responsavelSelected = responsavelSelected;
+	}
+	
+	public void responsavelSelectedListener(ValueChangeEvent e) {
+		this.responsavelNameSelected = (String)e.getNewValue();
+		this.responsavelSelected = this.getResponsavel(responsavelNameSelected);
+	}
+	
+    private Responsavel getResponsavel(String resName) {
+    	for(Responsavel r: this.responsaveis)
+    		if(r.getName().equals(resName))
+    			return r;
+		return null;
+    }
 
 	public void save() {
-/*		Data dt =  getDAO(DataDao.class).insertData(dataInicioPrevista, dataInicioEfetiva,
-				dataFimPrevista, dataFimEfetiva);*/
-		Map<String, Date> mapFieldValue = new HashMap<String, Date>();
-		if(dataInicioPrevista != null) mapFieldValue.put("data_inicio_prevista", dataInicioPrevista);
-		if(dataInicioEfetiva != null) mapFieldValue.put("data_inicio_efetiva", dataInicioEfetiva);
-		if(dataFimPrevista != null) mapFieldValue.put("data_fim_prevista", dataFimPrevista);
-		if(dataFimEfetiva != null) mapFieldValue.put("data_fim_efetiva", dataFimEfetiva);
-		
-		Data dt =  getDAO(DataDao.class).insertData(mapFieldValue);
-		
-		Etapa etapa = getDAO(EtapaDao.class).insertEtapa(desc, parent.getMyID());
-		etapa.setData(dt);
-		getDAO(EtapaDao.class).insertEtapaAndData(etapa.getId(), dt.getId());
-		this.parent.addTreeNodeChild(new EtapaTreeNode(this.parent, etapa));
+		if(this.validateFields()) {
+			Map<String, Date> mapFieldValue = new HashMap<String, Date>();
+			if(dataInicioPrevista != null) mapFieldValue.put("data_inicio_prevista", dataInicioPrevista);
+			if(dataInicioEfetiva != null) mapFieldValue.put("data_inicio_efetiva", dataInicioEfetiva);
+			if(dataFimPrevista != null) mapFieldValue.put("data_fim_prevista", dataFimPrevista);
+			if(dataFimEfetiva != null) mapFieldValue.put("data_fim_efetiva", dataFimEfetiva);
+			
+			Data dt =  getDAO(DataDao.class).insertData(mapFieldValue);
+			
+			Etapa etapa = getDAO(EtapaDao.class).insertEtapa(descricao, parent.getMyID(), this.getResponsavelSelected().getId());
+			etapa.setData(dt);
+			getDAO(EtapaDao.class).insertEtapaAndData(etapa.getId(), dt.getId());
+			this.parent.addTreeNodeChild(new EtapaTreeNode(this.parent, etapa, this.parent.getChildCount()));
+		}
 		this.returnMainPage();
+	}
+
+	@Override
+	protected void initInternalStructure() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected boolean validateFields() {
+		boolean ret = true;
+		if(this.responsavelNameSelected.isEmpty()) {
+			addMensagemErro("Responsável pela etapa não selecionado.");
+			ret = false;
+		}
+		if(this.descricao.isEmpty()) {
+			addMensagemErro("Descrição está vazia, ela deve ser preenchida.");
+			ret = false;
+		}
+		if(this.dataInicioPrevista == null) {
+			addMensagemErro("Data início prevista não preenchida.");
+			ret = false;
+		}
+		if(this.dataFimPrevista == null) {
+			addMensagemErro("Data fim prevista não preenchida.");
+			ret = false;
+		}
+
+		if(this.dataInicioPrevista != null && this.dataFimPrevista != null) {
+			DateTime dtIniPrev = new DateTime(this.dataInicioPrevista);
+			DateTime dtFimPrev = new DateTime(this.dataFimPrevista);
+			int days = Days.daysBetween(dtIniPrev, dtFimPrev).getDays();
+			if(days < 0) {
+				addMensagemErro("Data fim prevista é mais antiga que a data de início.");
+				ret = false;
+			}
+		}
+		
+		if(this.dataInicioEfetiva != null && this.dataFimEfetiva != null) {
+			DateTime dtIniEfe = new DateTime(this.dataInicioEfetiva);
+			DateTime dtFimEfe = new DateTime(this.dataFimEfetiva);
+			int daysEfe = Days.daysBetween(dtIniEfe, dtFimEfe).getDays();
+			if(daysEfe < 0) {
+				addMensagemErro("Data fim efetiva é mais antiga que a data de início.");
+				ret = false;
+			}
+		}
+		return ret;
 	}
 }

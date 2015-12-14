@@ -31,9 +31,21 @@ public class UnidadeDao extends GenericDAOImpl {
 		return sisplanDao.queryForList(sql);
 	}
 
-	public List selectUnidade(int id_unidade) {
+	public Unidade selectUnidade(int id_unidade) {
 		String sql = "SELECT * FROM sisplan.unidade where id="+id_unidade;
-		return sisplanDao.queryForList(sql);
+		Unidade u = 
+				(Unidade)this.sisplanDao.query(sql, new ResultSetExtractor() {
+					public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+						Unidade result = new Unidade();
+						while(rs.next()) {
+							final int id = rs.getInt(rs.findColumn("id"));
+							final String name = rs.getString(rs.findColumn("name"));
+							result.setId(id);
+							result.setName(name);
+						}
+						return result;
+					}});
+		return u;
 	}
 	
 	public boolean checkIfObjetivoIsBoundToUnidade(int id_obj_estrategico, int id_unidade) {

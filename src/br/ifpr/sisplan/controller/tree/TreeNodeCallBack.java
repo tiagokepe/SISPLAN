@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 
 import javax.faces.event.ValueChangeEvent;
 
+import br.ifpr.sisplan.controller.PlanningPeriodController;
+import br.ifpr.sisplan.controller.bean.SisplanUser;
+import br.ifpr.sisplan.controller.ifaces.DataPlanningIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeActionsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCallBackIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
@@ -19,15 +22,15 @@ import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
 import br.ifpr.sisplan.util.DateUtil;
 
-public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNodeCallBackIface, TreeNodeEventsIface, TreeNodeActionsIface, TreeNodeDetailsIface {
+public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNodeCallBackIface, TreeNodeEventsIface, TreeNodeActionsIface, TreeNodeDetailsIface, DataPlanningIface {
 	private static final long serialVersionUID = 1L;
 	protected Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 	protected boolean changedDatas = false;
 	protected boolean changedDescricao = false;
 	protected DateDescriptionNode dataNode;
-
-	public TreeNodeCallBack(TreeNodeGeneric parent, DateDescriptionNode kidNode) {
-		super(parent, kidNode);
+	
+	public TreeNodeCallBack(TreeNodeGeneric parent, DateDescriptionNode kidNode, int order) {
+		super(parent, kidNode, order);
 		this.dataNode = kidNode;
 	}
 	
@@ -99,9 +102,13 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		}
 	}
 	
-	public String getDataInicioPrevista() {
+	public String getStrDataInicioPrevista() {
 		Date dt = this.dataNode.getData().getDataInicioPrevista();
 		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
+	}
+	
+	public Date getDataInicioPrevista() {
+		return this.dataNode.getData().getDataInicioPrevista();
 	}
 	
 	public void setDataInicioPrevista(String strDate) {
@@ -116,8 +123,20 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 			this.addCallBackMethod("setDataInicioPrevistaCallBack", Date.class, newDate);
 		}
 	}
+	
+	public void setDataInicioPrevista(Date newDate) {
+		if(this.dataNode.getData().getDataInicioPrevista() == null ||
+		   this.dataNode.getData().getDataInicioPrevista().compareTo(newDate) != 0) {
+			
+			this.addCallBackMethod("setDataInicioPrevistaCallBack", Date.class, newDate);
+		}
+	}
+	
+	public Date getDataInicioEfetiva() {
+		return this.dataNode.getData().getDataInicioEfetiva();
+	}
 
-	public String getDataInicioEfetiva() {
+	public String getStrDataInicioEfetiva() {
 		Date dt = this.dataNode.getData().getDataInicioEfetiva();
 		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
 	}
@@ -133,7 +152,19 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		}
 	}
 	
-	public String getDataFimPrevista() {
+	public void setDataInicioEfetiva(Date newDate) {
+		if(this.dataNode.getData().getDataInicioEfetiva() == null ||
+		   this.dataNode.getData().getDataInicioEfetiva().compareTo(newDate) != 0) {
+			
+			this.addCallBackMethod("setDataInicioEfetivaCallBack", Date.class, newDate);
+		}
+	}
+	
+	public Date getDataFimPrevista() {
+		return this.dataNode.getData().getDataFimPrevista();
+	}
+	
+	public String getStrDataFimPrevista() {
 		Date dt = this.dataNode.getData().getDataFimPrevista();
 		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
 	}
@@ -149,7 +180,19 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		}
 	}
 	
-	public String getDataFimEfetiva() {
+	public void setDataFimPrevista(Date newDate) {
+		if(this.dataNode.getData().getDataFimPrevista() == null ||
+		   this.dataNode.getData().getDataFimPrevista().compareTo(newDate) != 0) {
+			
+			this.addCallBackMethod("setDataFimPrevistaCallBack", Date.class, newDate);
+		}
+	}
+	
+	public Date getDataFimEfetiva() {
+		return this.dataNode.getData().getDataFimEfetiva();
+	}
+	
+	public String getStrDataFimEfetiva() {
 		Date dt = this.dataNode.getData().getDataFimEfetiva();
 		return dt != null? new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt): "";
 	}
@@ -159,6 +202,14 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 			return;
 		}
 		Date newDate = DateUtil.stringToDate(strDate);
+		if(this.dataNode.getData().getDataFimEfetiva() == null ||
+		   this.dataNode.getData().getDataFimEfetiva().compareTo(newDate) != 0) {
+			
+			this.addCallBackMethod("setDataFimEfetivaCallBack", Date.class, newDate);
+		}
+	}
+	
+	public void setDataFimEfetiva(Date newDate) {
 		if(this.dataNode.getData().getDataFimEfetiva() == null ||
 		   this.dataNode.getData().getDataFimEfetiva().compareTo(newDate) != 0) {
 			
@@ -203,5 +254,39 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 
 	public DateDescriptionNode getDataNode() {
 		return dataNode;
+	}
+	
+	public boolean isDisabledDataInicioPrevista() {
+		if(this.isPlanningManagerOrPlanningPeriod())
+			return false;
+		if(this.dataNode.getData().getDataInicioPrevista() == null)
+			return false;
+		return true;
+	}
+	public boolean isDisabledDataInicioEfetiva() {
+		if(this.isPlanningManagerOrPlanningPeriod())
+			return false;
+		if(this.dataNode.getData().getDataInicioEfetiva() == null)
+			return false;
+		return true;
+	}
+	public boolean isDisabledDataFimPrevista() {
+		if(this.isPlanningManagerOrPlanningPeriod())
+			return false;
+		if(this.dataNode.getData().getDataFimPrevista() == null)
+			return false;
+		return true;
+	}
+	public boolean isDisabledDataFimEfetiva() {
+		if(this.isPlanningManagerOrPlanningPeriod())
+			return false;
+		if(this.dataNode.getData().getDataFimEfetiva() == null)
+			return false;
+		return true;
+	}
+	protected boolean isPlanningManagerOrPlanningPeriod() {
+		if(((SisplanUser)this.getMBean("sisplanUser")).isPlanningManager() || PlanningPeriodController.getInstance().isPlanningPeriod())
+			return true;
+		return false;
 	}
 }

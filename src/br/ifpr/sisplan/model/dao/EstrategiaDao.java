@@ -17,14 +17,16 @@ public class EstrategiaDao extends GenericDAOImpl {
 	}
 	
 	public List selectEstrategiaByObjetivo(int id_obj) {
-		String sql="SELECT * FROM sisplan.estrategia where id_objetivo="+id_obj;
+		String sql = "SELECT id, name FROM sisplan.estrategia AS est "
+					 +"JOIN (SELECT * FROM sisplan.objetivo_estrategias WHERE id_objetivo="+id_obj+") AS obj_est "
+					 +"ON est.id=obj_est.id_estrategia";
 		return sisplanDao.queryForList(sql);
 	}
 	
-	public Estrategia insertEstrategia(String name, int id_obj_especifico) {
-		String sql = "INSERT INTO sisplan.estrategia(name, id_objetivo) VALUES(?,?)";
-		this.sisplanDao.insert(sql, new Object[] {name, id_obj_especifico});
-		sql = "SELECT * FROM sisplan.estrategia WHERE name='"+name+"' AND id_objetivo="+id_obj_especifico;
+	public Estrategia insertEstrategia(String name) {
+		String sql = "INSERT INTO sisplan.estrategia(name) VALUES(?)";
+		this.sisplanDao.insert(sql, new Object[] {name});
+		sql = "SELECT * FROM sisplan.estrategia WHERE name='"+name+"'";
 		Estrategia est = 
 				(Estrategia)this.sisplanDao.query(sql, new ResultSetExtractor() {
 					public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
@@ -32,17 +34,20 @@ public class EstrategiaDao extends GenericDAOImpl {
 						while(rs.next()) {
 							final int id = rs.getInt(rs.findColumn("id"));
 							final String name = rs.getString(rs.findColumn("name"));
-							final int id_objetivo = rs.getInt(rs.findColumn("id_objetivo"));
 							result.setId(id);
 							result.setName(name);
-							result.setId_objetivo(id_objetivo);
 						}
 						return result;
 					}});
 		return est;
 	}
 	
-	public void insertLinkEstrategiaProjeto(int id_estrategia, int id_projeto) {
+	public void insertRelationshipObjetivoEstrategia(int id_est, int id_obj) {
+		String sql = "INSERT INTO sisplan.objetivo_estrategias VALUES(?,?)";
+		this.sisplanDao.insert(sql, new Object[] {id_est, id_obj});
+	}
+	
+	public void insertRelationshipEstrategiaProjeto(int id_estrategia, int id_projeto) {
 		String sql = "INSERT INTO sisplan.estrategia_projetos VALUES(?,?)";
 		this.sisplanDao.insert(sql, new Object[] {id_estrategia, id_projeto});
 	}

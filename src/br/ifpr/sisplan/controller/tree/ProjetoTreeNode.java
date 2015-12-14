@@ -17,7 +17,10 @@ import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
+import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.table.Etapa;
+import br.ifpr.sisplan.model.table.Projeto;
+import br.ifpr.sisplan.model.table.Responsavel;
 import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
 import br.ifpr.sisplan.util.ConverterToList;
 
@@ -28,10 +31,12 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	
 	private List<EtapaTreeNode> etapasTree = new ArrayList<EtapaTreeNode>();
 	private Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
+	
+	private Responsavel responsavel;
 
 	
-	public ProjetoTreeNode(TreeNodeGeneric parent, DateDescriptionNode projeto) {
-		super(parent, projeto);
+	public ProjetoTreeNode(TreeNodeGeneric parent, DateDescriptionNode projeto, int order) {
+		super(parent, projeto, order);
 		this.setEtapasTree();
 	}
 	
@@ -69,10 +74,10 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 
 	public void setEtapasTree() {
 		final List<Etapa> etapas = ConverterToList.convertListMappedToList(getDAO(EtapaDao.class).selectEtapaByProject(this.dataNode.getId()), Etapa.class);
-
+		int i=0;
 		for(Etapa e: etapas) {
 			this.setDataEtapa(e);
-			final EtapaTreeNode etapaTree = new EtapaTreeNode(this, e);
+			final EtapaTreeNode etapaTree = new EtapaTreeNode(this, e, i++);
 			this.etapasTree.add(etapaTree);
 		}
 	}
@@ -94,7 +99,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 		return this.dataNode.getName();
 	}
 	
-	public boolean isRenderedDescription() {
+	public boolean isProjectNode() {
 		return true;
 	}
 
@@ -151,5 +156,12 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.etapasTree.add((EtapaTreeNode)child);		
+	}
+	
+	public String getResponsavelName() {
+		if(responsavel == null) {
+			this.responsavel = ResponsavelDao.getInstance().selectResponsavel(((Projeto)this.dataNode).getIdResponsavel());
+		}
+		return this.responsavel.getName();
 	}
 }

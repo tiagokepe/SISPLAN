@@ -2,9 +2,6 @@ package br.ifpr.sisplan.controller.bean;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -14,10 +11,6 @@ import br.ifpr.sisplan.controller.tree.EixoTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.controller.tree.PDITreeNode;
 import br.ifpr.sisplan.controller.tree.UnidadeTreeNode;
-import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
-import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
-import br.ifpr.sisplan.model.table.Unidade;
-import br.ifpr.sisplan.util.ConverterToList;
 import br.ufrn.arq.web.jsf.AbstractController;
 
 public class NovoBean extends AbstractController {

@@ -38,6 +38,16 @@
       <param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
       <param-value>true</param-value>
 	</context-param-->
+	
+    <servlet>
+        <servlet-name>logoff</servlet-name>
+        <servlet-class>br.ifpr.sisplan.jsf.LogoffServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>logoff</servlet-name>
+        <url-pattern>/logoff.jsf</url-pattern>
+    </servlet-mapping>
     
     <servlet>
     	<servlet-name>Faces Servlet</servlet-name>

@@ -1,7 +1,8 @@
 <!-- DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
    "http://www.w3.org/TR/html4/loose.dtd"-->
 <!--    charset=ISO-8859-1 -->
-<%@page contentType="text/html; charset=UTF-8" %>
+<%-- <%@page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %> --%>
+<%-- <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> --%>
 
 <%-- Tags --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -67,13 +68,19 @@
 			<c:if test="${not empty sessionScope.usuario}">
 			<div id="tempoSessao"></div>
 			<span class="sair-sistema">
-				<a href="/admin/logoff.jsf"> SAIR </a>
+				<a href="/SISPLAN/logoff.jsf"> SAIR </a>
 			</span>
 			</c:if>
 		</div>
 		<c:set var="confirm" value="if (!confirm('Deseja cancelar a Operação? Todos os dados digitados serão perdidos!')) return false" scope="application"/>
 		<c:set var="confirmDelete" value="if (!confirm('Confirma a remoção desta informação?')) return false" scope="application"/>
-
+		
+<%-- 		<f:view>
+		<h:form>
+		  KEPE
+		</h:form>
+		</f:view>
+ --%>
 		<div id="painel-usuario" <c:if test="${empty sessionScope.usuario}"> style="height: 20px;" </c:if>>
 			<c:if test="${not empty sessionScope.usuario}">
 			<div id="menu-usuario">

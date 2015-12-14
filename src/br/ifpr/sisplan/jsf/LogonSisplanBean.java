@@ -8,8 +8,6 @@ import java.util.Date;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 import br.ufrn.admin.dominio.MensagensHelper;
@@ -39,7 +37,7 @@ import br.ufrn.comum.jsf.VerTelaAvisoLogonMBean;
  * @author David Pereira
  * 
  */
-@Component("logon") @Scope("request")
+/*@Component("logon") @Scope("request")*/
 public class LogonSisplanBean extends AdminAbstractController<Object> {
 	
 	public LogonSisplanBean() {
@@ -244,7 +242,7 @@ public class LogonSisplanBean extends AdminAbstractController<Object> {
 	 * @return
 	 * @throws Exception
 	 */
-	public String logoff() throws Exception {
+	public void logoff() throws Exception {
 		try {
 			if (getCurrentSession() != null) {
 				UsuarioMov mov = new UsuarioMov();
@@ -258,11 +256,17 @@ public class LogonSisplanBean extends AdminAbstractController<Object> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return forward("/login.jsf");
+		HttpServletRequest request = this.getCurrentRequest();
+
+		request.getSession().removeAttribute("usuario");
+		request.getSession().invalidate();
+
+		this.getCurrentResponse().sendRedirect("/SISPLAN/");
+		//return forward("/login.jsf");
 	}
 	
 	public String paginaPrincipal(){
-		return redirect("/admin/portal/index.jsf");
+		return redirect("/SISPLAN/portal/index.jsf");
 	}
 
 	public boolean isAdministrador(){

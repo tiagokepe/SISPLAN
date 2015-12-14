@@ -29,9 +29,9 @@ public class ProjetoDao extends GenericDAOImpl {
 		sisplanDao.update(update);
 	}
 	
-	public Projeto insertProjeto(String name, String desc) {
-		String sql = "INSERT INTO sisplan.projeto(name, descricao) VALUES(?,?)";
-		this.sisplanDao.insert(sql, new Object[] {name, desc});
+	public Projeto insertProjeto(String name, String desc, int id_responsavel) {
+		String sql = "INSERT INTO sisplan.projeto(name, descricao, id_responsavel) VALUES(?,?,?)";
+		this.sisplanDao.insert(sql, new Object[] {name, desc, id_responsavel});
 		sql = "select * from sisplan.projeto where id=(select max(id) from sisplan.projeto)";
 		Projeto proj = 
 				(Projeto)this.sisplanDao.query(sql, new ResultSetExtractor() {
@@ -41,9 +41,11 @@ public class ProjetoDao extends GenericDAOImpl {
 							final int id = rs.getInt(rs.findColumn("id"));
 							final String name = rs.getString(rs.findColumn("name"));
 							final String desc = rs.getString(rs.findColumn("descricao"));
+							final int id_responsavel = rs.getInt(rs.findColumn("id_responsavel"));
 							result.setId(id);
 							result.setName(name);
 							result.setDescricao(desc);
+							result.setIdResponsavel(id_responsavel);
 						}
 						return result;
 					}});

@@ -1,0 +1,42 @@
+  1 | Integração entre conteúdos de disciplinas e a pesquisa em todos os níveis de ensino
+  2 | Fomentar as práticas esportivas e culturais nos Campus
+  3 | Proporcionar aos alunos e inserção no mercado de trabalho através da oferta de estágio e emprego
+  4 | Desenvolver mecanismos de acompanhamento de egressos
+  5 | Implementar programas de empreendedorismo inovador
+  6 | Promover a inclusão tecnológica nos Campus
+  7 | Criar mecanismos para a redução da evasão
+  8 | Criar ambientes multidisciplinares para o processo ensino-aprendizagem
+  9 | Consolidar a assistência estudantil nos Campus
+ 10 | Manter e acompanhar o sistema de cotas
+ 11 | Fomentar a criação de programas de pós-graduação
+ 12 | Estruturar a equipe de professores e pesquisadores focados no tema de referência
+ 13 | Discutir de forma democrática nos Câmpus as áreas de referência
+ 14 | Mapear as competências e habilidades existentes no IFPR
+ 15 | Estruturar metodologia para a abertura de novos cursos
+ 16 | Consolidar e ampliar o sistema de parcerias em todos os níveis do IFPR
+ 17 | Criar espaços institucionais para a integração da comunidade interna e externa
+ 18 | Promover a participação das comunidades internas e externas nas tomadas de decisão
+ 19 | Promover parcerias com setor empresarial de referência no mercado
+ 20 | Criar ambientes especializados com alta tecnologia
+ 21 | Desenvolver o processo de transferência de conhecimento e tecnologia
+ 22 | Desenvolver a gestão administrativa e manutenção da infraestrutura
+ 23 | Articular planejamento e captação de recursos por meio de projetos
+ 24 | Promover desenvolvimento institucional com a utilização aprimoramento de indicadores
+ 25 | Alinhar as ações institucionais com os objetivos estratégicos
+ 26 | Criar modelos, métodos e ferramentas para promovera gestão sustentável
+ 27 | Consolidar os mecanismos organizacionais de gestão integrada
+ 28 | Disponibilizar conhecimentos e tecnologias que permitam a análise de dados, gestão de informação e conhecimento
+ 29 | Promover a transparência e a divulgação dos atos institucionais
+ 30 | Disseminar a cultura de planejamento em todos os níveis da instituição
+ 31 | Implantar políticas de capacitação
+ 32 | Desenvolver mecanismos de motivação e comprometimento dos servidores
+ 33 | Criar critérios de distribuição de vagas de servidores
+ 34 | Aprimorar o processo de gestão de pessoas nas unidades
+ 35 | Promover eventos culturais e sociais
+ 36 | Promover a integração e o desenvolvimento de pessoas, criando um ambiente produtivo e humanizado
+ 37 | Estruturar o modelo de comunicação interna para servidores
+ 38 | Implementar programas de qualidade de vida
+ 39 | Promover a identidade institucional e a marca do IFPR
+ 40 | Diversificar o portfólio de material de divulgação
+ 41 | Ser referência na área de desenvolvimento de tecnologias educacionais, fortalecendo a identidade institucional
+

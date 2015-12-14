@@ -11,7 +11,7 @@
            <f:facet name="header">
                <h:outputText value="Unidade"></h:outputText>
            </f:facet>
-	        <rich:comboBox width="200px" defaultLabel="Unidade" valueChangeListener="#{pdiControllerBean.unidadeSelectedListener}">
+	        <rich:comboBox width="200px" defaultLabel="#{pdiControllerBean.unidadeSelectedName}" valueChangeListener="#{pdiControllerBean.unidadeSelectedListener}">
 	           <f:selectItems value="#{pdiControllerBean.listUnidades}"/>
 	           <a4j:support event="onchange" reRender="id_tree"/>
 	        </rich:comboBox>
@@ -20,9 +20,10 @@
 	        </h:selectOneMenu> --%>
         </rich:panel>
 	    <h:panelGrid columns="2" columnClasses="columnTop, columnTop" width="100%">
-	        <rich:tree id="id_tree" var="node" value="#{pdiControllerBean.pdisTree}" nodeFace="#{node.type}" nodeSelectListener="#{pdiControllerBean.nodeSelected}" 
-	            		    reRender="id_detalhes, id_panel_desc, id_panel_unidade, id_panel_obj_especifico" ajaxSubmitSelection="true" switchType="client">
-            	<rich:treeNode  type="#{node.type}">
+	        <rich:tree adviseNodeOpened="#{pdiControllerBean.adviseNodeOpened}" id="id_tree" var="node" value="#{pdiControllerBean.pdisTree}" nodeFace="#{node.type}" nodeSelectListener="#{pdiControllerBean.nodeSelected}" 
+	            	   reRender="id_detalhes, id_panel_desc, id_panel_unidade, id_panel_obj_especifico" ajaxSubmitSelection="true" switchType="ajax">
+            	<rich:treeNode id="id_tree_node" changeExpandListener="#{node.processExpansion}" type="#{node.type}">
+<%--                     <a4j:support event="onchange" reRender="id_tree_node"/> --%>            	
             		<h:outputText value="#{node.name}" /> <%-- <h:graphicImage  value="/img/icons/red.png" style="width:20px; height:20px"/> --%>
             	</rich:treeNode>
             </rich:tree>
@@ -37,10 +38,13 @@
 		        <a4j:outputPanel ajaxRendered="true" layout="block">                    
 		            <rich:panel id="id_detalhes" header="#{pdiControllerBean.currentNodeSelection.name}"
 		                                    rendered="#{pdiControllerBean.rendered}" style="width: 100%; font-size:medium">
-		                <h:outputText value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}"
-		                              rendered="#{pdiControllerBean.currentNodeSelection.renderedDescription}"/>
-		                <br/>
-		                <br/>
+<%-- 		                <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.projectNode}"> --%>
+		                    <h:outputText value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}"/>
+                            <br/>
+                            <h:outputText value="Responsável: #{pdiControllerBean.currentNodeSelection.responsavelName}"/>
+                            <br/>
+                            <br/>
+<%--                         </h:panelGroup> --%>
 		                <fieldset>
 		                    <legend>Detalhes</legend>
 		                    <h:panelGrid columns="2" style="width: 100%">
@@ -50,9 +54,9 @@
 		
 		                                </f:facet>
 		                                
-		                                <h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.dataInicioPrevista}"/>
+		                                <h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.strDataInicioPrevista}"/>
 		                                <br/>
-		                                <h:outputText value="Efetiva: #{pdiControllerBean.currentNodeSelection.dataInicioEfetiva}"/>
+		                                <h:outputText value="Efetiva: #{pdiControllerBean.currentNodeSelection.strDataInicioEfetiva}"/>
 		                            </rich:panel>
 		                        
 		                        <rich:panel>
@@ -60,9 +64,9 @@
 		                                <h:outputText value="Data Fim" />
 		                            </f:facet>
 		                        
-		                            <h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.dataFimPrevista}" />
+		                            <h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.strDataFimPrevista}" />
 		                            <br/>
-		                            <h:outputText value="Efetiva: #{pdiControllerBean.currentNodeSelection.dataFimEfetiva}" />
+		                            <h:outputText value="Efetiva: #{pdiControllerBean.currentNodeSelection.strDataFimEfetiva}" />
 		                        </rich:panel>
 		                                                                                                                                            
 		                    </h:panelGrid>
@@ -118,4 +122,3 @@
         </rich:panel>
     </h:form>
 </f:view>
-<%@include file="/WEB-INF/jsp/include/rodape.jsp"%>

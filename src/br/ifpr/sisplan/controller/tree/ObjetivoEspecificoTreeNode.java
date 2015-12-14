@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.bean.NovaEstrategiaBean;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.EstrategiaDao;
 import br.ifpr.sisplan.model.dao.UnidadeDao;
@@ -17,15 +16,13 @@ import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract {
+public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract implements Comparable<ObjetivoEspecificoTreeNode>  {
 	private static final long serialVersionUID = 4568288872051168852L;
 	private List<EstrategiaTreeNode> estrategiasTree = new ArrayList<EstrategiaTreeNode>();
-	private int order;
 	private Unidade unidade;
 	
 	public ObjetivoEspecificoTreeNode(TreeNodeGeneric parent, ObjetivoEspecifico objetivo, int order) {
-		super(parent, objetivo);
-		this.order = order;
+		super(parent, objetivo, order);
 		this.setEstrategiasTree();
 		this.setUnidade();
 	}
@@ -71,7 +68,7 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract {
 		final List<Estrategia> estrategias = ConverterToList.convertListMappedToList(getDAO(EstrategiaDao.class).selectEstrategiaByObjetivo(this.nameNode.getId()), Estrategia.class);
 		int order=0;
 		for(Estrategia e: estrategias) {
-			final EstrategiaTreeNode estrategiaTree = new EstrategiaTreeNode(this, e, ++order);
+			final EstrategiaTreeNode estrategiaTree = new EstrategiaTreeNode(this, e, order++);
 			this.estrategiasTree.add(estrategiaTree);
 		}
  	}
@@ -81,7 +78,7 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract {
 	}
 	
 	public String getName() {
-		return "Objetivo Especifico "+this.order;
+		return "Objetivo Especifico "+ (this.order+1);
 	}
 
 	public String getDesc() {
@@ -89,7 +86,7 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public String getCadastroURL() {
-		((NovaEstrategiaBean)this.getMBean("novaEstrategiaBean")).setTreeNodeParent(this);
+		//((NovaEstrategiaBean)this.getMBean("novaEstrategiaBean")).setTreeNodeParent(this);
 		return "/SISPLAN/portal/nova_estrategia.jsf";
 	}
 
@@ -111,5 +108,13 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract {
 	
 	public String getUnidadeName() {
 		return this.unidade.getName();
+	}
+
+	public int compareTo(ObjetivoEspecificoTreeNode other) {
+		return Integer.compare(this.getMyID(), other.getMyID());
+	}
+	
+	public int getUnidadeID() {
+		return this.unidade.getId();
 	}
 }

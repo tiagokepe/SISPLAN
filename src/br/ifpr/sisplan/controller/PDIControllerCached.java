@@ -1,10 +1,15 @@
-package br.ifpr.sisplan.controller.bean;
+package br.ifpr.sisplan.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
+import br.ifpr.sisplan.controller.tree.EixoTreeNode;
+import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.controller.tree.PDITreeNode;
 import br.ifpr.sisplan.model.dao.PDIDao;
 import br.ifpr.sisplan.model.dao.UnidadeDao;
@@ -19,7 +24,9 @@ public class PDIControllerCached extends AbstractController {
 	private List<TreeNode> pdis;
 	private PDITreeNode currentPDI;
 	private List<Unidade> listUnidades = new ArrayList<Unidade>();
-	private final Unidade unidadeAll = new Unidade("Todas"); 
+	private final Unidade unidadeAll = new Unidade("TODAS UNIDADES");
+	
+	private Map<String, ObjetivoEstrategicoTreeNode> mapObjEstrategicoTreeNode;
 
 	private PDIControllerCached() {
 		this.setListUnidades();
@@ -40,8 +47,9 @@ public class PDIControllerCached extends AbstractController {
     public void buildTree() {
 		final List<PDI> listPDIs = ConverterToList.convertListMappedToList(getDAO(PDIDao.class).selectAll(), PDI.class);
 		this.pdis = new ArrayList<TreeNode>();
+		int i=0;
 		for(PDI pdi: listPDIs) {
-			PDITreeNode pdiTree = new PDITreeNode(pdi);
+			PDITreeNode pdiTree = new PDITreeNode(pdi,i++);
 			pdis.add(pdiTree);
 		}
 		if(pdis.size() > 0)
@@ -75,5 +83,20 @@ public class PDIControllerCached extends AbstractController {
 		if(this.pdis == null)
 			this.buildTree();
 		return this.pdis;
+	}
+
+	public Map<String, ObjetivoEstrategicoTreeNode> getMapObjEstrategicoTreeNode() {
+		if(mapObjEstrategicoTreeNode == null)
+			this.setMapObjEstrategicoTreeNode();
+		return mapObjEstrategicoTreeNode;
+	}
+
+	private void setMapObjEstrategicoTreeNode() {
+		this.mapObjEstrategicoTreeNode = new LinkedHashMap<String, ObjetivoEstrategicoTreeNode>();
+		for(EixoTreeNode eixo: this.getCurrentPDI().getEixosTree())
+			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
+				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree())
+					this.mapObjEstrategicoTreeNode.put(obj.getDesc(), obj);
+					
 	}
 }

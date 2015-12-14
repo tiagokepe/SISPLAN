@@ -4,13 +4,17 @@ import java.util.Enumeration;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.table.Etapa;
+import br.ifpr.sisplan.model.table.Projeto;
+import br.ifpr.sisplan.model.table.Responsavel;
 
 public class EtapaTreeNode extends TreeNodeCallBack {
 	private static final long serialVersionUID = -9205942028545960131L;
+	private Responsavel responsavel;
 	
-	public EtapaTreeNode(TreeNodeGeneric parent, Etapa etapa) {
-		super(parent, etapa);
+	public EtapaTreeNode(TreeNodeGeneric parent, Etapa etapa, int order) {
+		super(parent, etapa, order);
 	}
 	
 	public TreeNode getChildAt(int paramInt) {
@@ -62,7 +66,7 @@ public class EtapaTreeNode extends TreeNodeCallBack {
 		return this.dataNode.getName();
 	}
 	
-	public boolean isRenderedDescription() {
+	public boolean isProjectNode() {
 		return false;
 	}
 	
@@ -80,5 +84,12 @@ public class EtapaTreeNode extends TreeNodeCallBack {
 
 	public boolean isRenderedCadastrar() {
 		return false;
+	}
+	
+	public String getResponsavelName() {
+		if(responsavel == null) {
+			this.responsavel = ResponsavelDao.getInstance().selectResponsavel(((Etapa)this.dataNode).getIdResponsavel());
+		}
+		return this.responsavel.getName();
 	}
 }

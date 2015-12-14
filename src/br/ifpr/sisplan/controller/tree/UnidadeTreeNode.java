@@ -17,8 +17,8 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = -7309785687849179855L;
 	private List<ObjetivoEspecificoTreeNode> objetivosTree = new ArrayList<ObjetivoEspecificoTreeNode>();
 	
-	public UnidadeTreeNode(TreeNodeGeneric objParent, Unidade unidade) {
-		super(objParent, unidade);
+	public UnidadeTreeNode(TreeNodeGeneric objParent, Unidade unidade, int order) {
+		super(objParent, unidade, order);
 		this.setObjetivosTree();
 	}
 	

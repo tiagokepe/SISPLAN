@@ -22,7 +22,7 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	private int order;
 	
 	public EstrategiaTreeNode(TreeNodeGeneric parent, Estrategia estrategia, int order) {
-		super(parent, estrategia);
+		super(parent, estrategia, order);
 		this.order = order;
 		this.setProjetosTree();
 	}
@@ -57,9 +57,10 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	
 	public void setProjetosTree() {
 		final List<Projeto> projetos = ConverterToList.convertListMappedToList(getDAO(ProjetoDao.class).selectProjetosByEstrategia(this.nameNode.getId()), Projeto.class);
+		int i=0;
 		for(Projeto p: projetos) {
 			this.setDataProjeto(p);
-			final ProjetoTreeNode projetoTree = new ProjetoTreeNode(this, p);
+			final ProjetoTreeNode projetoTree = new ProjetoTreeNode(this, p, i++);
 			this.projetosTree.add(projetoTree);
 		}
 		this.projetosTree = projetosTree;
@@ -79,7 +80,7 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	}
 	
 	public String getName() {
-		return "Estratégia "+this.order;
+		return "Estratégia "+(this.order+1);
 	}
 
 	public String getDesc() {
@@ -91,7 +92,7 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public String getCadastroURL() {
-		((NovoProjetoBean)this.getMBean("novoProjetoBean")).setTreeNodeParent(this);
+		//((NovoProjetoBean)this.getMBean("novoProjetoBean")).setTreeNodeParent(this);
 		return "/SISPLAN/portal/novo_projeto.jsf";
 	}
 

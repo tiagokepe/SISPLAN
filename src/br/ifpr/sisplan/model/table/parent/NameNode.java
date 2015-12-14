@@ -2,7 +2,7 @@ package br.ifpr.sisplan.model.table.parent;
 
 public class NameNode {
 	protected String type;
-	private int id;
+	protected int id;
 	protected String name;
 
 	public String getType() {

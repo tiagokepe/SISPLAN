@@ -13,6 +13,18 @@
 	</application>
 	
     <managed-bean>
+        <managed-bean-name>novoObjetivoBean</managed-bean-name>
+        <managed-bean-class>br.ifpr.sisplan.controller.bean.NovoObjetivoBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    
+    <managed-bean>
+        <managed-bean-name>listSelectBean</managed-bean-name>
+        <managed-bean-class>br.ifpr.sisplan.controller.bean.ListSelectBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+	
+    <managed-bean>
 		<managed-bean-name>acessoMenu</managed-bean-name>
 		<managed-bean-class>br.ufrn.admin.jsf.AcessoMenu</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -30,6 +42,12 @@
         <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
 	
+	<managed-bean>
+        <managed-bean-name>logon</managed-bean-name>
+        <managed-bean-class>br.ifpr.sisplan.jsf.LogonSisplanBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    
 <!--     <managed-bean>
         <managed-bean-name>novoObjetivoBean2</managed-bean-name>
         <managed-bean-class>br.ifpr.sisplan.controller.bean.NovoObjetivoBean2</managed-bean-class>
@@ -38,7 +56,22 @@
     
     <validator>
         <validator-id>dateValidator</validator-id>
-        <validator-class>br.ifpr.sisplan.util.DateValidator</validator-class>
+        <validator-class>br.ifpr.sisplan.controller.validators.DateValidator</validator-class>
+    </validator>
+    
+    <converter>
+	    <converter-id>responsavelConverter</converter-id>
+	    <converter-class>br.ifpr.sisplan.controller.converters.ResponsavelConverter</converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>listShuttleconverter</converter-id>
+        <converter-class>br.ifpr.sisplan.controller.converters.ListShuttleconverter</converter-class>
+    </converter>
+    
+    <validator>
+        <validator-id>pickListValidator</validator-id>
+        <validator-class>br.ifpr.sisplan.controller.validators.PickListValidator</validator-class>
     </validator>
 	
 </faces-config>

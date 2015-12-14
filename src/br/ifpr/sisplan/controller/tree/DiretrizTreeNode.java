@@ -17,8 +17,8 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = 8418909430752199490L;
 	private List<ObjetivoEstrategicoTreeNode> objetivosTree = new ArrayList<ObjetivoEstrategicoTreeNode>();
 	
-	public DiretrizTreeNode(TreeNodeGeneric eixoParent, Diretriz myDiretriz) {
-		super(eixoParent, myDiretriz);
+	public DiretrizTreeNode(TreeNodeGeneric eixoParent, Diretriz myDiretriz, int order) {
+		super(eixoParent, myDiretriz, order);
 		this.setObjetivosTree();
 	}
 
@@ -53,8 +53,9 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	public void setObjetivosTree() {
 		final List<ObjetivoEstrategico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEstrategicoDao.class).
 													selectObjetivosByDiretriz(this.nameNode.getId()), ObjetivoEstrategico.class);
+		int i=0;
 		for(ObjetivoEstrategico o: objetivos) {
-			final ObjetivoEstrategicoTreeNode objetivoTree = new ObjetivoEstrategicoTreeNode(this, o);
+			final ObjetivoEstrategicoTreeNode objetivoTree = new ObjetivoEstrategicoTreeNode(this, o, i++);
 			this.objetivosTree.add(objetivoTree);
 		}
 	}
@@ -68,7 +69,7 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return "D"+this.getMyID()+"."+this.nameNode.getType();
 	}
 	
 	public String getName() {

@@ -17,8 +17,8 @@ public class EixoTreeNode extends TreeNodeGeneric {
 	private static final long serialVersionUID = 4712680632403538439L;
 	private List<DiretrizTreeNode> diretrizesTree = new ArrayList<DiretrizTreeNode>();
 
-	public EixoTreeNode(TreeNodeGeneric pdiParent, Eixo eixo) {
-		super(pdiParent, eixo);
+	public EixoTreeNode(TreeNodeGeneric pdiParent, Eixo eixo, int order) {
+		super(pdiParent, eixo, order);
 		this.setDiretrizesTree();
 	}
 	
@@ -46,8 +46,9 @@ public class EixoTreeNode extends TreeNodeGeneric {
 
 	public void setDiretrizesTree() {
 		final List<Diretriz> diretrizes = ConverterToList.convertListMappedToList(getDAO(DiretrizDao.class).selectDiretrizesByEixo(this.nameNode.getId()), Diretriz.class);
+		int i=0;
 		for(Diretriz d: diretrizes) {
-			final DiretrizTreeNode diretrizTree = new DiretrizTreeNode(this, d);
+			final DiretrizTreeNode diretrizTree = new DiretrizTreeNode(this, d, i++);
 			this.diretrizesTree.add(diretrizTree);
 		}
 	}

@@ -1,35 +1,36 @@
 package br.ifpr.sisplan.controller.bean;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.faces.event.ValueChangeEvent;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.faces.validator.Validator;
+import javax.faces.validator.ValidatorException;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
+import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
+import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
+import br.ifpr.sisplan.controller.tree.EixoTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
+import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
-import br.ifpr.sisplan.model.table.Unidade;
 
-@Component
-@Scope("session")
-public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
+public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> implements Validator {
 	private static final long serialVersionUID = -4222480778726435646L;
 	private static NovoObjetivoBean instance;
-	private String unidadeName;
-	private Unidade unidadeSelected;
-	List<SelectItem> listUnidades;
-	
+
+    private List<SelectItem> availableObjEst; // +getter (no setter necessary)
+    private List<String> selectedObjEst; // +getter +setter
+    
+	private Map<String, ObjetivoEstrategicoTreeNode> mapObjEstrategicoTreeNode;
+    
 	public NovoObjetivoBean() {
-		this.buildListUnidade();
-		if(listUnidades.size() == 1)
-			this.setUnidadeName(listUnidades.get(0).getLabel());
-		else
-			this.setUnidadeName("Selecione Unidade");
+		super();
 	}
 	
 	public static NovoObjetivoBean getInstance() {
@@ -37,14 +38,6 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 			instance = new NovoObjetivoBean();
 		
 		return instance;
-	}
-	
-	public String getUnidadeName() {
-		return this.unidadeName;
-	}
-	
-	public void setUnidadeName(String unidadeName) {
-		this.unidadeName = unidadeName;
 	}
 	
 	public String getObjetivoEstrategicoName() {
@@ -56,35 +49,18 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	}
 
 	public void save() {
-		final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.name);
-		getDAO(ObjetivoEspecificoDao.class).insertUnidadeObjetivos(this.getUnidadeSelected().getId(), this.parent.getMyID(), objEspecifico.getId());
-		
-		this.parent.addTreeNodeChild(new ObjetivoEspecificoTreeNode(this.parent, objEspecifico, this.parent.getChildCount() + 1));
-		this.returnMainPage();
-	}
-
-	public Unidade getUnidadeSelected() {
-		if(unidadeSelected == null)
-			this.setUnidadeSelected();
-		return this.unidadeSelected;
-	}
-
-	public void setUnidadeSelected() {
-		this.unidadeSelected = PDIControllerCached.getInstance().getUnidade(this.unidadeName);
-	}
+		if(this.validateFields()) {
+			final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.name);
+			
+			for(String strObj: this.selectedObjEst) {
+				ObjetivoEstrategicoTreeNode objEstr = this.mapObjEstrategicoTreeNode.get(strObj);
+				ObjetivoEspecificoTreeNode objEsp = new ObjetivoEspecificoTreeNode(objEstr, objEspecifico, objEstr.getChildCount());
+				getDAO(ObjetivoEspecificoDao.class).insertUnidadeObjetivos(this.getUnidadeSelected().getId(), objEstr.getMyID(), objEsp.getMyID());
+				objEstr.addTreeNodeChild(objEsp);
 	
-	public List<SelectItem> getListUnidades() {
-		return this.listUnidades;
-	}
-	
-	public void buildListUnidade() {
-		this.listUnidades = new ArrayList<SelectItem>();
-		for(Unidade u: PDIControllerCached.getInstance().getListUnidades())
-			this.listUnidades.add(new SelectItem(u.toString(), u.toString()));
-	}
-	
-	public void unidadeSelectedListener(ValueChangeEvent e) {
-		this.unidadeName = (String)e.getNewValue();
+			}
+			this.returnMainPage();
+		}
 	}
 
 	public String getDefaultUnidadeName() {
@@ -92,4 +68,59 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 			return listUnidades.get(0).getLabel();
 		return "Selecione Unidade";
 	}
+
+	public List<String> getSelectedObjEst() {
+		return selectedObjEst;
+	}
+
+	public void setSelectedObjEst(List<String> selectedObjEst) {
+		this.selectedObjEst = selectedObjEst;
+	}
+
+	public List<SelectItem> getAvailableObjEst() {
+		return availableObjEst;
+	}
+	
+	public void setAvailableObjEst(List<SelectItem> availableObjEst) {
+		this.availableObjEst = availableObjEst;
+	}
+
+	public void validate(FacesContext fc, UIComponent component, Object value)
+			throws ValidatorException {
+		
+		System.out.println("NovoObjetivoBean Validator-----");
+	}
+
+	@Override
+	protected void initInternalStructure() {
+		this.mapObjEstrategicoTreeNode = new LinkedHashMap<String, ObjetivoEstrategicoTreeNode>();
+		this.availableObjEst = new ArrayList<SelectItem>();
+		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
+			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
+				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree()) {
+					this.mapObjEstrategicoTreeNode.put(obj.getDesc(), obj);
+					this.availableObjEst.add(new SelectItem(obj.getDesc()));	
+				}
+	}
+
+	@Override
+	protected boolean validateFields() {
+		boolean ret = true; 
+		if(this.name.isEmpty()) {
+			addMensagemErro("Descrição está vazia, ela deve ser preenchida.");
+			ret = false;
+		}
+		if(this.unidadeName.isEmpty() || this.unidadeName.equals(SELECIONE_UNIDADE)
+				|| this.unidadeName.equals(PDIControllerCached.getInstance().getUnidadeAll())) {
+			addMensagemErro("Unidade não pode ser vazia.");
+			ret = false;
+		}
+		if(!(this.selectedObjEst != null && !this.selectedObjEst.isEmpty())) {
+			addMensagemErro("Nenhum Objetivo Específico foi selecionado.");
+			ret = false;
+		}
+			
+		return ret;
+	}
+	
 }
