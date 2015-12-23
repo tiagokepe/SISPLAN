@@ -15,8 +15,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
+import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
+import br.ifpr.sisplan.controller.tree.EixoTreeNode;
+import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
 import br.ifpr.sisplan.controller.tree.EtapaTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
+import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.controller.tree.ProjetoTreeNode;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
@@ -140,6 +144,9 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
     }
 
 	public void save() {
+		//TODO Atualizar o projeto em todos as estratégias. Um projeto pode estar
+		// vinculado a mais de uma estratégia e a etapa deve ser adicionada em
+		// cada ProjetoTreeNode do mesmo projeto. 
 		if(this.validateFields()) {
 			Map<String, Date> mapFieldValue = new HashMap<String, Date>();
 			if(dataInicioPrevista != null) mapFieldValue.put("data_inicio_prevista", dataInicioPrevista);
@@ -152,7 +159,15 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 			Etapa etapa = getDAO(EtapaDao.class).insertEtapa(descricao, parent.getMyID(), this.getResponsavelSelected().getId());
 			etapa.setData(dt);
 			getDAO(EtapaDao.class).insertEtapaAndData(etapa.getId(), dt.getId());
-			this.parent.addTreeNodeChild(new EtapaTreeNode(this.parent, etapa, this.parent.getChildCount()));
+			for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
+				for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
+					for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree())
+						for(ObjetivoEspecificoTreeNode objEsp: objEst.getAllObjetivos())
+							for(EstrategiaTreeNode est: objEsp.getEstrategiasTree())
+								for(ProjetoTreeNode proj: est.getProjetosTree())
+									if(proj.getMyID() == this.parent.getMyID())
+										proj.addTreeNodeChild(new EtapaTreeNode(proj, etapa, proj.getChildCount()));
+			
 		}
 		this.returnMainPage();
 	}

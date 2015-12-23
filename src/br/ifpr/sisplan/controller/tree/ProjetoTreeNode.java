@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,10 +14,12 @@ import javax.faces.event.ValueChangeEvent;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.bean.NovaEtapaBean;
+import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
+import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.model.table.Projeto;
@@ -137,10 +140,6 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 		return this.nameNode.getId();
 	}
 
-	public boolean isRenderedCadastrar() {
-		return true;
-	}
-
 	public String getDesc() {
 		return this.getDescricao();
 	}
@@ -163,5 +162,80 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 			this.responsavel = ResponsavelDao.getInstance().selectResponsavel(((Projeto)this.dataNode).getIdResponsavel());
 		}
 		return this.responsavel.getName();
+	}
+	
+	public boolean hasLinkEstrategia() {
+		return this.getDAO(ProjetoDao.class).countEstrategiaLinks(this.getMyID()) > 0 ? true: false; 
+	}
+	
+	public void deleteProjetoFromDB() {
+		// Removing projeto from data base
+		this.getDAO(ProjetoDao.class).deleteProjeto(this.nameNode.getId());
+		this.getDAO(DataDao.class).deleteData(this.dataNode.getData());
+		for(EtapaTreeNode etapa: this.etapasTree)
+			etapa.deleteEtapaFromDB();
+	}
+
+	public void delete() {
+		System.out.println("PROJETO delete...");
+		this.deleteProjetoFromDB();
+		
+		// Removing projeto references from java objects
+		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
+			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
+				for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree())
+					for(ObjetivoEspecificoTreeNode objEsp: objEst.getFilteredObjetivos())
+						for(EstrategiaTreeNode est: objEsp.getEstrategiasTree()) {
+								boolean foundProj = false;
+								Iterator<ProjetoTreeNode> it = est.getProjetosTree().iterator();
+								ProjetoTreeNode nextProj;
+								while(it.hasNext()) {
+									nextProj = it.next();
+									// Se projeto encontrado, então decrementa a ordem dos projetos posteriores
+									if(foundProj)
+										nextProj.decreaseOrder();
+									if(nextProj.getMyID() == this.getMyID()) {
+										//Deleting associated etapas from DB
+										for(EtapaTreeNode etapa: nextProj.getEtapasTree())
+											etapa.deleteEtapaFromDB();
+										((PDIControllerBean)this.getMBean("pdiControllerBean")).removeExpandedNode(nextProj.getRowKey());
+										it.remove();
+										foundProj = true;
+									}
+									System.out.println(nextProj.getMyID() +  " == " + this.getMyID());
+								}
+								System.out.println("--------------------------------------------");
+							}
+		
+		((PDIControllerBean)this.getMBean("pdiControllerBean")).setCurrentNodeSelection(null);
+		System.out.println("PROJETO deletou...");
+	}
+	
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return true;
+	}
+
+	public boolean isRenderedAlterar() {
+		return true;
+	}
+
+	public boolean isRenderedExcluir() {
+		return true;
+	}
+	
+	public boolean isRenderedProjetoOrEtapa() {
+		return true;
+	}
+
+	public void removeTreeNodeChild(TreeNodeGeneric child) {
+		this.etapasTree.remove(child);
 	}
 }

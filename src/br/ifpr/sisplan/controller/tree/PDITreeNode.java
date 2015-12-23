@@ -55,10 +55,12 @@ public class PDITreeNode extends TreeNodeGeneric {
 	}
 	
 	public List<EixoTreeNode> getEixosTree() {
-		if(!this.eixosTree.isEmpty()) {
+/*		if(!this.eixosTree.isEmpty()) {
 			this.eixosTree.clear();
 		}
-		this.setEixosTree();
+		this.setEixosTree();*/
+		if(this.eixosTree != null && this.eixosTree.isEmpty())
+			this.setEixosTree();
 		return eixosTree;
 	}
 
@@ -94,7 +96,28 @@ public class PDITreeNode extends TreeNodeGeneric {
 		}
 		return false;
 	}
-/*	public String getHtmlID() {
-		return "pdiID_"+this.getMyID();
-	}*/
+
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return false;
+	}
+
+	public boolean isRenderedAlterar() {
+		return false;
+	}
+
+	public boolean isRenderedExcluir() {
+		return false;
+	}
+	
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
+	}
 }

@@ -67,7 +67,7 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 				for(ObjetivoEspecificoTreeNode objEsp: listEsp) {
 					try {
 						// Try to insert a relationship between ObjetivoEspecifico e Estrategia, even ignoring primary key constraint
-						getDAO(EstrategiaDao.class).insertRelationshipObjetivoEstrategia(estrategia.getId(), objEsp.getMyID());
+						getDAO(EstrategiaDao.class).insertRelationshipObjetivoEstrategia(objEsp.getMyID(), estrategia.getId());
 					}
 					catch(DuplicateKeyException e) {
 						Logger.warn("SISPLAN - DuplicateKeyException, violation of the primary key constraint,"

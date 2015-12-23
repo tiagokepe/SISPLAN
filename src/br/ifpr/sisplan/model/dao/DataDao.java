@@ -124,4 +124,9 @@ public class DataDao extends GenericDAOImpl {
 		Data data = (Data)this.sisplanDao.query(strSql, new DataExtractor());
 		return data;
 	}
+	
+	public void deleteData(Data dt) {
+		String sql = "DELETE FROM sisplan.data WHERE id="+dt.getId();
+		sisplanDao.update(sql);
+	}
 }

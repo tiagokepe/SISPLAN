@@ -10,11 +10,12 @@ import org.richfaces.event.NodeExpandedListener;
 import org.richfaces.model.TreeRowKey;
 
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
+import br.ifpr.sisplan.controller.ifaces.RenderedJSFComponentsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
 import br.ifpr.sisplan.model.table.parent.NameNode;
 import br.ufrn.arq.web.jsf.AbstractController;
 
-public abstract class TreeNodeGeneric extends AbstractController implements TreeNode, TreeNodeInfoIface, NodeExpandedListener {
+public abstract class TreeNodeGeneric extends AbstractController implements TreeNode, TreeNodeInfoIface, NodeExpandedListener, RenderedJSFComponentsIface {
 	private static final long serialVersionUID = 7504710891476763636L;
 	protected TreeNodeGeneric parentNode;
 	protected NameNode nameNode;
@@ -57,5 +58,9 @@ public abstract class TreeNodeGeneric extends AbstractController implements Tree
 
 	public void setOrder(int order) {
 		this.order = order;
+	}
+	
+	public void decreaseOrder() {
+		this.order--;
 	}
 }

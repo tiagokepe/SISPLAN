@@ -50,4 +50,9 @@ public class EtapaDao extends GenericDAOImpl {
 		String sql = "INSERT INTO sisplan.etapa_datas VALUES(?,?)";
 		this.sisplanDao.insert(sql, new Object[] {idEtapa, idData});
 	}
+	
+	public void deleteEtapa(int id_etapa) {
+		String sql = "DELETE FROM sisplan.etapa WHERE id="+id_etapa;
+		this.sisplanDao.update(sql);
+	}
 }

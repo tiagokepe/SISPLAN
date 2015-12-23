@@ -18,7 +18,7 @@ public class EstrategiaDao extends GenericDAOImpl {
 	
 	public List selectEstrategiaByObjetivo(int id_obj) {
 		String sql = "SELECT id, name FROM sisplan.estrategia AS est "
-					 +"JOIN (SELECT * FROM sisplan.objetivo_estrategias WHERE id_objetivo="+id_obj+") AS obj_est "
+					 +"JOIN (SELECT * FROM sisplan.objetivo_esp_estrategias WHERE id_objetivo_esp="+id_obj+") AS obj_est "
 					 +"ON est.id=obj_est.id_estrategia";
 		return sisplanDao.queryForList(sql);
 	}
@@ -42,13 +42,18 @@ public class EstrategiaDao extends GenericDAOImpl {
 		return est;
 	}
 	
-	public void insertRelationshipObjetivoEstrategia(int id_est, int id_obj) {
-		String sql = "INSERT INTO sisplan.objetivo_estrategias VALUES(?,?)";
-		this.sisplanDao.insert(sql, new Object[] {id_est, id_obj});
+	public void insertRelationshipObjetivoEstrategia(int id_obj, int id_est) {
+		String sql = "INSERT INTO sisplan.objetivo_esp_estrategias VALUES(?,?)";
+		this.sisplanDao.insert(sql, new Object[] {id_obj, id_est});
 	}
 	
 	public void insertRelationshipEstrategiaProjeto(int id_estrategia, int id_projeto) {
 		String sql = "INSERT INTO sisplan.estrategia_projetos VALUES(?,?)";
 		this.sisplanDao.insert(sql, new Object[] {id_estrategia, id_projeto});
+	}
+	
+	public void deleteEstrategia(int id_estrategia) {
+		String sql = "DELETE FROM sisplan.estrategia WHERE id="+id_estrategia;
+		sisplanDao.update(sql);
 	}
 }

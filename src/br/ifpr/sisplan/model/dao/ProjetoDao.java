@@ -56,4 +56,14 @@ public class ProjetoDao extends GenericDAOImpl {
 		String sql = "INSERT INTO sisplan.projeto_datas VALUES(?,?)";
 		this.sisplanDao.insert(sql, new Object[] {idProjeto, idData});
 	}
+	
+	public void deleteProjeto(int id_projeto) {
+		String sql = "DELETE FROM sisplan.projeto WHERE id="+id_projeto;
+		sisplanDao.update(sql);
+	}
+	
+	public int countEstrategiaLinks(int id_projeto) {
+		String sql = "SELECT COUNT(*) FROM sisplan.estrategia_projetos WHERE id_projeto="+id_projeto;
+		return this.sisplanDao.queryForInt(sql);
+	}
 }

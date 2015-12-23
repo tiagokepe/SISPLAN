@@ -54,10 +54,13 @@ public class EixoTreeNode extends TreeNodeGeneric {
 	}
 	
 	public List<DiretrizTreeNode> getDiretrizesTree() {
-		if(!this.diretrizesTree.isEmpty()) {
+/*		if(!this.diretrizesTree.isEmpty()) {
 			this.diretrizesTree.clear();
 		}
-		this.setDiretrizesTree();
+		this.setDiretrizesTree();*/
+		if(this.diretrizesTree != null && this.diretrizesTree.isEmpty())
+			this.setDiretrizesTree();
+
 		return diretrizesTree;
 	}
 
@@ -82,4 +85,27 @@ public class EixoTreeNode extends TreeNodeGeneric {
 		return this.nameNode.getId();
 	}
 
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return false;
+	}
+
+	public boolean isRenderedAlterar() {
+		return false;
+	}
+
+	public boolean isRenderedExcluir() {
+		return false;
+	}
+	
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
+	}
 }

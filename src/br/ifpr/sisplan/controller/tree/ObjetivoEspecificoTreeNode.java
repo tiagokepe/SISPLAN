@@ -117,4 +117,38 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract impleme
 	public int getUnidadeID() {
 		return this.unidade.getId();
 	}
+
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return true;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return true;
+	}
+
+	public boolean isRenderedAlterar() {
+		return true;
+	}
+
+	public boolean isRenderedExcluir() {
+		return true;
+	}
+	
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
+	}
+
+	public void removeTreeNodeChild(TreeNodeGeneric child) {
+		// TODO Auto-generated method stub
+		
+	}
 }

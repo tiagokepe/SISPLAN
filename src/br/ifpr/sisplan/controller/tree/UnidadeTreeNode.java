@@ -81,4 +81,33 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	public int getMyID() {
 		return this.nameNode.getId();
 	}
+
+	public boolean isRenderedDescricao() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isRenderedUnidade() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isRenderedAlterar() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isRenderedExcluir() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
+	}
 }

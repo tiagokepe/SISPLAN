@@ -54,8 +54,9 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 			
 			for(String strObj: this.selectedObjEst) {
 				ObjetivoEstrategicoTreeNode objEstr = this.mapObjEstrategicoTreeNode.get(strObj);
+				getDAO(ObjetivoEspecificoDao.class).insertUnidadeObjetivos(this.getUnidadeSelected().getId(), objEstr.getMyID(), objEspecifico.getId());
+				
 				ObjetivoEspecificoTreeNode objEsp = new ObjetivoEspecificoTreeNode(objEstr, objEspecifico, objEstr.getChildCount());
-				getDAO(ObjetivoEspecificoDao.class).insertUnidadeObjetivos(this.getUnidadeSelected().getId(), objEstr.getMyID(), objEsp.getMyID());
 				objEstr.addTreeNodeChild(objEsp);
 	
 			}

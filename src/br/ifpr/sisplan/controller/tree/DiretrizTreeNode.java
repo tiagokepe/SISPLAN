@@ -61,10 +61,12 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	}
 	
 	public List<ObjetivoEstrategicoTreeNode> getObjetivosTree() {
-		if(!this.objetivosTree.isEmpty()) {
+/*		if(!this.objetivosTree.isEmpty()) {
 			this.objetivosTree.clear();
 		}
-		this.setObjetivosTree();
+		this.setObjetivosTree();*/
+		if(this.objetivosTree != null && this.objetivosTree.isEmpty())
+			this.setObjetivosTree();
 		return objetivosTree;
 	}
 	
@@ -82,5 +84,29 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 
 	public int getMyID() {
 		return this.nameNode.getId();
+	}
+
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return false;
+	}
+
+	public boolean isRenderedAlterar() {
+		return false;
+	}
+
+	public boolean isRenderedExcluir() {
+		return false;
+	}
+
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
 	}
 }

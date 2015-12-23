@@ -2,13 +2,15 @@ package br.ifpr.sisplan.controller.tree;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
-import br.ifpr.sisplan.controller.bean.NovoProjetoBean;
+import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.model.dao.DataDao;
+import br.ifpr.sisplan.model.dao.EstrategiaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.table.Estrategia;
 import br.ifpr.sisplan.model.table.Projeto;
@@ -66,6 +68,10 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 		this.projetosTree = projetosTree;
 	}
 	
+	public List<ProjetoTreeNode> getProjetosTree() {
+		return projetosTree;
+	}
+
 	private void setDataProjeto(Projeto p) {
 		p.setData(getDAO(DataDao.class).selectDataByProjeto(p.getId()));
 	}
@@ -102,5 +108,69 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.projetosTree.add((ProjetoTreeNode)child);		
+	}
+
+	public void delete() {
+		this.getDAO(EstrategiaDao.class).deleteEstrategia(this.nameNode.getId());
+		
+		// Removing estrategia references from java objects
+		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
+			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
+				for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree())
+					for(ObjetivoEspecificoTreeNode objEsp: objEst.getFilteredObjetivos()) {
+								boolean foundEstrategia = false;
+								Iterator<EstrategiaTreeNode> it = objEsp.getEstrategiasTree().iterator();
+								EstrategiaTreeNode nextEstrategia;
+								while(it.hasNext()) {
+									nextEstrategia = it.next();
+									// Se projeto encontrado, então decrementa a ordem dos projetos posteriores
+									if(foundEstrategia)
+										nextEstrategia.decreaseOrder();
+									if(nextEstrategia.getMyID() == this.getMyID()) {
+										//Check if projeto has no relationship with other estrategia
+										for(ProjetoTreeNode proj: nextEstrategia.getProjetosTree()) {
+											//Delete projeto with no link with estrategia
+											if(!proj.hasLinkEstrategia())
+												proj.deleteProjetoFromDB();
+										}
+										((PDIControllerBean)this.getMBean("pdiControllerBean")).removeExpandedNode(nextEstrategia.getRowKey());
+										it.remove();
+										foundEstrategia = true;
+									}
+									System.out.println(nextEstrategia.getMyID() +  " == " + this.getMyID());
+								}
+								System.out.println("--------------------------------------------");
+							}
+		
+		((PDIControllerBean)this.getMBean("pdiControllerBean")).setCurrentNodeSelection(null);
+	}
+	
+
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return true;
+	}
+
+	public boolean isRenderedAlterar() {
+		return true;
+	}
+
+	public boolean isRenderedExcluir() {
+		return true;
+	}
+	
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
+	}
+
+	public void removeTreeNodeChild(TreeNodeGeneric child) {
+		this.projetosTree.remove(child);
 	}
 }

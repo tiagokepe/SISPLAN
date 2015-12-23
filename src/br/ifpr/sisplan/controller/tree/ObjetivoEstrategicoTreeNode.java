@@ -22,7 +22,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = -4321723297704261633L;
 	private List<ObjetivoEspecificoTreeNode> allObjetivos = new ArrayList<ObjetivoEspecificoTreeNode>();
 	private List<ObjetivoEspecificoTreeNode> filteredObjetivos = new ArrayList<ObjetivoEspecificoTreeNode>();
-	private String unidadeSelected;
+	private String unidadeSelected = PDIControllerCached.getInstance().getUnidadeAll().getName();
 	
 	public ObjetivoEstrategicoTreeNode(TreeNodeGeneric diretrizParent, ObjetivoEstrategico myObjetivo, int order) {
 		super(diretrizParent, myObjetivo, order);
@@ -60,6 +60,10 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	
+	public List<ObjetivoEspecificoTreeNode> getFilteredObjetivos() {
+		return filteredObjetivos;
+	}
+
 	@SuppressWarnings("unchecked")
 	public Enumeration<ObjetivoEspecificoTreeNode> children() {
 		return Iterators.asEnumeration(this.filteredObjetivos.iterator());
@@ -112,8 +116,11 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.allObjetivos.add((ObjetivoEspecificoTreeNode)child);
-		if(child.getName().equals(this.unidadeSelected))
+		if(this.unidadeSelected.equals(PDIControllerCached.getInstance().getUnidadeAll().getName()) 
+		   || child.getName().equals(this.unidadeSelected)) {
+			
 			this.filteredObjetivos.add((ObjetivoEspecificoTreeNode)child);
+		}
 	}
 
 	public String getCadastroURL() {
@@ -150,8 +157,38 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 			}
 		}
 	}
+
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean isRenderedDescricao() {
+		return true;
+	}
+
+	public boolean isRenderedUnidade() {
+		return false;
+	}
+
+	public boolean isRenderedCadastrar() {
+		return true;
+	}
+
+	public boolean isRenderedAlterar() {
+		return false;
+	}
+
+	public boolean isRenderedExcluir() {
+		return false;
+	}
 	
-/*	public boolean equals(ObjetivoEstrategicoTreeNode o) {
-		return this.getName().equals(o.getName());
-	}*/
+	public boolean isRenderedProjetoOrEtapa() {
+		return false;
+	}
+
+	public void removeTreeNodeChild(TreeNodeGeneric child) {
+		// TODO Auto-generated method stub
+		
+	}
 }

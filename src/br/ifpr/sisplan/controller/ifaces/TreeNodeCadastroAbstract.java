@@ -1,6 +1,5 @@
 package br.ifpr.sisplan.controller.ifaces;
 
-import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.controller.tree.TreeNodeGeneric;
 import br.ifpr.sisplan.model.table.parent.NameNode;
 

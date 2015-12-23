@@ -1,13 +1,8 @@
 package br.ifpr.sisplan.controller.bean;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.faces.event.ValueChangeEvent;
@@ -19,11 +14,8 @@ import org.richfaces.component.html.HtmlTree;
 import org.richfaces.event.NodeSelectedEvent;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
 import br.ifpr.sisplan.controller.tree.EixoTreeNode;
-import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
-import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.controller.tree.PDITreeNode;
 import br.ifpr.sisplan.model.dao.PDIDao;
@@ -35,16 +27,14 @@ import br.ufrn.arq.web.jsf.AbstractController;
 public class PDIControllerBean extends AbstractController {
 	private static final long serialVersionUID = 501774684540273826L;
 	private TreeNode currentNodeSelection = null;
-	private boolean rendered, renderedDescPanel, renderedCadastroPanel, objEspecificoPanel;
+	private boolean renderPanel = false;
 	private Unidade unidadeSelected;
-	private boolean changedUnidade = false;
+/*	private boolean changedUnidade = false;*/
 	private PDITreeNode currentPDI;
 	private List<SelectItem> listUnidades;
 	private SortedSet<String> setExpandedNode = new TreeSet<String>();
-//	private Map<String, ObjetivoEstrategicoTreeNode> mapObjEstrategicoTreeNode;
-//	private SortedMap<String, ObjetivoEspecificoTreeNode> mapObjEspecificoTreeNode;
 	private List<TreeNode> pdisTreeAll;
-	private List<TreeNode> pdisTreeFilter;
+/*	private List<TreeNode> pdisTreeFiltered;*/
 	
 	public PDIControllerBean() {
 		SisplanUser sisplanUser = (SisplanUser)this.getMBean("sisplanUser");
@@ -78,44 +68,34 @@ public class PDIControllerBean extends AbstractController {
 		if(pdisTreeAll == null)
 			this.buildPdisTree();
 		return pdisTreeAll;
-/*		if(this.pdisTreeFilter == null) {
-			this.buildPdisTree();
-			this.pdisTreeFilter = new ArrayList<TreeNode>();
-			this.pdisTreeFilter.addAll(pdisTreeAll);
-			this.changedUnidade = false;
-		}
-		else if(this.changedUnidade) {
-			this.changedUnidade = false;
-		}
-		return this.pdisTreeFilter;*/
 	}
 	
-	public List<TreeNode> getPdisTreeFilter() {
-		return pdisTreeFilter;
+/*	public List<TreeNode> getPdisTreeFilter() {
+		return pdisTreeFiltered;
 	}
 
 	public void setPdisTreeFilter(List<TreeNode> pdisTreeFilter) {
-		this.pdisTreeFilter = pdisTreeFilter;
-	}
+		this.pdisTreeFiltered = pdisTreeFilter;
+	}*/
 
 	//TODO TEM que ver se ao aplicar o filtro não remove elementos da lista de Objetivos Específicos ORIGINAL
-	private void applyUnidadeFilter() {
+/*	private void applyUnidadeFilter() {
 		//Clear the last filter
-		this.pdisTreeFilter.clear();
+		this.pdisTreeFiltered.clear();
 		int order=0;
 		for(TreeNode pdiNode: this.pdisTreeAll) {
 			if(((PDITreeNode)pdiNode).equals(this.currentPDI)) {
 				this.currentPDI = new PDITreeNode(((PDITreeNode)pdiNode).getPDI(), order++);
-				this.pdisTreeFilter.add(this.currentPDI);
+				this.pdisTreeFiltered.add(this.currentPDI);
 			}
 			else
-				this.pdisTreeFilter.add(pdiNode);
+				this.pdisTreeFiltered.add(pdiNode);
 		}
 		//this.pdisTreeFilter.addAll(pdisTreeAll);
 
 		if(!unidadeSelected.equals(PDIControllerCached.getInstance().getUnidadeAll())) {
-			int index = this.pdisTreeFilter.indexOf(this.currentPDI);
-			PDITreeNode pdiFiltered = (PDITreeNode)this.pdisTreeFilter.get(this.pdisTreeFilter.indexOf(this.currentPDI));
+			int index = this.pdisTreeFiltered.indexOf(this.currentPDI);
+			PDITreeNode pdiFiltered = (PDITreeNode)this.pdisTreeFiltered.get(this.pdisTreeFiltered.indexOf(this.currentPDI));
 			for(EixoTreeNode e: pdiFiltered.getEixosTree())
 				for(DiretrizTreeNode d: e.getDiretrizesTree())
 					for(ObjetivoEstrategicoTreeNode o: d.getObjetivosTree()) {
@@ -128,59 +108,26 @@ public class PDIControllerBean extends AbstractController {
 						}
 					}
 		}
-	}
+	}*/
 	
 	private void fireFilter() {
+		this.setExpandedNode.clear();
 		for(EixoTreeNode e: ((PDITreeNode)this.getCurrentPDI()).getEixosTree())
 			for(DiretrizTreeNode d: e.getDiretrizesTree())
 				for(ObjetivoEstrategicoTreeNode o: d.getObjetivosTree())
 					o.applyUnidadeFilter(this.unidadeSelected.getName());
 	}
-/*	private void excludeObjetivos() {
-		for(EixoTreeNode eixo: this.getCurrentPDI().getEixosTree())
-			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
-				for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree())
-					for(ObjetivoEspecificoTreeNode objEsp: objEst.getObjetivosTree()) {
-						if(!objEsp.getUnidadeName().equals(this.unidadeSelected.getName())) {
-							String unidadeName = objEsp.getUnidadeName();
-							List<ObjetivoEspecificoTreeNode> listObj = this.mapUnidadeObjetivoEspecificoExcluded.get(unidadeName);
-							if(listObj == null)
-								listObj = new ArrayList<ObjetOivoEspecificoTreeNode>();
-							listObj.add(objEsp);
-							this.mapUnidadeObjetivoEspecificoExcluded.put(unidadeName, listObj);
-						}
-					}
-	}*/
-	
+
 	public void setCurrentPDI(PDITreeNode currentPDI) {
 		this.currentPDI = currentPDI;
 	}
 	
 	public void nodeSelected(NodeSelectedEvent event) {
-		//((TreeNodeGeneric)event.getSource()).setOpened(true);
-		
-		this.rendered = false;
-		this.renderedDescPanel = false;
-		this.renderedCadastroPanel = false;
-		this.objEspecificoPanel = false;
+		this.renderPanel = true;
 		
 		HtmlTree tree = (HtmlTree)event.getSource();
+		System.out.println("HTMLTree - "+tree);
 		this.currentNodeSelection = ((TreeNode)tree.getRowData());
-		if(this.currentNodeSelection instanceof TreeNodeDetailsIface) {
-			this.rendered = true;
-			return;
-		}
-		else if( !(this.currentNodeSelection instanceof ObjetivoEstrategicoTreeNode ||
-				   this.currentNodeSelection instanceof ObjetivoEspecificoTreeNode ||
-				   this.currentNodeSelection instanceof EstrategiaTreeNode)) {
-			this.renderedDescPanel = true;
-			return;
-		} else if(this.currentNodeSelection instanceof ObjetivoEspecificoTreeNode) {
-			this.objEspecificoPanel = true;
-			return;
-		}
-		
-		this.renderedCadastroPanel = true;
 	}
 
 	public TreeNode getCurrentNodeSelection() {
@@ -191,25 +138,9 @@ public class PDIControllerBean extends AbstractController {
         this.currentNodeSelection = currentNode;
     }
 	
-/*    public PDITreeNode getCurrentPDI() {
-    	return PDIControllerCached.getInstance().getCurrentPDI();
-	}*/
-
-	public boolean isRendered() {
-    	return this.rendered;
-    }
-    
-    public boolean isRenderedDescPanel() {
-    	return this.renderedDescPanel;
-    }
-    
-    public boolean isrenderedCadastroPanel() {
-    	return this.renderedCadastroPanel;
-    }
-    
-    public boolean isObjEspecificoPanel() {
-    	return this.objEspecificoPanel;
-    }
+	public boolean isRenderPanel() {
+		return renderPanel;
+	}
 
 	public void goToNovoObjetivo() {
 		this.redirect("/portal/novo_objetivo.jsf");
@@ -236,10 +167,6 @@ public class PDIControllerBean extends AbstractController {
 	}
 	
 	public List<SelectItem> getListUnidades() {
-/*		List<SelectItem> unidades = new ArrayList<SelectItem>();
-		for(Unidade u: ((SisplanUser)this.getMBean("sisplanUser")).getUnidades())
-			unidades.add(new SelectItem(u.toString(), u.toString()));
-		return unidades;*/
 		return this.listUnidades;
 	}
 	
@@ -256,14 +183,14 @@ public class PDIControllerBean extends AbstractController {
 		String unidadeName = (String)e.getNewValue();
 		/* Checks if unidadeSelected was changed.*/
 		if(!this.unidadeSelected.getName().equals(unidadeName) && !unidadeName.isEmpty()) {
-			this.changedUnidade = true;
+//			this.changedUnidade = true;
 			this.unidadeSelected = PDIControllerCached.getInstance().getUnidade(unidadeName);
 			if(unidadeName.equals(this.getUnidadeAll().getName()))
 				this.unidadeSelected = this.getUnidadeAll();
 			this.fireFilter();
 			return;
 		}
-		this.changedUnidade = false;
+//		this.changedUnidade = false;
 		System.out.println("AAA");
 	}
 	
@@ -277,15 +204,6 @@ public class PDIControllerBean extends AbstractController {
 			return Boolean.TRUE;
 		else
 			return Boolean.FALSE;
-/*		TreeState state = (TreeState)tree.getComponentState();
-	    if (state.isExpanded(key)) {
-	        System.out.println(rowKey + " - expanded");
-	        return Boolean.TRUE;
-	    }
-	    else {
-	        System.out.println(rowKey + " - collapsed");
-	        return Boolean.FALSE;
-	    }*/
 	}
 	
 	public synchronized void addExpandedNode(String rowKey) {
@@ -295,33 +213,4 @@ public class PDIControllerBean extends AbstractController {
 	public synchronized void removeExpandedNode(String rowKey) {
 		this.setExpandedNode.remove(rowKey);
 	}
-	
-/*	public Map<String, ObjetivoEstrategicoTreeNode> getMapObjEstrategicoTreeNode() {
-		if(mapObjEstrategicoTreeNode == null)
-			this.setMapObjEstrategicoTreeNode();
-		return mapObjEstrategicoTreeNode;
-	}
-
-	private void setMapObjEstrategicoTreeNode() {
-		this.mapObjEstrategicoTreeNode = new LinkedHashMap<String, ObjetivoEstrategicoTreeNode>();
-		for(EixoTreeNode eixo: this.getCurrentPDI().getEixosTree())
-			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
-				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree())
-					this.mapObjEstrategicoTreeNode.put(obj.getDesc(), obj);
-					
-	}*/
-	
-/*	public Map<String, ObjetivoEspecificoTreeNode> getMapObjEspecificoTreeNode() {
-		if(mapObjEspecificoTreeNode == null)
-			this.setMapObjEspecificoTreeNode();
-		return this.mapObjEspecificoTreeNode;
-	}
-	
-	private void setMapObjEspecificoTreeNode() {
-		this.mapObjEspecificoTreeNode = new TreeMap<String, ObjetivoEspecificoTreeNode>();
-		for(Map.Entry<String, ObjetivoEstrategicoTreeNode> entry: this.getMapObjEstrategicoTreeNode().entrySet())
-			for(ObjetivoEspecificoTreeNode objEsp: entry.getValue().getAllObjetivos())
-				this.mapObjEspecificoTreeNode.put(objEsp.getDesc(), objEsp);
-					
-	}*/
 }
