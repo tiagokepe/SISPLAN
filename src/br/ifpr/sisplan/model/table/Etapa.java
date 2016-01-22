@@ -2,9 +2,9 @@ package br.ifpr.sisplan.model.table;
 
 import java.io.Serializable;
 
-import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
+import br.ifpr.sisplan.model.table.parent.DateNode;
 
-public class Etapa extends DateDescriptionNode implements Serializable {
+public class Etapa extends DateNode implements Serializable {
 	private static final long serialVersionUID = -7711507910916895636L;
 	private int id_projeto;
 	private int idResponsavel;
@@ -31,11 +31,10 @@ public class Etapa extends DateDescriptionNode implements Serializable {
 	
 	@Override
 	public String toString() {
-		return this.descricao;
+		return this.name;
 	}
 	
-	@Override
 	public String getName() {
-		return this.descricao;
+		return this.getDescricao();
 	}
 }

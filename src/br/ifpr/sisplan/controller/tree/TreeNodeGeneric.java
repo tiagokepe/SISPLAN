@@ -12,22 +12,26 @@ import org.richfaces.model.TreeRowKey;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.ifaces.RenderedJSFComponentsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
-import br.ifpr.sisplan.model.table.parent.NameNode;
+import br.ifpr.sisplan.model.table.parent.DescriptionNode;
 import br.ufrn.arq.web.jsf.AbstractController;
 
 public abstract class TreeNodeGeneric extends AbstractController implements TreeNode, TreeNodeInfoIface, NodeExpandedListener, RenderedJSFComponentsIface {
 	private static final long serialVersionUID = 7504710891476763636L;
 	protected TreeNodeGeneric parentNode;
-	protected NameNode nameNode;
+	protected DescriptionNode descriptionNode;
 	protected boolean opened = false;
 	protected int order;
 	
-	public TreeNodeGeneric(TreeNodeGeneric parentNode, NameNode nameNode, int order) {
+	public TreeNodeGeneric(TreeNodeGeneric parentNode, DescriptionNode descNode, int order) {
 		this.parentNode = parentNode;
-		this.nameNode = nameNode;
+		this.descriptionNode = descNode;
 		this.order = order;
 	}
 	
+	public DescriptionNode getDescriptionNode() {
+		return descriptionNode;
+	}
+
 	public boolean isOpened() {return opened;}
 	public void setOpened(boolean opened) {this.opened = opened;}
 	

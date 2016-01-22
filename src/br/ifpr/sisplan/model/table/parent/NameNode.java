@@ -24,8 +24,8 @@ public class NameNode {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String desc) {
+		this.name = desc;
 	}
 	
 	@Override

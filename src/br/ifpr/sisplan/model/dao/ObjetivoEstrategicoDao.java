@@ -2,6 +2,7 @@ package br.ifpr.sisplan.model.dao;
 
 import java.util.List;
 
+import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class ObjetivoEstrategicoDao extends GenericDAOImpl {

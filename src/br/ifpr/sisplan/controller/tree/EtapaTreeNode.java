@@ -67,7 +67,7 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	}
 
 	public String getName() {
-		return this.dataNode.getName();
+		return this.dataNode.getDescricao();
 	}
 	
 	public boolean isProjectNode() {
@@ -80,10 +80,6 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 
 	public int getMyID() {
 		return this.getDataNode().getId();
-	}
-
-	public String getDesc() {
-		return this.getDescricao();
 	}
 
 	public String getResponsavelName() {
@@ -108,7 +104,7 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 		
 	}
 	
-	public void deleteEtapaFromDB() {
+	public void deleteFromDB() {
 		// Removing etapa from data base
 		this.getDAO(EtapaDao.class).deleteEtapa(this.dataNode.getId());
 		this.getDAO(DataDao.class).deleteData(this.dataNode.getData());
@@ -116,7 +112,7 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 
 	public void delete() {
 		System.out.println("ETAPA delete...");
-		this.deleteEtapaFromDB();
+		this.deleteFromDB();
 		
 		// Removing etapa references from java objects
 		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
@@ -178,6 +174,17 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 
 	public void removeTreeNodeChild(TreeNodeGeneric child) {
 		// TODO Auto-generated method stub
-		
+	}
+	
+	public void save() {
+		super.save();
+	}
+
+	public void cancel() {
+		super.cancel();
+	}
+
+	public String getAlterarURL() {
+		return "/SISPLAN/portal/alterar_projeto_etapa.jsf";
 	}
 }

@@ -37,7 +37,7 @@ public class EtapaDao extends GenericDAOImpl {
 							final int id_projeto = rs.getInt(rs.findColumn("id_projeto"));
 							final int id_res = rs.getInt(rs.findColumn("id_responsavel"));
 							result.setId(id);
-							result.setDescricao(desc);
+							result.setName(desc);
 							result.setId_projeto(id_projeto);
 							result.setIdResponsavel(id_res);
 						}

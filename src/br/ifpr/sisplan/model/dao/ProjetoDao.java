@@ -8,7 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import br.ifpr.sisplan.model.table.Projeto;
-import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
+import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class ProjetoDao extends GenericDAOImpl {
@@ -24,7 +24,7 @@ public class ProjetoDao extends GenericDAOImpl {
 		return sisplanDao.queryForList(sql);	
 	}
 	
-	public void updateDescricao(DateDescriptionNode p) {
+	public void updateDescricao(DateNode p) {
 		String update = "UPDATE sisplan.projeto SET descricao='"+p.getDescricao()+"' where id="+p.getId();
 		sisplanDao.update(update);
 	}

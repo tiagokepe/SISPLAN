@@ -12,7 +12,7 @@ public class EixoDao extends GenericDAOImpl {
 	
 	public List selectEixosByPDI(int id_pdi) {
 		String sqlPDI = "SELECT id_eixo FROM sisplan.pdi_eixo WHERE id_pdi="+id_pdi;
-		String sql = "SELECT id, name FROM ("+sqlPDI+") AS pdi_eixo, sisplan.eixo AS eixo WHERE eixo.id=pdi_eixo.id_eixo ORDER BY id ASC";
+		String sql = "SELECT id, descricao FROM ("+sqlPDI+") AS pdi_eixo, sisplan.eixo AS eixo WHERE eixo.id=pdi_eixo.id_eixo ORDER BY id ASC";
 		return sisplanDao.queryForList(sql);
 	}
 }

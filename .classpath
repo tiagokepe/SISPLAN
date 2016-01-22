@@ -30,7 +30,6 @@
 	<classpathentry kind="lib" path="/LIBS/app/libs.jar/richfaces-api-3.3.3.Final.jar"/>
 	<classpathentry kind="lib" path="/LIBS/app/libs.jar/richfaces-impl-3.3.3.Final.jar"/>
 	<classpathentry kind="lib" path="/LIBS/app/libs.jar/richfaces-ui-3.3.3.Final.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/joda-time-2.9.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/LIBS/app/libs.jar/org.springframework.transaction-3.1.2.RELEASE.jar"/>
 	<classpathentry kind="lib" path="/LIBS/app/libs.jar/joda-time-1.6.1.jar"/>

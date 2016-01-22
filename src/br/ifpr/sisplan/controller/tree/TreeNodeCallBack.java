@@ -19,7 +19,7 @@ import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeEventsIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
-import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
+import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ifpr.sisplan.util.DateUtil;
 
 public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNodeCallBackIface, TreeNodeEventsIface, TreeNodeActionsIface, TreeNodeDetailsIface, DataPlanningIface {
@@ -27,9 +27,9 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	protected Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 	protected boolean changedDatas = false;
 	protected boolean changedDescricao = false;
-	protected DateDescriptionNode dataNode;
+	protected DateNode dataNode;
 	
-	public TreeNodeCallBack(TreeNodeGeneric parent, DateDescriptionNode kidNode, int order) {
+	public TreeNodeCallBack(TreeNodeGeneric parent, DateNode kidNode, int order) {
 		super(parent, kidNode, order);
 		this.dataNode = kidNode;
 	}
@@ -252,7 +252,7 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		this.redirect("/portal/index.jsf");
 	}
 
-	public DateDescriptionNode getDataNode() {
+	public DateNode getDataNode() {
 		return dataNode;
 	}
 	

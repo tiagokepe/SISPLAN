@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import br.ifpr.sisplan.model.table.Estrategia;
+import br.ifpr.sisplan.model.table.parent.DescriptionNode;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class EstrategiaDao extends GenericDAOImpl {
@@ -17,25 +18,25 @@ public class EstrategiaDao extends GenericDAOImpl {
 	}
 	
 	public List selectEstrategiaByObjetivo(int id_obj) {
-		String sql = "SELECT id, name FROM sisplan.estrategia AS est "
+		String sql = "SELECT id, descricao FROM sisplan.estrategia AS est "
 					 +"JOIN (SELECT * FROM sisplan.objetivo_esp_estrategias WHERE id_objetivo_esp="+id_obj+") AS obj_est "
 					 +"ON est.id=obj_est.id_estrategia";
 		return sisplanDao.queryForList(sql);
 	}
 	
-	public Estrategia insertEstrategia(String name) {
-		String sql = "INSERT INTO sisplan.estrategia(name) VALUES(?)";
-		this.sisplanDao.insert(sql, new Object[] {name});
-		sql = "SELECT * FROM sisplan.estrategia WHERE name='"+name+"'";
+	public Estrategia insertEstrategia(String desc) {
+		String sql = "INSERT INTO sisplan.estrategia(descricao) VALUES(?)";
+		this.sisplanDao.insert(sql, new Object[] {desc});
+		sql = "SELECT * FROM sisplan.estrategia WHERE descricao='"+desc+"'";
 		Estrategia est = 
 				(Estrategia)this.sisplanDao.query(sql, new ResultSetExtractor() {
 					public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
 						Estrategia result = new Estrategia();
 						while(rs.next()) {
 							final int id = rs.getInt(rs.findColumn("id"));
-							final String name = rs.getString(rs.findColumn("name"));
+							final String desc = rs.getString(rs.findColumn("descricao"));
 							result.setId(id);
-							result.setName(name);
+							result.setName(desc);
 						}
 						return result;
 					}});
@@ -54,6 +55,16 @@ public class EstrategiaDao extends GenericDAOImpl {
 	
 	public void deleteEstrategia(int id_estrategia) {
 		String sql = "DELETE FROM sisplan.estrategia WHERE id="+id_estrategia;
+		sisplanDao.update(sql);
+	}
+	
+	public int countObjEspecificoLinks(int id_estrategia) {
+		String sql = "SELECT COUNT(*) FROM sisplan.objetivo_esp_estrategias WHERE id_estrategia="+id_estrategia;
+		return this.sisplanDao.queryForInt(sql);
+	}
+	
+	public void updateEstrategia(DescriptionNode estrategia) {
+		String sql = "UPDATE sisplan.estrategia SET descricao='"+estrategia.getDescricao()+"' where id="+estrategia.getId();
 		sisplanDao.update(sql);
 	}
 }

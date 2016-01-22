@@ -93,7 +93,7 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	}
 
 	public String getProjetoDesc() {
-		return this.parent.getDesc();
+		return this.parent.getDescricao();
 	}
 	
 	public String getResponsavelNameSelected() {

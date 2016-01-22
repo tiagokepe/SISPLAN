@@ -5,9 +5,34 @@
 <link rel="stylesheet" media="all" href="/SISPLAN/css/portal_sisplan.css" type="text/css" />
 
 <f:view>
-	<h:form acceptcharset="UTF-8">
+	<h:form id="id_main_form" acceptcharset="UTF-8">
+        <rich:toolBar id="id_tool_bar" height="26px">
+            <h:outputText value="Unidade:"/>
+            <rich:comboBox defaultLabel="#{pdiControllerBean.unidadeSelectedName}"
+                           valueChangeListener="#{pdiControllerBean.unidadeSelectedListener}"
+                           enableManualInput="false" >
+               <f:selectItems value="#{pdiControllerBean.listUnidades}"/>
+               <a4j:support event="onchange" reRender="id_tree"/>
+            </rich:comboBox>
+        
+            <rich:dropDownMenu submitMode="ajax">
+                <f:facet name="label">
+                    <h:outputText value="Periodo Planejamento"/>
+                </f:facet>
+                <rich:menuItem disabled="#{not sisplanUser.planningManager}" value="Novo" action="#{toolBarBean.goToNovoPeriodoPlan}"/>
+				<rich:menuItem value="#{toolBarBean.valueMenuShowHide}" action="#{toolBarBean.setShowPeriodoPlan}" reRender="id_tool_bar" />
+            </rich:dropDownMenu>
+            
+            <h:outputText rendered="#{toolBarBean.showPeriodoPlan}"
+                          value="De #{toolBarBean.periodoPlan.strDataInicio} até #{toolBarBean.periodoPlan.strDataFim}"/>
+            <rich:progressBar interval="3600000" rendered="#{toolBarBean.showPeriodoPlan}"
+                              label="#{toolBarBean.barCurrentValue}%" value="#{toolBarBean.barCurrentValue}" minValue="0" maxValue="100"/>
+            
+        </rich:toolBar>
+        <br/>
+                
         <rich:panel header="Visão Geral do Planejamento Estratégico" style="text-align: center;">
-        <rich:panel style="width:220px;">
+<%--         <rich:panel style="width:220px;">
            <f:facet name="header">
                <h:outputText value="Unidade"></h:outputText>
            </f:facet>
@@ -16,7 +41,7 @@
 	           <f:selectItems value="#{pdiControllerBean.listUnidades}"/>
 	           <a4j:support event="onchange" reRender="id_tree"/>
 	        </rich:comboBox>
-        </rich:panel>
+        </rich:panel> --%>
 	    <h:panelGrid columns="2" columnClasses="columnTop, columnTop" width="100%">
 	        <rich:tree id="id_tree" var="node" ajaxSubmitSelection="true" switchType="ajax"
 	                   value="#{pdiControllerBean.pdisTree}"
@@ -25,7 +50,8 @@
 	                   adviseNodeOpened="#{pdiControllerBean.adviseNodeOpened}" 
 	            	   reRender="id_detalhes" >
 	            	   
-            	<rich:treeNode id="id_tree_node" changeExpandListener="#{node.processExpansion}" type="#{node.type}">
+<%--             	<rich:treeNode id="id_tree_node" changeExpandListener="#{node.processExpansion}" type="#{node.type}"> --%>
+                <rich:treeNode changeExpandListener="#{node.processExpansion}" type="#{node.type}">
             		<h:outputText value="#{node.name}" /> <%-- <h:graphicImage  value="/img/icons/red.png" style="width:20px; height:20px"/> --%>
             	</rich:treeNode>
             	
@@ -37,7 +63,7 @@
 		                        header="#{pdiControllerBean.currentNodeSelection.name}"
                                 rendered="#{pdiControllerBean.renderPanel}">
                         <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedDescricao}"
-                                      value="Descrição: #{pdiControllerBean.currentNodeSelection.desc}">
+                                      value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}">
                             <br/>
                         </h:outputText>
                         <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedUnidade}"
@@ -91,7 +117,7 @@
                                           value="          " />
                             
                             <h:outputLink rendered="#{pdiControllerBean.currentNodeSelection.renderedAlterar}"
-                                          value="/SISPLAN/portal/alterar_projeto_etapa.jsf">
+                                          value="#{pdiControllerBean.currentNodeSelection.alterarURL}">
                                 <f:verbatim><img src="/shared/img/alterar.gif" alt="Alterar" title="Alterar"/></f:verbatim>
                             </h:outputLink>
                             <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedAlterar}"
@@ -107,15 +133,6 @@
 		            </rich:panel>
 
 		        </a4j:outputPanel>
-                
-<%--                 <a4j:outputPanel title="PANEL TESTETEE" style="text-align: center;" ajaxRendered="true" layout="block" >
-                    <rich:panel header="#{pdiControllerBean.currentNodeSelection.name}"
-                                rendered="#{pdiControllerBean.renderPanel}">
-
-                        
-                    </rich:panel>
-                </a4j:outputPanel> --%>
-                
 	        </h:panelGroup>     
         </h:panelGrid>
         </rich:panel>

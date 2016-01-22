@@ -24,7 +24,7 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	
 	public void setObjetivosTree() {
 		final List<ObjetivoEspecifico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-													selectObjetivosByUnidadeObjEstrategico(this.nameNode.getId(), this.parentNode.getMyID()), ObjetivoEspecifico.class);
+													selectObjetivosByUnidadeObjEstrategico(this.descriptionNode.getId(), this.parentNode.getMyID()), ObjetivoEspecifico.class);
 		int order=0;
 		
 		for(ObjetivoEspecifico o: objetivos) {
@@ -63,23 +63,23 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	
 	@Override
 	public String toString() {
-		return this.nameNode.toString();
+		return this.descriptionNode.toString();
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return this.descriptionNode.getType();
 	}
 	
 	public String getName() {
-		return this.nameNode.getName();
+		return this.descriptionNode.getName();
 	}
 
-	public String getDesc() {
+	public String getDescricao() {
 		return "";
 	}
 	
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public boolean isRenderedDescricao() {

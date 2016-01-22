@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
+import br.ifpr.sisplan.model.table.parent.DescriptionNode;
 import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class ObjetivoEspecificoDao extends GenericDAOImpl {
@@ -30,25 +31,25 @@ public class ObjetivoEspecificoDao extends GenericDAOImpl {
 	}
 	
 	public List selectObjetivosByUnidade(int id_unidade) {
-		String sql = "select id, name from sisplan.objetivo_especifico as A JOIN"
+		String sql = "select id, descricao from sisplan.objetivo_especifico as A JOIN"
 			   + " (select distinct(id_especifico) from sisplan.unidade_objetivos where id_unidade="+id_unidade+") as B"
 			   + " ON A.id=B.id_especifico";
 		return sisplanDao.queryForList(sql);
 	}
 	
-	public ObjetivoEspecifico insertObj(String name) {
-		String sql = "INSERT INTO sisplan.objetivo_especifico(name) VALUES(?)";
-		this.sisplanDao.insert(sql, new Object[] {name});
-		sql = "SELECT * FROM sisplan.objetivo_especifico WHERE name='"+name+"'";
+	public ObjetivoEspecifico insertObj(String desc) {
+		String sql = "INSERT INTO sisplan.objetivo_especifico(descricao) VALUES(?)";
+		this.sisplanDao.insert(sql, new Object[] {desc});
+		sql = "SELECT * FROM sisplan.objetivo_especifico WHERE descricao='"+desc+"'";
 		ObjetivoEspecifico obj = 
 				(ObjetivoEspecifico)this.sisplanDao.query(sql, new ResultSetExtractor() {
 					public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
 						ObjetivoEspecifico result = new ObjetivoEspecifico();
 						while(rs.next()) {
 							final int id = rs.getInt(rs.findColumn("id"));
-							final String name = rs.getString(rs.findColumn("name"));
+							final String desc = rs.getString(rs.findColumn("descricao"));
 							result.setId(id);
-							result.setName(name);
+							result.setDescricao(desc);
 						}
 						return result;
 					}});
@@ -60,5 +61,14 @@ public class ObjetivoEspecificoDao extends GenericDAOImpl {
 		Object[] args = {id_unidade, id_estrategico, id_especifico};
 		this.sisplanDao.insert(sql, args);
 	}
+	
+	public void deleteObjEspecifico(int id_objetivo) {
+		String sql = "DELETE FROM sisplan.objetivo_especifico WHERE id="+id_objetivo;
+		sisplanDao.update(sql);
+	}
 
+	public void updateObjetivo(DescriptionNode obj) {
+		String sql = "UPDATE sisplan.objetivo_especifico SET descricao='"+obj.getDescricao()+"' where id="+obj.getId();
+		sisplanDao.update(sql);
+	}
 }

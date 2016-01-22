@@ -24,7 +24,7 @@ import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.model.table.Projeto;
 import br.ifpr.sisplan.model.table.Responsavel;
-import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
+import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
@@ -38,7 +38,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	private Responsavel responsavel;
 
 	
-	public ProjetoTreeNode(TreeNodeGeneric parent, DateDescriptionNode projeto, int order) {
+	public ProjetoTreeNode(TreeNodeGeneric parent, DateNode projeto, int order) {
 		super(parent, projeto, order);
 		this.setEtapasTree();
 	}
@@ -137,11 +137,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 
 	public int getMyID() {
-		return this.nameNode.getId();
-	}
-
-	public String getDesc() {
-		return this.getDescricao();
+		return this.descriptionNode.getId();
 	}
 
 	public String getCadastroURL() {
@@ -168,17 +164,17 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 		return this.getDAO(ProjetoDao.class).countEstrategiaLinks(this.getMyID()) > 0 ? true: false; 
 	}
 	
-	public void deleteProjetoFromDB() {
+	public void deleteFromDB() {
 		// Removing projeto from data base
-		this.getDAO(ProjetoDao.class).deleteProjeto(this.nameNode.getId());
+		this.getDAO(ProjetoDao.class).deleteProjeto(this.descriptionNode.getId());
 		this.getDAO(DataDao.class).deleteData(this.dataNode.getData());
 		for(EtapaTreeNode etapa: this.etapasTree)
-			etapa.deleteEtapaFromDB();
+			etapa.deleteFromDB();
 	}
 
 	public void delete() {
 		System.out.println("PROJETO delete...");
-		this.deleteProjetoFromDB();
+		this.deleteFromDB();
 		
 		// Removing projeto references from java objects
 		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
@@ -197,7 +193,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 									if(nextProj.getMyID() == this.getMyID()) {
 										//Deleting associated etapas from DB
 										for(EtapaTreeNode etapa: nextProj.getEtapasTree())
-											etapa.deleteEtapaFromDB();
+											etapa.deleteFromDB();
 										((PDIControllerBean)this.getMBean("pdiControllerBean")).removeExpandedNode(nextProj.getRowKey());
 										it.remove();
 										foundProj = true;
@@ -237,5 +233,17 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 
 	public void removeTreeNodeChild(TreeNodeGeneric child) {
 		this.etapasTree.remove(child);
+	}
+	
+	public void save() {
+		super.save();
+	}
+
+	public void cancel() {
+		super.cancel();
+	}
+
+	public String getAlterarURL() {
+		return "/SISPLAN/portal/alterar_projeto_etapa.jsf";
 	}
 }

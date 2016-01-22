@@ -2,9 +2,9 @@ package br.ifpr.sisplan.model.table;
 
 import java.io.Serializable;
 
-import br.ifpr.sisplan.model.table.parent.DateDescriptionNode;
+import br.ifpr.sisplan.model.table.parent.DateNode;
 
-public class Projeto extends DateDescriptionNode implements Serializable {
+public class Projeto extends DateNode implements Serializable {
 	private static final long serialVersionUID = 8291960368270505551L;
 	private int idResponsavel;
 	

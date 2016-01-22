@@ -22,6 +22,7 @@
 	                   <f:selectItems value="#{novoProjetoBean.listUnidades}"/>
 	                   <a4j:support event="onchange" reRender="id_pick_list_panel, id_reponsaveis"/>
 	                </rich:comboBox>
+	                <h:outputText style="color:blue" value="#{novoProjetoBean.unidadeName}" rendered="#{!sisplanUser.planningManager}"/>
 	                                 
                     <h:outputText value="Responsável"></h:outputText>
                     <rich:comboBox id="id_reponsaveis" width="200px" defaultLabel="Responsável pelo projeto"

@@ -55,7 +55,7 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	}
 
 	public String getObjetivoDesc() {
-		return this.parent.getDesc();
+		return this.parent.getDescricao();
 	}
 
 	public void save() {
@@ -128,11 +128,11 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
 				for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree())
 					for(ObjetivoEspecificoTreeNode objEsp: objEst.getAllObjetivos()) {
-						List<ObjetivoEspecificoTreeNode> listObj = this.mapObjEspecificoTreeNode.get(objEsp.getDesc());
+						List<ObjetivoEspecificoTreeNode> listObj = this.mapObjEspecificoTreeNode.get(objEsp.getDescricao());
 						if(listObj == null) {
 							listObj = new ArrayList<ObjetivoEspecificoTreeNode>();
-							this.mapObjEspecificoTreeNode.put(objEsp.getDesc(), listObj);
-							this.availableObjEsp.add(new SelectItem(objEsp.getDesc()));
+							this.mapObjEspecificoTreeNode.put(objEsp.getDescricao(), listObj);
+							this.availableObjEsp.add(new SelectItem(objEsp.getDescricao()));
 						}
 						listObj.add(objEsp);
 					}

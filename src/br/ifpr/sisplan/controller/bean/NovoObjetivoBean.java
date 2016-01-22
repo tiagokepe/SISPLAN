@@ -45,12 +45,12 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 	}
 	
 	public String getObjetivoEstrategicoDesc() {
-		return this.parent.getDesc();
+		return this.parent.getDescricao();
 	}
 
 	public void save() {
 		if(this.validateFields()) {
-			final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.name);
+			final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.descricao);
 			
 			for(String strObj: this.selectedObjEst) {
 				ObjetivoEstrategicoTreeNode objEstr = this.mapObjEstrategicoTreeNode.get(strObj);
@@ -99,8 +99,8 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
 			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
 				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree()) {
-					this.mapObjEstrategicoTreeNode.put(obj.getDesc(), obj);
-					this.availableObjEst.add(new SelectItem(obj.getDesc()));	
+					this.mapObjEstrategicoTreeNode.put(obj.getDescricao(), obj);
+					this.availableObjEst.add(new SelectItem(obj.getDescricao()));	
 				}
 	}
 

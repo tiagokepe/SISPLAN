@@ -52,7 +52,7 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	
 	public void setObjetivosTree() {
 		final List<ObjetivoEstrategico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEstrategicoDao.class).
-													selectObjetivosByDiretriz(this.nameNode.getId()), ObjetivoEstrategico.class);
+													selectObjetivosByDiretriz(this.descriptionNode.getId()), ObjetivoEstrategico.class);
 		int i=0;
 		for(ObjetivoEstrategico o: objetivos) {
 			final ObjetivoEstrategicoTreeNode objetivoTree = new ObjetivoEstrategicoTreeNode(this, o, i++);
@@ -71,19 +71,19 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	}
 	
 	public String getType() {
-		return "D"+this.getMyID()+"."+this.nameNode.getType();
+		return "D"+this.getMyID()+"."+this.descriptionNode.getType();
 	}
 	
 	public String getName() {
 		return "Diretriz Organizacional " + this.getMyID();
 	}
 	
-	public String getDesc() {
-		return this.nameNode.getName();
+	public String getDescricao() {
+		return this.descriptionNode.getDescricao();
 	}
 
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public boolean isRenderedDescricao() {

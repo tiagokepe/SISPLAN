@@ -43,7 +43,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
 					selectObjetivosByUnidadeObjEstrategico(unidadeSelected.getId(), this.getMyID()), ObjetivoEspecifico.class);*/
 		objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-				selectObjetivosEspByEstrategico(this.nameNode.getId()), ObjetivoEspecifico.class);
+				selectObjetivosEspByEstrategico(this.descriptionNode.getId()), ObjetivoEspecifico.class);
 		int order=0;
 		
 		for(ObjetivoEspecifico o: objetivos) {
@@ -95,23 +95,23 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 
 	@Override
 	public String toString() {
-		return this.nameNode.toString();
+		return this.descriptionNode.toString();
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return this.descriptionNode.getType();
 	}
 	
 	public String getName() {
 		return "Objetivo Estratégico " + this.getMyID();
 	}
 
-	public String getDesc() {
-		return "O"+this.getMyID()+"."+this.nameNode.getName();
+	public String getDescricao() {
+		return "O"+this.getMyID()+"."+this.descriptionNode.getDescricao();
 	}
 	
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public void addTreeNodeChild(TreeNodeGeneric child) {
@@ -158,6 +158,11 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 		}
 	}
 
+	public void deleteFromDB() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void delete() {
 		// TODO Auto-generated method stub
 		
@@ -188,6 +193,21 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	}
 
 	public void removeTreeNodeChild(TreeNodeGeneric child) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getAlterarURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cancel() {
 		// TODO Auto-generated method stub
 		
 	}
