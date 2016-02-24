@@ -6,7 +6,7 @@ public class DescriptionNode extends NameNode {
 	protected String descricao;
 	protected BigDecimal custoPrevisto;
 	protected BigDecimal custoEfetivo;
-	
+
 	public String getDescricao() {
 		return descricao;
 	}

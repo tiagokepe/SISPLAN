@@ -13,5 +13,4 @@ public abstract class TreeNodeCadastroAbstract extends TreeNodeGeneric implement
 	public void returnMainPage() {
 		this.redirect("/portal/index.jsf");
 	}
-	
 }

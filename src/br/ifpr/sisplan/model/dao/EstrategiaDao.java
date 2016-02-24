@@ -38,6 +38,7 @@ public class EstrategiaDao extends GenericDAOImpl {
 							final String desc = rs.getString(rs.findColumn("descricao"));
 							result.setId(id);
 							result.setDescricao(desc);
+							result.setName(desc);
 						}
 						return result;
 					}});

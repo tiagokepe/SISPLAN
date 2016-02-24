@@ -38,15 +38,11 @@
             
              <h:outputText rendered="#{not periodoPlanControllerBean.periodoPlanAtivo}" 
                            value="Planejamento em Execução..." style="color: green;"/>
-
-<%--             <h:commandButton rendered="#{sisplanUser.planningManager}"
-                             styleClass="rich-panel-header"
-                             value="Histórico" type="submit"
-                             action="#{historicoControllerBean.goToHistory}"/> --%>
                              
             <h:outputLink value="#{historicoControllerBean.historyURL}" title="Histórico">
                 Histórico
             </h:outputLink>                                                            
+
         </rich:toolBar>
         <br/>
                 
@@ -71,7 +67,7 @@
 	            	   
 <%--             	<rich:treeNode id="id_tree_node" changeExpandListener="#{node.processExpansion}" type="#{node.type}"> --%>
                 <rich:treeNode changeExpandListener="#{node.processExpansion}" type="#{node.type}">
-            		<h:outputText value="#{node.name}  " /> 
+            		<h:outputText value="#{node.name}" /> <%-- <h:graphicImage  value="/img/icons/red.png" style="width:20px; height:20px"/> --%>
             	</rich:treeNode>
             	
             </rich:tree>
@@ -93,6 +89,7 @@
                         
                         <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedDescricao}"
                                       value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}">
+
                         </h:outputText>
                         
                         <br/>

@@ -8,6 +8,7 @@ import br.ifpr.sisplan.controller.Permission;
 import br.ifpr.sisplan.model.dao.UnidadeDao;
 import br.ifpr.sisplan.model.table.Unidade;
 import br.ufrn.arq.web.jsf.AbstractController;
+import br.ufrn.comum.dominio.UnidadeGeral;
 import br.ufrn.comum.dominio.UsuarioGeral;
 
 public class SisplanUser extends AbstractController {
