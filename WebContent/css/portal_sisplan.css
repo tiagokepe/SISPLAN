@@ -182,3 +182,32 @@ table tr.nivel td{
     vertical-align: top;
     width: 50%;
 }
+
+.grayRow{  
+    background-color: LightGray;  
+}
+
+.whiteRow{  
+    background-color: White;  
+}
+
+.redStatus {
+ 	background-color: rgb(255, 77, 77) !important;
+ 	background-image: none !important;
+ 	
+}
+
+.greenStatus {
+    background-color: rgb(52, 178, 87) !important;
+    background-image: none !important; 
+}
+
+.blueStatus {
+    background-color: rgb(31, 128, 224) !important;
+    background-image: none !important; 
+}
+
+.orangeStatus {
+    background-color: rgb(245, 174, 61) !important;
+    background-image: none !important; 
+}

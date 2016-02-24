@@ -53,6 +53,26 @@
                         <h:message for="id_Data_Fim_Efetiva" style="color: red;font-weight:bold"/>
                     </h:panelGroup>
                     
+                    <h:outputText value="Custo Previsto: " />
+                    <h:panelGroup>
+	                    <h:inputText id="id_Custo_Previsto" value="#{novaEtapaBean.custoPrevisto}" 
+	                                 size="20" required="true" label="Custo Previsto" >
+	                        <!-- display in at least 2 decimal points -->
+	                        <f:converter converterId="bigDecimalConverter"/>
+	                    </h:inputText>
+	                    <h:outputText value="Ex: 500.00" style="text-colour:gray;"/>
+                    </h:panelGroup>
+                    
+                    <h:outputText value="Custo Efetivo: " />
+                    <h:panelGroup>
+                        <h:inputText id="id_Custo_Efetivo" value="#{novaEtapaBean.custoEfetivo}" 
+                                     size="20" required="true" label="Custo Efetivo" >
+                            <!-- display in at least 2 decimal points -->
+                            <f:converter converterId="bigDecimalConverter"/>
+                        </h:inputText>
+                        <h:outputText value="Ex: 510.00" style="text-colour:gray;"/>
+                    </h:panelGroup>
+                    
 <%--                     <h:outputText value="Data Início Prevista: "/>
                     <h:panelGroup>
                         <h:inputText id="id_data_ini_prevista" label="Data Início Prevista"

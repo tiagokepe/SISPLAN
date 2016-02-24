@@ -1,5 +1,6 @@
 package br.ifpr.sisplan.controller.bean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
+import br.ifpr.sisplan.controller.converters.BigDecimalConverter;
 import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
 import br.ifpr.sisplan.controller.tree.EixoTreeNode;
 import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
@@ -39,6 +41,8 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	private Date dataInicioEfetiva;
 	private Date dataFimPrevista;
 	private Date dataFimEfetiva;
+	private BigDecimal custoPrevisto;
+	private BigDecimal custoEfetivo;
 	
 	private List<Responsavel> responsaveis;
 	private Responsavel responsavelSelected;
@@ -80,6 +84,22 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 		this.dataFimEfetiva = dataFimEfetiva;
 	}
 
+	public BigDecimal getCustoPrevisto() {
+		return custoPrevisto;
+	}
+
+	public void setCustoPrevisto(BigDecimal custoPrevisto) {
+		this.custoPrevisto = custoPrevisto;
+	}
+
+	public BigDecimal getCustoEfetivo() {
+		return custoEfetivo;
+	}
+
+	public void setCustoEfetivo(BigDecimal custoEfetivo) {
+		this.custoEfetivo = custoEfetivo;
+	}
+
 	private Date getDateFromString(String strDate) {
 		if(!DateUtil.validateDateFormat(strDate)) {
 			return null;
@@ -93,7 +113,7 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	}
 
 	public String getProjetoDesc() {
-		return this.parent.getDesc();
+		return this.parent.getDescricao();
 	}
 	
 	public String getResponsavelNameSelected() {
@@ -156,7 +176,14 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 			
 			Data dt =  getDAO(DataDao.class).insertData(mapFieldValue);
 			
-			Etapa etapa = getDAO(EtapaDao.class).insertEtapa(descricao, parent.getMyID(), this.getResponsavelSelected().getId());
+			Etapa etapa;
+			if(!custoEfetivo.equals(BigDecimalConverter.bigDecEmpty))
+				etapa = getDAO(EtapaDao.class).insertEtapa(descricao, parent.getMyID(),this.getResponsavelSelected().getId(),
+													this.custoPrevisto, this.custoEfetivo);
+			else
+				etapa = getDAO(EtapaDao.class).insertEtapa(descricao, parent.getMyID(),this.getResponsavelSelected().getId(),
+													this.custoPrevisto);
+			
 			etapa.setData(dt);
 			getDAO(EtapaDao.class).insertEtapaAndData(etapa.getId(), dt.getId());
 			for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
@@ -167,9 +194,9 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 								for(ProjetoTreeNode proj: est.getProjetosTree())
 									if(proj.getMyID() == this.parent.getMyID())
 										proj.addTreeNodeChild(new EtapaTreeNode(proj, etapa, proj.getChildCount()));
-			
+		
+			this.returnMainPage();
 		}
-		this.returnMainPage();
 	}
 
 	@Override
@@ -217,6 +244,23 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 				ret = false;
 			}
 		}
+		
+		if(this.custoPrevisto == null || this.custoPrevisto.equals(BigDecimalConverter.bigDecEmpty)) {
+			addMensagemErro("Custo previsto não preenchido.");
+			ret = false;
+		} 
+		else if(this.custoPrevisto != null && (this.custoPrevisto.doubleValue() < 0.0)) {
+			addMensagemErro("Custo previsto inválido, menor que 0.00.");
+			ret = false;
+		}
+			
+		
+		if(this.custoEfetivo != null && !this.custoEfetivo.equals(BigDecimalConverter.bigDecEmpty)  && (this.custoEfetivo.doubleValue() < 0.0)) {
+			addMensagemErro("Custo efetivo inválido, menor que 0.00.");
+			ret = false;
+		}
+			
+			
 		return ret;
 	}
 }

@@ -11,6 +11,9 @@ import javax.faces.model.SelectItem;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
@@ -20,6 +23,8 @@ import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 
+@Component
+@Scope("request")
 public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> implements Validator {
 	private static final long serialVersionUID = -4222480778726435646L;
 	private static NovoObjetivoBean instance;
@@ -45,12 +50,12 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 	}
 	
 	public String getObjetivoEstrategicoDesc() {
-		return this.parent.getDesc();
+		return this.parent.getDescricao();
 	}
 
 	public void save() {
 		if(this.validateFields()) {
-			final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.name);
+			final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.descricao);
 			
 			for(String strObj: this.selectedObjEst) {
 				ObjetivoEstrategicoTreeNode objEstr = this.mapObjEstrategicoTreeNode.get(strObj);
@@ -99,15 +104,15 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
 			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
 				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree()) {
-					this.mapObjEstrategicoTreeNode.put(obj.getDesc(), obj);
-					this.availableObjEst.add(new SelectItem(obj.getDesc()));	
+					this.mapObjEstrategicoTreeNode.put(obj.getDescricao(), obj);
+					this.availableObjEst.add(new SelectItem(obj.getDescricao()));	
 				}
 	}
 
 	@Override
 	protected boolean validateFields() {
 		boolean ret = true; 
-		if(this.name.isEmpty()) {
+		if(this.descricao.isEmpty()) {
 			addMensagemErro("Descrição está vazia, ela deve ser preenchida.");
 			ret = false;
 		}

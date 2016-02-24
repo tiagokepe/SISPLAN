@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.model.dao.ObjetivoEspecificoDao;
 import br.ifpr.sisplan.model.table.ObjetivoEspecifico;
 import br.ifpr.sisplan.model.table.Unidade;
@@ -24,7 +25,7 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	
 	public void setObjetivosTree() {
 		final List<ObjetivoEspecifico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-													selectObjetivosByUnidadeObjEstrategico(this.nameNode.getId(), this.parentNode.getMyID()), ObjetivoEspecifico.class);
+													selectObjetivosByUnidadeObjEstrategico(this.descriptionNode.getId(), this.parentNode.getMyID()), ObjetivoEspecifico.class);
 		int order=0;
 		
 		for(ObjetivoEspecifico o: objetivos) {
@@ -63,23 +64,23 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	
 	@Override
 	public String toString() {
-		return this.nameNode.toString();
+		return this.descriptionNode.toString();
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return this.descriptionNode.getType();
 	}
 	
 	public String getName() {
-		return this.nameNode.getName();
+		return this.descriptionNode.getName();
 	}
 
-	public String getDesc() {
+	public String getDescricao() {
 		return "";
 	}
 	
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public boolean isRenderedDescricao() {
@@ -107,7 +108,16 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 		return false;
 	}
 	
+	public boolean isRenderedCancelar() {
+		return false;
+	}
+	
 	public boolean isRenderedProjetoOrEtapa() {
 		return false;
+	}
+	
+	@Override
+	public String getStatusStyleClass() {
+		return ProgressStatus.Default.getStyleClass();
 	}
 }

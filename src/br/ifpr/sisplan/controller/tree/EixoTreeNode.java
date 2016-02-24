@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.model.dao.DiretrizDao;
 import br.ifpr.sisplan.model.table.Diretriz;
 import br.ifpr.sisplan.model.table.Eixo;
@@ -45,7 +46,7 @@ public class EixoTreeNode extends TreeNodeGeneric {
 	}
 
 	public void setDiretrizesTree() {
-		final List<Diretriz> diretrizes = ConverterToList.convertListMappedToList(getDAO(DiretrizDao.class).selectDiretrizesByEixo(this.nameNode.getId()), Diretriz.class);
+		final List<Diretriz> diretrizes = ConverterToList.convertListMappedToList(getDAO(DiretrizDao.class).selectDiretrizesByEixo(this.descriptionNode.getId()), Diretriz.class);
 		int i=0;
 		for(Diretriz d: diretrizes) {
 			final DiretrizTreeNode diretrizTree = new DiretrizTreeNode(this, d, i++);
@@ -66,23 +67,23 @@ public class EixoTreeNode extends TreeNodeGeneric {
 
 	@Override
 	public String toString() {
-		return this.nameNode.toString();
+		return this.descriptionNode.toString();
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return this.descriptionNode.getType();
 	}
 	
 	public String getName() {
-		return "Eixo Estratégico "+this.nameNode.getId();
+		return "Eixo Estratégico "+this.descriptionNode.getId();
 	}
 
-	public String getDesc() {
-		return this.nameNode.getName();
+	public String getDescricao() {
+		return this.descriptionNode.getDescricao();
 	}
 
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public boolean isRenderedDescricao() {
@@ -105,7 +106,16 @@ public class EixoTreeNode extends TreeNodeGeneric {
 		return false;
 	}
 	
+	public boolean isRenderedCancelar() {
+		return false;
+	}
+	
 	public boolean isRenderedProjetoOrEtapa() {
 		return false;
+	}
+	
+	@Override
+	public String getStatusStyleClass() {
+		return ProgressStatus.Default.getStyleClass();
 	}
 }

@@ -13,12 +13,6 @@
 	</application>
 	
     <managed-bean>
-        <managed-bean-name>novoObjetivoBean</managed-bean-name>
-        <managed-bean-class>br.ifpr.sisplan.controller.bean.NovoObjetivoBean</managed-bean-class>
-        <managed-bean-scope>session</managed-bean-scope>
-    </managed-bean>
-    
-    <managed-bean>
         <managed-bean-name>listSelectBean</managed-bean-name>
         <managed-bean-class>br.ifpr.sisplan.controller.bean.ListSelectBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -62,6 +56,11 @@
     <converter>
 	    <converter-id>responsavelConverter</converter-id>
 	    <converter-class>br.ifpr.sisplan.controller.converters.ResponsavelConverter</converter-class>
+    </converter>
+    
+    <converter>
+        <converter-id>bigDecimalConverter</converter-id>
+        <converter-class>br.ifpr.sisplan.controller.converters.BigDecimalConverter</converter-class>
     </converter>
     
     <converter>

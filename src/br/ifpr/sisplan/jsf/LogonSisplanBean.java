@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.ReflectionUtils;
 
+import br.ifpr.sisplan.controller.bean.SisplanUser;
 import br.ufrn.admin.dominio.MensagensHelper;
-import br.ufrn.admin.jsf.AcessoMenu;
 import br.ufrn.admin.jsf.AdminAbstractController;
 import br.ufrn.admin.negocio.AdminListaComando;
 import br.ufrn.arq.caixa_postal.Mensagem;
@@ -123,13 +123,19 @@ public class LogonSisplanBean extends AdminAbstractController<Object> {
 			getCurrentSession().invalidate();
 			return falha("Usuário não autorizado a acessar o sistema.");
 		}
-		
-		// Verificar permissão de acesso ao sistema
-		AcessoMenu acesso = getMBean("acessoMenu");
-		if ( !acesso.processarPermissoes() && !isAlterandoSenha() && !isRespondendoQuestionario() ) {
+
+		SisplanUser sisplanUser = getMBean("sisplanUser");
+		if(!sisplanUser.isGrantedAccess()) {
 			getCurrentSession().invalidate();
 			return falha("Usuário não autorizado a acessar este sistema.");
 		}
+		
+		// Verificar permissão de acesso ao sistema
+/*		AcessoMenu acesso = getMBean("acessoMenu");
+		if ( !acesso.processarPermissoes() && !isAlterandoSenha() && !isRespondendoQuestionario() ) {
+			getCurrentSession().invalidate();
+			return falha("Usuário não autorizado a acessar este sistema.");
+		}*/
 		
 		if ( acao != null ) {
 			String[] partes = acao.split("\\.");

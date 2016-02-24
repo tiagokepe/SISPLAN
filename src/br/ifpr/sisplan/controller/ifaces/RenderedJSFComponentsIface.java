@@ -6,5 +6,6 @@ public interface RenderedJSFComponentsIface {
 	public boolean isRenderedCadastrar();
 	public boolean isRenderedAlterar();
 	public boolean isRenderedExcluir();
+	public boolean isRenderedCancelar();
 	public boolean isRenderedProjetoOrEtapa();
 }

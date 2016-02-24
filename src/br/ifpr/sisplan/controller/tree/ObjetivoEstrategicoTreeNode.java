@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
+import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
@@ -43,7 +44,7 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
 					selectObjetivosByUnidadeObjEstrategico(unidadeSelected.getId(), this.getMyID()), ObjetivoEspecifico.class);*/
 		objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-				selectObjetivosEspByEstrategico(this.nameNode.getId()), ObjetivoEspecifico.class);
+				selectObjetivosEspByEstrategico(this.descriptionNode.getId()), ObjetivoEspecifico.class);
 		int order=0;
 		
 		for(ObjetivoEspecifico o: objetivos) {
@@ -95,29 +96,29 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 
 	@Override
 	public String toString() {
-		return this.nameNode.toString();
+		return this.descriptionNode.toString();
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return this.descriptionNode.getType();
 	}
 	
 	public String getName() {
 		return "Objetivo Estratégico " + this.getMyID();
 	}
 
-	public String getDesc() {
-		return "O"+this.getMyID()+"."+this.nameNode.getName();
+	public String getDescricao() {
+		return "O"+this.getMyID()+"."+this.descriptionNode.getDescricao();
 	}
 	
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.allObjetivos.add((ObjetivoEspecificoTreeNode)child);
 		if(this.unidadeSelected.equals(PDIControllerCached.getInstance().getUnidadeAll().getName()) 
-		   || child.getName().equals(this.unidadeSelected)) {
+		   || ((ObjetivoEspecificoTreeNode)child).getUnidadeName().equals(this.unidadeSelected)) {
 			
 			this.filteredObjetivos.add((ObjetivoEspecificoTreeNode)child);
 		}
@@ -158,6 +159,11 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 		}
 	}
 
+	public void deleteFromDB() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	public void delete() {
 		// TODO Auto-generated method stub
 		
@@ -171,24 +177,52 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 		return false;
 	}
 
-	public boolean isRenderedCadastrar() {
-		return true;
-	}
-
+	@Override
 	public boolean isRenderedAlterar() {
 		return false;
 	}
 
+	@Override
 	public boolean isRenderedExcluir() {
+		return false;
+	}
+	
+	@Override
+	public boolean isRenderedCancelar() {
 		return false;
 	}
 	
 	public boolean isRenderedProjetoOrEtapa() {
 		return false;
 	}
-
+	
 	public void removeTreeNodeChild(TreeNodeGeneric child) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public String getAlterarURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void save() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cancel() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getUnidadeName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public String getStatusStyleClass() {
+		return ProgressStatus.Default.getStyleClass();
 	}
 }

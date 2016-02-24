@@ -20,7 +20,7 @@ public class ListShuttleconverter implements Converter {
 		if(obj == null)
 			return null;
 		if(obj instanceof ObjetivoEstrategicoTreeNode)
-			return ((ObjetivoEstrategicoTreeNode) obj).getDesc();
+			return ((ObjetivoEstrategicoTreeNode) obj).getDescricao();
 		if(obj instanceof String)
 			return (String)obj;
 		else

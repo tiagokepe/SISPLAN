@@ -17,11 +17,12 @@ public abstract class NovoCadastro<P> extends AbstractController implements Tree
 	protected String name;
 	protected String descricao = "";
 	protected String unidadeName = "";
-	private Unidade unidadeSelected;
+	protected Unidade unidadeSelected;
 	protected List<SelectItem> listUnidades;
 	protected final String SELECIONE_UNIDADE = "Selecione Unidade"; 
 
 	public NovoCadastro() {
+		this.unidadeSelected = this.getUnidadeAll();
 		this.buildListUnidade();
 		if(listUnidades.size() == 1)
 			this.setUnidadeName(listUnidades.get(0).getLabel());
@@ -80,8 +81,19 @@ public abstract class NovoCadastro<P> extends AbstractController implements Tree
 		this.unidadeSelected = PDIControllerCached.getInstance().getUnidade(this.unidadeName);
 	}
 	
+	public Unidade getUnidadeAll() {
+		return PDIControllerCached.getInstance().getUnidadeAll();
+	}
+	
 	public void unidadeSelectedListener(ValueChangeEvent e) {
 		this.unidadeName = (String)e.getNewValue();
+		
+		if(!unidadeName.isEmpty() && !this.unidadeSelected.getName().equals(unidadeName)) {
+			this.unidadeSelected = PDIControllerCached.getInstance().getUnidade(unidadeName);
+			if(unidadeName.equals(this.getUnidadeAll().getName()))
+				this.unidadeSelected = this.getUnidadeAll();
+		}
+
 	}
 	
 	public List<SelectItem> getListUnidades() {

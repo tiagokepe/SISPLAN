@@ -22,6 +22,7 @@ public class ConverterToList {
 		return listCasted;
 	}
 	
+	//Remove '_' from database column names
 	private static List<Map> threatKeysOnListMapped(List<Map> source) {
 		List<Map> newList = new ArrayList<Map>();
 		Map newMap;
@@ -56,7 +57,7 @@ public class ConverterToList {
 	}
 	
 	private static void setField(Field field, Object value, Object instance, Class clazz) {
-		Pattern regexp = Pattern.compile("set"+field.getName().toLowerCase(), Pattern.CASE_INSENSITIVE);
+		Pattern regexp = Pattern.compile("set"+field.getName().toLowerCase() +"$", Pattern.CASE_INSENSITIVE);
     	for(Method m: clazz.getDeclaredMethods()) {
     		if(regexp.matcher(m.getName().toLowerCase()).find())
 				try {

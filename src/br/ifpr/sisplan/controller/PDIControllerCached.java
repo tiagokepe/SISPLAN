@@ -96,7 +96,7 @@ public class PDIControllerCached extends AbstractController {
 		for(EixoTreeNode eixo: this.getCurrentPDI().getEixosTree())
 			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
 				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree())
-					this.mapObjEstrategicoTreeNode.put(obj.getDesc(), obj);
+					this.mapObjEstrategicoTreeNode.put(obj.getDescricao(), obj);
 					
 	}
 }

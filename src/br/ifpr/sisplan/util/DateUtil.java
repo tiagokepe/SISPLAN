@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 public class DateUtil {
 	public static String DefaultDateFormat = "dd/MM/yyyy";
+	public static String DefaultTimeStampFormat = "dd/MM/yyyy HH:mm:ss";
 	public static boolean validateDateFormat(String strDate) {
 		if(strDate.isEmpty()) return false;
 		Pattern p = Pattern.compile("^[0-3][0-9]/[0-1][0-9]/[0-9][0-9][0-9][0-9]$");
@@ -31,6 +32,15 @@ public class DateUtil {
 			e.printStackTrace();
 		}
 		return dt;
+	}
+	
+	public static String dateToString(Date dt) {
+		return new SimpleDateFormat(DateUtil.DefaultDateFormat).format(dt);
+	}
+	
+	public static String timeStampToString(Date ts) {
+		SimpleDateFormat dtFormat = new SimpleDateFormat(DateUtil.DefaultTimeStampFormat);
+		return dtFormat.format(ts);
 	}
 	
 	public static Date stringFromDBToDate(String strDate) {

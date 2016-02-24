@@ -18,7 +18,7 @@ public class PDIDao extends GenericDAOImpl {
 	}
 	
 	public List selectAll() {
-		String sql = "SELECT * FROM sisplan.pdi ORDER BY name ASC";
+		String sql = "SELECT * FROM sisplan.pdi ORDER BY id ASC";
 		return sisplanDao.queryForList(sql);
 	}
 

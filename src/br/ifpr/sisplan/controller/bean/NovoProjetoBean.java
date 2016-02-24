@@ -12,7 +12,6 @@ import javax.faces.model.SelectItem;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.LocalDate;
 import org.springframework.context.annotation.Scope;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
@@ -111,7 +110,7 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	}
 
 	public String getEstrategiaDesc() {
-		return this.parent.getDesc();
+		return this.parent.getDescricao();
 	}
 	
 	public List<SelectItem> getResponsaveis() {
@@ -271,11 +270,11 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 				for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree())
 					for(ObjetivoEspecificoTreeNode objEsp: objEst.getAllObjetivos())
 						for(EstrategiaTreeNode est: objEsp.getEstrategiasTree()) {
-							List<EstrategiaTreeNode> listEst = this.mapEstrategiaTreeNode.get(est.getDesc());
+							List<EstrategiaTreeNode> listEst = this.mapEstrategiaTreeNode.get(est.getDescricao());
 							if(listEst == null) {
 								listEst = new ArrayList<EstrategiaTreeNode>();
-								this.mapEstrategiaTreeNode.put(est.getDesc(), listEst);
-								this.availableEst.add(new SelectItem(est.getDesc()));
+								this.mapEstrategiaTreeNode.put(est.getDescricao(), listEst);
+								this.availableEst.add(new SelectItem(est.getDescricao()));
 							}
 							listEst.add(est);
 						}

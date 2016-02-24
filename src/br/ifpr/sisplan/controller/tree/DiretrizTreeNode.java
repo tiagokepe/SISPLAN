@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.model.dao.ObjetivoEstrategicoDao;
 import br.ifpr.sisplan.model.table.Diretriz;
 import br.ifpr.sisplan.model.table.ObjetivoEstrategico;
@@ -52,7 +53,7 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	
 	public void setObjetivosTree() {
 		final List<ObjetivoEstrategico> objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEstrategicoDao.class).
-													selectObjetivosByDiretriz(this.nameNode.getId()), ObjetivoEstrategico.class);
+													selectObjetivosByDiretriz(this.descriptionNode.getId()), ObjetivoEstrategico.class);
 		int i=0;
 		for(ObjetivoEstrategico o: objetivos) {
 			final ObjetivoEstrategicoTreeNode objetivoTree = new ObjetivoEstrategicoTreeNode(this, o, i++);
@@ -71,19 +72,19 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	}
 	
 	public String getType() {
-		return "D"+this.getMyID()+"."+this.nameNode.getType();
+		return "D"+this.getMyID()+"."+this.descriptionNode.getType();
 	}
 	
 	public String getName() {
 		return "Diretriz Organizacional " + this.getMyID();
 	}
 	
-	public String getDesc() {
-		return this.nameNode.getName();
+	public String getDescricao() {
+		return this.descriptionNode.getDescricao();
 	}
 
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public boolean isRenderedDescricao() {
@@ -105,8 +106,17 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	public boolean isRenderedExcluir() {
 		return false;
 	}
+	
+	public boolean isRenderedCancelar() {
+		return false;
+	}
 
 	public boolean isRenderedProjetoOrEtapa() {
 		return false;
+	}
+
+	@Override
+	public String getStatusStyleClass() {
+		return ProgressStatus.Default.getStyleClass();
 	}
 }

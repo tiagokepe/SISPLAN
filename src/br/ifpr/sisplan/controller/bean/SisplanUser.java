@@ -14,6 +14,7 @@ public class SisplanUser extends AbstractController {
 	private static final long serialVersionUID = 940364573344164102L;
 	List<Unidade> unidades;
 	private boolean planningManager;
+	private boolean grantedAccess = true;
 	private UsuarioGeral user = this.getUsuarioLogado();
 	
 	public SisplanUser() throws Exception {
@@ -29,7 +30,6 @@ public class SisplanUser extends AbstractController {
 		if(Permission.PLANNING_MANAGER.checkPermission(this.user.getPapeis())) {
 			this.unidades = PDIControllerCached.getInstance().getListUnidades();
 			this.setPlanningManager(true);
-			
 		}
 		else if (Permission.CAMPUS_MANAGER.checkPermission(this.user.getPapeis())) {
 			this.setPlanningManager(false);
@@ -44,6 +44,7 @@ public class SisplanUser extends AbstractController {
 		
 		}
 		else {
+			this.setGrantedAccess(false);
 			this.setPlanningManager(false);
 			this.unidades = new ArrayList<Unidade>();
 		}
@@ -55,5 +56,21 @@ public class SisplanUser extends AbstractController {
 
 	private void setPlanningManager(boolean planningManager) {
 		this.planningManager = planningManager;
+	}
+	
+	public boolean isGrantedAccess() {
+		return grantedAccess;
+	}
+
+	public void setGrantedAccess(boolean grantedAccess) {
+		this.grantedAccess = grantedAccess;
+	}
+
+	public Unidade getUnidade() {
+		return this.unidades.get(0);
+	}
+	
+	public String getUserName() {
+		return this.getUsuarioLogado().getNome();
 	}
 }

@@ -7,8 +7,11 @@ import java.util.List;
 
 import javax.swing.tree.TreeNode;
 
+import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EstrategiaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
@@ -22,6 +25,7 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = 3708717812208996777L;
 	private List<ProjetoTreeNode> projetosTree = new ArrayList<ProjetoTreeNode>();
 	private int order;
+	private String newDescricao;
 	
 	public EstrategiaTreeNode(TreeNodeGeneric parent, Estrategia estrategia, int order) {
 		super(parent, estrategia, order);
@@ -58,7 +62,7 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	}
 	
 	public void setProjetosTree() {
-		final List<Projeto> projetos = ConverterToList.convertListMappedToList(getDAO(ProjetoDao.class).selectProjetosByEstrategia(this.nameNode.getId()), Projeto.class);
+		final List<Projeto> projetos = ConverterToList.convertListMappedToList(getDAO(ProjetoDao.class).selectProjetosByEstrategia(this.descriptionNode.getId()), Projeto.class);
 		int i=0;
 		for(Projeto p: projetos) {
 			this.setDataProjeto(p);
@@ -78,23 +82,27 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 
 	@Override
 	public String toString() {
-		return this.nameNode.getName();
+		return this.descriptionNode.getName();
 	}
 	
 	public String getType() {
-		return this.nameNode.getType();
+		return this.descriptionNode.getType();
 	}
 	
 	public String getName() {
 		return "Estratégia "+(this.order+1);
 	}
 
-	public String getDesc() {
-		return this.nameNode.getName();
+	public String getDescricao() {
+		return this.descriptionNode.getDescricao();
+	}
+	
+	public void setDescricao(String descricao) {
+		this.newDescricao = descricao;
 	}
 
 	public int getMyID() {
-		return this.nameNode.getId();
+		return this.descriptionNode.getId();
 	}
 
 	public String getCadastroURL() {
@@ -109,9 +117,21 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	public void addTreeNodeChild(TreeNodeGeneric child) {
 		this.projetosTree.add((ProjetoTreeNode)child);		
 	}
+	
+	public boolean hasLinkObjEspecifico() {
+		return this.getDAO(EstrategiaDao.class).countObjEspecificoLinks(this.getMyID()) > 0 ? true: false; 
+	}
+	
+	public void deleteFromDB() {
+		// Removing estrategia from data base
+		this.getDAO(EstrategiaDao.class).deleteEstrategia(this.descriptionNode.getId());
+		for(ProjetoTreeNode proj: this.projetosTree)
+			proj.deleteFromDB();
+	}
 
 	public void delete() {
-		this.getDAO(EstrategiaDao.class).deleteEstrategia(this.nameNode.getId());
+		System.out.println("Estrategia delete...");
+		this.deleteFromDB();
 		
 		// Removing estrategia references from java objects
 		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
@@ -131,7 +151,7 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 										for(ProjetoTreeNode proj: nextEstrategia.getProjetosTree()) {
 											//Delete projeto with no link with estrategia
 											if(!proj.hasLinkEstrategia())
-												proj.deleteProjetoFromDB();
+												proj.deleteFromDB();
 										}
 										((PDIControllerBean)this.getMBean("pdiControllerBean")).removeExpandedNode(nextEstrategia.getRowKey());
 										it.remove();
@@ -154,23 +174,52 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 		return false;
 	}
 
-	public boolean isRenderedCadastrar() {
-		return true;
-	}
-
-	public boolean isRenderedAlterar() {
-		return true;
-	}
-
-	public boolean isRenderedExcluir() {
-		return true;
-	}
-	
 	public boolean isRenderedProjetoOrEtapa() {
 		return false;
 	}
 
 	public void removeTreeNodeChild(TreeNodeGeneric child) {
 		this.projetosTree.remove(child);
+	}
+
+	public String getAlterarURL() {
+		return "/SISPLAN/portal/alterar_descricao.jsf";
+	}
+
+	public void save() {
+		boolean alreadyUpdatedDB = false;
+
+		for(EixoTreeNode eixo: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getCurrentPDI().getEixosTree())
+			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
+				for(ObjetivoEstrategicoTreeNode objEst: dir.getObjetivosTree()) 
+					for(ObjetivoEspecificoTreeNode objEsp: objEst.getFilteredObjetivos())
+						for(EstrategiaTreeNode estrategia: objEsp.getEstrategiasTree())
+							if(this.getMyID() == estrategia.getMyID()) {
+								if(alreadyUpdatedDB) { 
+									estrategia.getDescriptionNode().setDescricao(newDescricao);
+								} else {
+									LogHistory.getInstance().log((TreeNodeInfoIface) this,
+											(TreeNodeCadastroIface) this, "Descrição",
+											estrategia.getDescriptionNode().getDescricao(),
+											newDescricao);
+									estrategia.getDescriptionNode().setDescricao(newDescricao);
+									this.getDAO(EstrategiaDao.class).updateEstrategia(estrategia.getDescriptionNode());
+									alreadyUpdatedDB = true;
+								}
+							}
+		this.returnMainPage();
+	}
+
+	public void cancel() {
+		this.redirect("/portal/index.jsf");		
+	}
+
+	public String getUnidadeName() {
+		return ((TreeNodeCadastroIface)this.parentNode).getUnidadeName();
+	}
+	
+	@Override
+	public String getStatusStyleClass() {
+		return ProgressStatus.Default.getStyleClass();
 	}
 }

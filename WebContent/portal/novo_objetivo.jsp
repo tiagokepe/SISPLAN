@@ -57,7 +57,7 @@
                 <h:outputText rendered="#{!sisplanUser.planningManager}" style="color:blue" value="#{novoObjetivoBean.unidadeName}" />
                 
                 <h:outputText style="color:blue" value="Descrição do Objetivo: "/>
-                <h:inputTextarea style="width:700px" value="#{novoObjetivoBean.name}"/>
+                <h:inputTextarea style="width:700px" value="#{novoObjetivoBean.descricao}"/>
 
             </h:panelGrid>
             <br/>

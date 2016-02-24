@@ -2,9 +2,9 @@ package br.ifpr.sisplan.model.table;
 
 import java.io.Serializable;
 
-import br.ifpr.sisplan.model.table.parent.NameNode;
+import br.ifpr.sisplan.model.table.parent.DescriptionNode;
 
-public class Unidade extends NameNode implements Serializable, Comparable<Unidade> {
+public class Unidade extends DescriptionNode implements Serializable, Comparable<Unidade> {
 	private static final long serialVersionUID = -8530969036750687780L;
 	
 	public Unidade() {
@@ -15,6 +15,14 @@ public class Unidade extends NameNode implements Serializable, Comparable<Unidad
 		this.name = unidadeName;
 	}
 	
+/*	public String getName() {
+		return name;
+	}*/
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public int compareTo(Unidade o) {
 		return this.getName().compareTo(o.getName());
 	}
