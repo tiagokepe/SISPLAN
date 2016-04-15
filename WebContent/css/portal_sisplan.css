@@ -211,3 +211,7 @@ table tr.nivel td{
     background-color: #ffa200 !important;
     background-image: none !important; 
 }
+
+.descricao {
+	width:700px;
+}

@@ -44,7 +44,6 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	public final static String PROJ_LEGENDA_RED="Projeto concluído sem data efetiva de fim.";
 	
 	private List<EtapaTreeNode> etapasTree = new ArrayList<EtapaTreeNode>();
-	private Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 	
 	//private Responsavel responsavel;
 
@@ -124,7 +123,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 
 	public String getName() {
-		return "Projeto: "+this.dataNode.getName();
+		return "Projeto " + (this.order+1);
 	}
 	
 	public boolean isProjectNode() {

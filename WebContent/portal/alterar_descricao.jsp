@@ -1,14 +1,14 @@
 <%@include file="/WEB-INF/jsp/include/cabecalho.jsp" %>
 
 <%@page import="br.ufrn.comum.dominio.LocalizacaoNoticiaPortal"%>
-<link rel="stylesheet" media="all" href="/admin/css/portal_sisplan.css" type="text/css" />
+<link rel="stylesheet" media="all" href="/SISPLAN/css/portal_sisplan.css" type="text/css" />
 <f:view>
     <a4j:outputPanel ajaxRendered="true" layout="block" >
         <h:form>
 	        <rich:panel id="id_panel_hint" header="#{pdiControllerBean.currentNodeSelection.name}">
 		        <h:panelGrid columns="2">
 		            <h:outputText style="color:blue" value="Descrição:"/>
-		            <h:inputTextarea style="width:700px" value="#{pdiControllerBean.currentNodeSelection.descricao}"/>
+		            <h:inputTextarea styleClass="descricao" value="#{pdiControllerBean.currentNodeSelection.descricao}"/>
                 </h:panelGrid>
 	        </rich:panel>
             <br/>

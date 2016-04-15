@@ -37,12 +37,12 @@ public class ProjetoDao extends GenericDAOImpl {
 	}
 	
 	public void updateDescricao(DateNode p) {
-		String update = "UPDATE "+TABLE_NAME+" SET name='"+p.getName()+"' where id="+p.getId();
+		String update = "UPDATE "+TABLE_NAME+" SET descricao='"+p.getDescricao()+"' where id="+p.getId();
 		sisplanDao.update(update);
 	}
 	
 	public void updateName(DateNode p) {
-		String update = "UPDATE "+TABLE_NAME+" SET descricao='"+p.getDescricao()+"' where id="+p.getId();
+		String update = "UPDATE "+TABLE_NAME+" SET name='"+p.getDescricao()+"' where id="+p.getId();
 		sisplanDao.update(update);
 	}
 	

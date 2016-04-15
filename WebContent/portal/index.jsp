@@ -82,14 +82,16 @@
 	            <h:panelGroup>
 			        <a4j:outputPanel ajaxRendered="true">                    
 			            <rich:panel id="id_detalhes" 
+			                        style="width: 475px;"
 	                                rendered="#{pdiControllerBean.renderPanel}"
 	                                headerClass="#{pdiControllerBean.currentNodeSelection.statusStyleClass}"
 	                                header="#{pdiControllerBean.currentNodeSelection.name}">
-	                       
+
+<!--                                           style="width: 460px; overflow-x: scroll; display: block;"  -->
+	                       <pre style="text-align:left !important; white-space: pre-line; font-family: Arial,Verdana,sans-serif !important;" >
 	                        <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedDescricao}"
 	                                      value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}"/>
-	
-	                        <br/>
+	                       </pre>
 	                        
 	                        <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedUnidade}"
 	                                      value="Unidade: #{pdiControllerBean.currentNodeSelection.unidadeName}">

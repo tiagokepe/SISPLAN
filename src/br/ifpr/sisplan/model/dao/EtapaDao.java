@@ -9,7 +9,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 import br.ifpr.sisplan.controller.converters.BigDecimalConverter;
-import br.ifpr.sisplan.model.table.Data;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ufrn.arq.dao.GenericDAOImpl;
@@ -116,5 +115,10 @@ public class EtapaDao extends GenericDAOImpl {
 		String sql = "UPDATE " + TABLE_NAME + " SET id_responsavel=" +id_responsavel
 				   + " WHERE id="+id_etapa;
 		this.sisplanDao.update(sql);
+	}
+	
+	public void updateDescricao(DateNode p) {
+		String update = "UPDATE "+TABLE_NAME+" SET name='"+p.getDescricao()+"' WHERE id="+p.getId();
+		sisplanDao.update(update);
 	}
 }

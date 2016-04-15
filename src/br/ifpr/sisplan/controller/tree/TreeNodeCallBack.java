@@ -100,6 +100,7 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 				(TreeNodeCadastroIface) this, "Descrição",
 				this.dataNode.getDescricao(),desc);
 		this.dataNode.setDescricao(desc);
+		this.descriptionNode.setDescricao(desc);
 		this.changedDescricao = true;
 	}
 	
@@ -363,7 +364,10 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 			this.changedName = false;
 		}
 		if(this.changedDescricao) {
-			this.getDAO(ProjetoDao.class).updateDescricao(this.dataNode);
+			if(this instanceof ProjetoTreeNode)
+				this.getDAO(ProjetoDao.class).updateDescricao(this.dataNode);
+			else
+				this.getDAO(EtapaDao.class).updateDescricao(this.dataNode);
 			this.changedDescricao = false;
 		}
 		if(this.changedDatas) {

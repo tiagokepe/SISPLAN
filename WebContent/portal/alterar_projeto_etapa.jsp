@@ -1,7 +1,7 @@
 <%@include file="/WEB-INF/jsp/include/cabecalho.jsp" %>
 
 <%@page import="br.ufrn.comum.dominio.LocalizacaoNoticiaPortal"%>
-<link rel="stylesheet" media="all" href="/admin/css/portal_sisplan.css" type="text/css" />
+<link rel="stylesheet" media="all" href="/SISPLAN/css/portal_sisplan.css" type="text/css" />
 <f:view>
 	<a4j:outputPanel ajaxRendered="true" layout="block" >
     	<rich:panel id="id_panel_hint" header="#{pdiControllerBean.currentNodeSelection.name}">
@@ -9,12 +9,13 @@
 	    		<h:panelGrid columns="2">
 <%-- 	    		rendered="#{pdiControllerBean.currentNodeSelection.projectNode}" --%>
                                         
-                    <h:outputText value="Nome: " rendered="#{pdiControllerBean.currentNodeSelection.projeto}"/>
+<%--                     <h:outputText value="Nome: " rendered="#{pdiControllerBean.currentNodeSelection.projeto}"/>
                     <h:inputText id="id_set_Name" rendered="#{pdiControllerBean.currentNodeSelection.projeto}"
-                                 value="#{pdiControllerBean.currentNodeSelection.name}"/>
+                                 value="#{pdiControllerBean.currentNodeSelection.name}"/> --%>
                     
                     <h:outputText value="Descrição: " />
-		        	<h:inputText id="id_set_Descricao" value="#{pdiControllerBean.currentNodeSelection.descricao}"/>
+		        	<h:inputTextarea styleClass="descricao"
+		        	                 value="#{pdiControllerBean.currentNodeSelection.descricao}"/>
 		        	
 		        	<h:outputText value="Responsável"></h:outputText>
                     <rich:comboBox id="id_reponsaveis" width="200px" defaultLabel="Responsavel pelo projeto"
