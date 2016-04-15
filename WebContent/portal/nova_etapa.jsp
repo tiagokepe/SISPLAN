@@ -9,7 +9,7 @@
                 <h:panelGrid columns="2">
                 
                     <h:outputText style="color:blue" value="Projeto: "/>
-                    <h:outputText value="#{novaEtapaBean.projetoName}"/>
+                    <h:outputText value="#{novaEtapaBean.projetoDesc}"/>
                     
                     <h:outputText value="Responsável"></h:outputText>
                     <rich:comboBox id="id_reponsaveis" width="200px" defaultLabel="Responsavel pelo projeto"

@@ -32,8 +32,8 @@
                         <a4j:support event="onchange" reRender="id_reponsaveis"/>
                     </rich:comboBox>
 
-                    <h:outputText value="Nome: "/>
-                    <h:inputText value="#{novoProjetoBean.name}"/>
+<%--                     <h:outputText value="Nome: "/>
+                    <h:inputText value="#{novoProjetoBean.name}"/> --%>
                     
                     <h:outputText value="Descrição: "/>
                     <h:inputTextarea style="width:250px" value="#{novoProjetoBean.descricao}"/>
