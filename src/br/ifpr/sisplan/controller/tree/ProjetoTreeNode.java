@@ -18,18 +18,18 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 
 import br.ifpr.sisplan.controller.ProgressStatus;
-import br.ifpr.sisplan.controller.bean.NovaEtapaBean;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
-import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
+import br.ifpr.sisplan.controller.bean.SisplanUser;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
 import br.ifpr.sisplan.model.dao.ResponsavelDao;
+import br.ifpr.sisplan.model.dao.UnidadeDao;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.model.table.Projeto;
-import br.ifpr.sisplan.model.table.Responsavel;
+import br.ifpr.sisplan.model.table.Unidade;
 import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ifpr.sisplan.util.ConverterToList;
 
@@ -38,14 +38,20 @@ import com.google.common.collect.Iterators;
 public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastroIface {
 	private static final long serialVersionUID = -7787388029320598005L;
 	
+	public final static String PROJ_LEGENDA_GREEN="Projeto concluído em dia.";
+	public final static String PROJ_LEGENDA_BLUE="Projeto em andamento.";
+	public final static String PROJ_LEGENDA_ORANGE="Projeto concluído em atraso.";
+	public final static String PROJ_LEGENDA_RED="Projeto concluído sem data efetiva de fim.";
+	
 	private List<EtapaTreeNode> etapasTree = new ArrayList<EtapaTreeNode>();
 	private Map<Method, Object> mapOfUpdateCallBack = new HashMap<Method, Object>();
 	
-	private Responsavel responsavel;
+	//private Responsavel responsavel;
 
 	
 	public ProjetoTreeNode(TreeNodeGeneric parent, DateNode projeto, int order) {
 		super(parent, projeto, order);
+		this.setResponsavel();
 		this.setEtapasTree();
 	}
 	
@@ -82,13 +88,26 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 
 	public void setEtapasTree() {
-		final List<Etapa> etapas = ConverterToList.convertListMappedToList(getDAO(EtapaDao.class).selectEtapaByProject(this.dataNode.getId()), Etapa.class);
+		final SisplanUser sisplanUser = (SisplanUser)getMBean("sisplanUser");
+
+		final List<Etapa> etapas = ConverterToList.convertListMappedToList(getDAO(EtapaDao.class).
+													selectEtapaByProject(this.dataNode.getId()), Etapa.class);
 		int i=0;
 		for(Etapa e: etapas) {
-			this.setDataEtapa(e);
-			final EtapaTreeNode etapaTree = new EtapaTreeNode(this, e, i++);
-			this.etapasTree.add(etapaTree);
+			if(sisplanUser.isResponsavelProjetoEtapa()) {
+				if(sisplanUser.getUserID() == this.responsavel.getId() || e.getIdResponsavel() == this.responsavel.getId()) {
+					this.addEtapa(e, i++);
+				}
+			}
+			else
+				this.addEtapa(e, i++);
 		}
+	}
+	
+	private void addEtapa(Etapa e, int order) {
+		this.setDataEtapa(e);
+		final EtapaTreeNode etapaTree = new EtapaTreeNode(this, e, order);
+		this.etapasTree.add(etapaTree);
 	}
 	
 	private void setDataEtapa(Etapa e) {
@@ -105,7 +124,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 
 	public String getName() {
-		return this.dataNode.getName();
+		return "Projeto: "+this.dataNode.getName();
 	}
 	
 	public boolean isProjectNode() {
@@ -147,7 +166,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 
 	public String getCadastroURL() {
-		((NovaEtapaBean)this.getMBean("novaEtapaBean")).setTreeNodeParent(this);
+		//((NovaEtapaBean)this.getMBean("novaEtapaBean")).setTreeNodeParent(this);
 		return "/SISPLAN/portal/nova_etapa.jsf";
 	}
 
@@ -160,10 +179,19 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 	
 	public String getResponsavelName() {
+		return responsavelName;
+	}
+	
+	protected void setResponsavel() {
 		if(responsavel == null) {
 			this.responsavel = ResponsavelDao.getInstance().selectResponsavel(((Projeto)this.dataNode).getIdResponsavel());
+			responsavelName = responsavel.getName();
 		}
-		return this.responsavel.getName();
+	}
+	
+	protected void setResponsaveis() {
+		Unidade unidade = this.getDAO(UnidadeDao.class).selectUnidadeOfResponsavel(((Projeto)dataNode).getIdResponsavel());
+		this.responsaveis = ResponsavelDao.getInstance().selectResponsavelByUnidade(unidade.getId());			
 	}
 	
 	public boolean hasLinkEstrategia() {
@@ -222,7 +250,18 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	}
 
 	public boolean isRenderedCadastrar() {
-		return true;
+		if(this.isPlanningManager())
+			return true;
+		if(this.isPeriodoPlanAtivo() && !this.isResponsvelProjetoEtapa())
+			return true;
+		
+		if(this.isResponsvelProjetoEtapa()) {
+			final SisplanUser user = (SisplanUser)getMBean("sisplanUser");
+			if(this.responsavel.getId() == user.getUserID())
+				return true;
+		}
+		
+		return false;
 	}
 
 	public boolean isRenderedAlterar() {
@@ -252,25 +291,52 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	public String getUnidadeName() {
 		return ((TreeNodeCadastroIface)this.parentNode).getUnidadeName();
 	}
-
-	@Override
-	public String getStatusStyleClass() {
+	
+	public ProgressStatus getProgressStatus() {
 		DateTime dtFimPrev = new DateTime(this.getDataFimPrevista());
 		DateTime dtToday = new DateTime(new Date());
 		int days = Days.daysBetween(dtToday, dtFimPrev).getDays();
 		if(days >= 0)
-			return ProgressStatus.Blue.getStyleClass();
+			return ProgressStatus.Blue;
 		else 
 			if(this.getDataFimEfetiva() == null)
-				return ProgressStatus.Red.getStyleClass();
+				return ProgressStatus.Red;
 			else {
 				DateTime dtFimEfe = new DateTime(this.getDataFimEfetiva());
 				days = Days.daysBetween(dtFimPrev, dtFimEfe).getDays();
 				if(days <= 0)
-					return ProgressStatus.Green.getStyleClass();
+					return ProgressStatus.Green;
 				else
-					return ProgressStatus.Orange.getStyleClass();
+					return ProgressStatus.Orange;
 				
 			}
+	}
+
+	@Override
+	public String getStatusStyleClass() {
+		return this.getProgressStatus().getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		return true;
+	}
+	
+	public String getImgStatus() {
+		return this.getProgressStatus().getIconPath();
+	}
+	
+	public String getLegenda() {
+		return this.getProgressStatus().getProjetoLegenda();
+	}
+
+	@Override
+	protected void setIdResponsavel() {
+		((Projeto)this.dataNode).setIdResponsavel(this.responsavel.getId());
+	}
+
+	@Override
+	protected void updateDBResponsavel() {
+		this.getDAO(ProjetoDao.class).updateResponsavel(this.dataNode.getId(), this.responsavel.getId());
 	}
 }

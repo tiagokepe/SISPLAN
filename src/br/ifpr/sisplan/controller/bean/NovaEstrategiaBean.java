@@ -63,7 +63,7 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 			final Estrategia estrategia = getDAO(EstrategiaDao.class).insertEstrategia(this.descricao);
 			for(String strObj: this.selectedObjEsp) {
 //				ObjetivoEspecificoTreeNode objEsp = ((PDIControllerBean)this.getMBean("pdiControllerBean")).getMapObjEspecificoTreeNode().get(strObj);
-				List<ObjetivoEspecificoTreeNode> listEsp = this.mapObjEspecificoTreeNode.get(strObj);
+				List<ObjetivoEspecificoTreeNode> listEsp = this.mapObjEspecificoTreeNode.get(strObj.replace(";", ","));
 				for(ObjetivoEspecificoTreeNode objEsp: listEsp) {
 					try {
 						// Try to insert a relationship between ObjetivoEspecifico e Estrategia, even ignoring primary key constraint
@@ -132,7 +132,7 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 						if(listObj == null) {
 							listObj = new ArrayList<ObjetivoEspecificoTreeNode>();
 							this.mapObjEspecificoTreeNode.put(objEsp.getDescricao(), listObj);
-							this.availableObjEsp.add(new SelectItem(objEsp.getDescricao()));
+							this.availableObjEsp.add(new SelectItem(objEsp.getDescricao().replace(",", ";")));
 						}
 						listObj.add(objEsp);
 					}
@@ -147,16 +147,12 @@ public class NovaEstrategiaBean extends NovoCadastro<TreeNodeCadastroAbstract> {
  		this.unidadeName = (String)e.getNewValue();
 		this.availableObjEsp.clear();
 		String unidadeAll = PDIControllerCached.getInstance().getUnidadeAll().getName();
-/*		for(Map.Entry<String, ObjetivoEspecificoTreeNode> entry: ((PDIControllerBean)this.getMBean("pdiControllerBean")).getMapObjEspecificoTreeNode().entrySet()) {
-			if(entry.getValue().getUnidadeName().equals(this.unidadeName) || this.unidadeName.equals(unidadeAll))
-				this.availableObjEsp.add(new SelectItem(entry.getKey()));
-		}*/
 		for(Map.Entry<String, List<ObjetivoEspecificoTreeNode>> entry: this.mapObjEspecificoTreeNode.entrySet()) {
 			ObjetivoEspecificoTreeNode obj = entry.getValue().get(0);
 			if(obj == null)
 				continue;
 			if(obj.getUnidadeName().equals(this.unidadeName) || this.unidadeName.equals(unidadeAll))
-				this.availableObjEsp.add(new SelectItem(entry.getKey()));
+				this.availableObjEsp.add(new SelectItem(entry.getKey().replace(",", ";")));
 		}
 		if(this.selectedObjEsp != null)
 			this.selectedObjEsp.clear();

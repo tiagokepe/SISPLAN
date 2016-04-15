@@ -1,5 +1,6 @@
 package br.ifpr.sisplan.controller.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.model.dao.PeriodoPlanejamentoDao;
 import br.ifpr.sisplan.model.table.PeriodoPlanejamento;
+import br.ifpr.sisplan.model.table.Unidade;
 
 @Component
 @Scope("request")
@@ -20,7 +22,8 @@ public class NewPeriodoPlanejamentoBean extends NovoCadastro<PeriodoPlanejamento
 	private Date dataIni, dataFim;
 	
 	public NewPeriodoPlanejamentoBean() {
-		this.initInternalStructure();
+		super();
+		//this.initInternalStructure();
 	}
 
 	public Date getDataIni() {
@@ -122,7 +125,16 @@ public class NewPeriodoPlanejamentoBean extends NovoCadastro<PeriodoPlanejamento
 
 	@Override
 	protected void initInternalStructure() {
-/*		this.unidadeSelected = PDIControllerCached.getInstance().getUnidadeAll();
-		this.setListUnidades();*/
+		this.unidadeSelected = this.getUnidadeAll();
+	}
+	
+	@Override
+	public void buildListUnidade() {
+		this.listUnidades = new ArrayList<SelectItem>();
+		SisplanUser sisplanUser = (SisplanUser)this.getMBean("sisplanUser");
+		Unidade unidadeAll = PDIControllerCached.getInstance().getUnidadeAll();	
+		this.listUnidades.add(new SelectItem(unidadeAll.getName()));
+		for(Unidade u: sisplanUser.getUnidades())
+			this.listUnidades.add(new SelectItem(u.toString()));
 	}
 }

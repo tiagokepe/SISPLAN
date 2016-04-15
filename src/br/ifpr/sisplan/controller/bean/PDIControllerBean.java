@@ -19,9 +19,7 @@ import br.ifpr.sisplan.controller.tree.EixoTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
 import br.ifpr.sisplan.controller.tree.PDITreeNode;
 import br.ifpr.sisplan.model.dao.PDIDao;
-import br.ifpr.sisplan.model.dao.PeriodoPlanejamentoDao;
 import br.ifpr.sisplan.model.table.PDI;
-import br.ifpr.sisplan.model.table.PeriodoPlanejamento;
 import br.ifpr.sisplan.model.table.Unidade;
 import br.ifpr.sisplan.util.ConverterToList;
 import br.ufrn.arq.web.jsf.AbstractController;
@@ -190,6 +188,7 @@ public class PDIControllerBean extends AbstractController {
 			if(unidadeName.equals(this.getUnidadeAll().getName()))
 				this.unidadeSelected = this.getUnidadeAll();
 			this.fireFilter();
+			((PeriodoPlanControllerBean)getMBean("periodoPlanControllerBean")).setPeriodoPlan();
 			return;
 		}
 //		this.changedUnidade = false;

@@ -14,6 +14,7 @@ import br.ufrn.arq.dao.GenericDAOImpl;
 public class ProjetoDao extends GenericDAOImpl {
 	private SisplanDao sisplanDao = SisplanDao.getInstance();
 	private final static String TABLE_NAME = "sisplan.projeto";
+	private final static String ESTRATEGIA_JOIN_TABLE = "sisplan.estrategia_projetos";
 	
 	public ProjetoDao() {
 		super();
@@ -24,6 +25,15 @@ public class ProjetoDao extends GenericDAOImpl {
 		String sql = "SELECT * FROM ("+sqlProjetos+") AS projeto_ids, sisplan.projeto AS projeto "
 				+ "WHERE projeto.id=projeto_ids.id_projeto AND projeto.ativo='true' ORDER BY id ASC";
 		return sisplanDao.queryForList(sql);	
+	}
+	
+	public List selectProjetosByEstrategiaAndResponsavel(int id_estrategia, int id_responsavel) {
+		String sqlEstrategia = "SELECT * FROM "+ESTRATEGIA_JOIN_TABLE+" WHERE id_estrategia="+id_estrategia;
+		
+		String sqlProjetos = "SELECT * FROM "+TABLE_NAME+" WHERE id_responsavel="+id_responsavel;
+		
+		String sqlJoin = "SELECT * FROM ("+sqlEstrategia+") AS EST JOIN ("+sqlProjetos+") AS PROJ ON EST.id_projeto = PROJ.id";
+		return sisplanDao.queryForList(sqlJoin);	
 	}
 	
 	public void updateDescricao(DateNode p) {
@@ -72,5 +82,11 @@ public class ProjetoDao extends GenericDAOImpl {
 	public int countEstrategiaLinks(int id_projeto) {
 		String sql = "SELECT COUNT(*) FROM sisplan.estrategia_projetos WHERE id_projeto="+id_projeto;
 		return this.sisplanDao.queryForInt(sql);
+	}
+	
+	public void updateResponsavel(int id_projeto, int id_responsavel) {
+		String sql = "UPDATE " + TABLE_NAME + " SET id_responsavel=" +id_responsavel
+				   + "WHERE id="+id_projeto;
+		this.sisplanDao.update(sql);
 	}
 }

@@ -13,6 +13,8 @@ import br.ufrn.arq.dao.GenericDAOImpl;
 
 public class EstrategiaDao extends GenericDAOImpl {
 	private SisplanDao sisplanDao = SisplanDao.getInstance();
+	public final static String TABLE_NAME = "sisplan.estrategia";
+	
 	public EstrategiaDao() {
 		super();
 	}

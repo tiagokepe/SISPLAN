@@ -99,4 +99,8 @@ public class PDIControllerCached extends AbstractController {
 					this.mapObjEstrategicoTreeNode.put(obj.getDescricao(), obj);
 					
 	}
+	
+	public boolean equalsToUnidadeAll(String unidadeToCompare) {
+		return unidadeToCompare.equals(unidadeAll.getName());
+	}
 }

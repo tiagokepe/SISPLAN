@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
+import br.ifpr.sisplan.controller.Permission;
 import br.ifpr.sisplan.model.table.Responsavel;
 import br.ufrn.arq.dao.Database;
 import br.ufrn.arq.dao.GenericDAOImpl;
@@ -40,8 +41,10 @@ public class ResponsavelDao extends GenericDAOImpl {
 	;*/
 	
 	public List<Responsavel> selectResponsavelByUnidade(int id_unidade) {
-		String sql = "SELECT pessoa.id_pessoa, pessoa.nome, temp.id_unidade FROM comum.pessoa AS pessoa"
-				   + " JOIN ((SELECT id_usuario FROM comum.permissao WHERE id_papel=22) AS gestor"
+		String sql = "SELECT pessoa.nome, temp.* FROM comum.pessoa AS pessoa"
+				   + " JOIN ((SELECT id_usuario FROM comum.permissao"
+				   + " WHERE id_papel="+Permission.CAMPUS_MANAGER.getIdPapel()
+				   + " OR id_papel="+Permission.RESPONSALVEL_PROJETO_ETAPA.getIdPapel()+") AS gestor"
 				   + " JOIN (SELECT DISTINCT(id_pessoa), id_usuario, id_unidade from comum.usuario WHERE id_unidade="+id_unidade
 				   + " AND id_servidor IS NOT NULL ORDER BY id_pessoa) AS usuario"
 				   + " ON gestor.id_usuario=usuario.id_usuario) AS temp"
@@ -52,7 +55,7 @@ public class ResponsavelDao extends GenericDAOImpl {
 						List<Responsavel> result = new ArrayList<Responsavel>();
 						while(rs.next()) {
 							Responsavel res = new Responsavel();
-							res.setId(rs.getInt(rs.findColumn("id_pessoa")));
+							res.setId(rs.getInt(rs.findColumn("id_usuario")));
 							res.setName(rs.getString(rs.findColumn("nome")));
 							res.setId_unidade(rs.getInt(rs.findColumn("id_unidade"))); 
 							result.add(res);

@@ -22,7 +22,7 @@ public abstract class NovoCadastro<P> extends AbstractController implements Tree
 	protected final String SELECIONE_UNIDADE = "Selecione Unidade"; 
 
 	public NovoCadastro() {
-		this.unidadeSelected = this.getUnidadeAll();
+		//this.unidadeSelected = this.getUnidadeAll();
 		this.buildListUnidade();
 		if(listUnidades.size() == 1)
 			this.setUnidadeName(listUnidades.get(0).getLabel());
@@ -88,7 +88,7 @@ public abstract class NovoCadastro<P> extends AbstractController implements Tree
 	public void unidadeSelectedListener(ValueChangeEvent e) {
 		this.unidadeName = (String)e.getNewValue();
 		
-		if(!unidadeName.isEmpty() && !this.unidadeSelected.getName().equals(unidadeName)) {
+		if(this.unidadeSelected == null || (!unidadeName.isEmpty() && !this.unidadeSelected.getName().equals(unidadeName)) ) {
 			this.unidadeSelected = PDIControllerCached.getInstance().getUnidade(unidadeName);
 			if(unidadeName.equals(this.getUnidadeAll().getName()))
 				this.unidadeSelected = this.getUnidadeAll();
@@ -103,10 +103,10 @@ public abstract class NovoCadastro<P> extends AbstractController implements Tree
 	public void buildListUnidade() {
 		this.listUnidades = new ArrayList<SelectItem>();
 		SisplanUser sisplanUser = (SisplanUser)this.getMBean("sisplanUser");
-		if(sisplanUser.isPlanningManager()) {
+/*		if(sisplanUser.isPlanningManager()) {
 			Unidade unidadeAll = PDIControllerCached.getInstance().getUnidadeAll();	
 			this.listUnidades.add(new SelectItem(unidadeAll.getName()));
-		}
+		}*/
 		for(Unidade u: sisplanUser.getUnidades())
 			this.listUnidades.add(new SelectItem(u.toString()));
 	}

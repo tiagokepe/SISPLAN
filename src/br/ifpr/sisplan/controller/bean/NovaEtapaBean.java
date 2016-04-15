@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.swing.tree.TreeNode;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -33,7 +34,7 @@ import br.ifpr.sisplan.model.table.Responsavel;
 import br.ifpr.sisplan.util.DateUtil;
 
 @Component
-@Scope("session")
+@Scope("request")
 public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	private static final long serialVersionUID = 7157061703783244442L;
 	
@@ -49,7 +50,11 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	private String responsavelNameSelected;
 	
 	public NovaEtapaBean() {
-		System.out.println("------NovaEtapaBean");
+		TreeNode parent = ((PDIControllerBean)getMBean("pdiControllerBean")).getCurrentNodeSelection();
+		if(parent instanceof ProjetoTreeNode)
+			this.setTreeNodeParent((ProjetoTreeNode)parent);
+		this.setResponsaveis();
+		//System.out.println("------NovaEtapaBean");
 	}
 	
 	public Date getDataInicioPrevista() {
@@ -192,8 +197,17 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 						for(ObjetivoEspecificoTreeNode objEsp: objEst.getAllObjetivos())
 							for(EstrategiaTreeNode est: objEsp.getEstrategiasTree())
 								for(ProjetoTreeNode proj: est.getProjetosTree())
-									if(proj.getMyID() == this.parent.getMyID())
-										proj.addTreeNodeChild(new EtapaTreeNode(proj, etapa, proj.getChildCount()));
+									if(proj.getMyID() == this.parent.getMyID()) {
+										SisplanUser user = (SisplanUser)getMBean("sisplanUser");
+										if(user.isResponsavelProjetoEtapa()) {
+											if(user.getUserID()== this.responsavelSelected.getId()) {
+												proj.addTreeNodeChild(new EtapaTreeNode(proj, etapa, proj.getChildCount()));
+											}
+										}
+										else {
+											proj.addTreeNodeChild(new EtapaTreeNode(proj, etapa, proj.getChildCount()));
+										}
+									}
 		
 			this.returnMainPage();
 		}
@@ -208,8 +222,8 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 	@Override
 	protected boolean validateFields() {
 		boolean ret = true;
-		if(this.responsavelNameSelected.isEmpty()) {
-			addMensagemErro("Responsável pela etapa não selecionado.");
+		if(this.responsavelNameSelected.isEmpty() || this.responsavelSelected == null) {
+			addMensagemErro("Não foi selecionado responsável pela etapa.");
 			ret = false;
 		}
 		if(this.descricao.isEmpty()) {

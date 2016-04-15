@@ -17,6 +17,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
+import br.ifpr.sisplan.controller.Permission;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
 import br.ifpr.sisplan.controller.tree.EixoTreeNode;
@@ -164,7 +165,7 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 			projeto.setData(dt);
 			getDAO(ProjetoDao.class).insertProjetoAndData(projeto.getId(), dt.getId());
 			for(String strEst: this.selectedEst) {
-				for(EstrategiaTreeNode est: this.mapEstrategiaTreeNode.get(strEst)) {
+				for(EstrategiaTreeNode est: this.mapEstrategiaTreeNode.get(strEst.replace(";", ","))) {
 					try {
 						// Try to insert a relationship between ObjetivoEspecifico e Estrategia, even ignoring primary key constraint
 						getDAO(EstrategiaDao.class).insertRelationshipEstrategiaProjeto(est.getMyID(), projeto.getId());
@@ -175,8 +176,18 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 					} catch(Exception e) {
 						e.printStackTrace();
 					}
-					ProjetoTreeNode projTree = new ProjetoTreeNode(est, projeto, est.getChildCount());
-					est.addTreeNodeChild(projTree);
+					
+					SisplanUser user = (SisplanUser)getMBean("sisplanUser");
+					if(user.isResponsavelProjetoEtapa()) {
+						if(user.getUserID()== this.responsavelSelected.getId()) {
+							ProjetoTreeNode projTree = new ProjetoTreeNode(est, projeto, est.getChildCount());
+							est.addTreeNodeChild(projTree);
+						}
+					}
+					else {
+						ProjetoTreeNode projTree = new ProjetoTreeNode(est, projeto, est.getChildCount());
+						est.addTreeNodeChild(projTree);
+					}
 				}
 			}
 			this.returnMainPage();
@@ -185,7 +196,11 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 	
 	@Override
 	protected boolean validateFields() {
-		boolean ret = true; 
+		boolean ret = true;
+		if(this.responsavelSelected == null) {
+			addMensagemErro("Não foi selecionado responsável pelo projeto.");
+			ret = false;
+		}
 		if(this.descricao.isEmpty()) {
 			addMensagemErro("Descrição está vazia, ela deve ser preenchida.");
 			ret = false;
@@ -274,7 +289,7 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 							if(listEst == null) {
 								listEst = new ArrayList<EstrategiaTreeNode>();
 								this.mapEstrategiaTreeNode.put(est.getDescricao(), listEst);
-								this.availableEst.add(new SelectItem(est.getDescricao()));
+								this.availableEst.add(new SelectItem(est.getDescricao().replace(",", ";")));
 							}
 							listEst.add(est);
 						}
@@ -291,7 +306,7 @@ public class NovoProjetoBean extends NovoCadastro<TreeNodeCadastroAbstract> {
 			if(est == null)
 				continue;
 			if( ((ObjetivoEspecificoTreeNode)est.getParent()).getUnidadeName().equals(this.unidadeName) || this.unidadeName.equals(unidadeAll))
-				this.availableEst.add(new SelectItem(entry.getKey()));
+				this.availableEst.add(new SelectItem(entry.getKey().replace(",", ";")));
 		}
 		if(this.selectedEst != null)
 			this.selectedEst.clear();

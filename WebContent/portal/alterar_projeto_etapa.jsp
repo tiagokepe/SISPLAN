@@ -16,9 +16,18 @@
                     <h:outputText value="Descrição: " />
 		        	<h:inputText id="id_set_Descricao" value="#{pdiControllerBean.currentNodeSelection.descricao}"/>
 		        	
+		        	<h:outputText value="Responsável"></h:outputText>
+                    <rich:comboBox id="id_reponsaveis" width="200px" defaultLabel="Responsavel pelo projeto"
+                                   value="#{pdiControllerBean.currentNodeSelection.responsavelNameSelected}"
+                                   valueChangeListener="#{pdiControllerBean.currentNodeSelection.responsavelSelectedListener}">
+                        <f:selectItems value="#{pdiControllerBean.currentNodeSelection.responsaveis}"/>
+                        <a4j:support event="onchange" reRender="id_reponsaveis"/>
+                    </rich:comboBox>
+		        	
  					<h:outputText value="Data Início Prevista: "/>
   					<h:panelGroup>
-	                    <rich:calendar id="id_set_Data_Inicio_Prevista" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataInicioPrevista}"
+	                    <rich:calendar id="id_set_Data_Inicio_Prevista" enableManualInput="true" 
+	                                   disabled="#{pdiControllerBean.currentNodeSelection.disabledDataInicioPrevista}"
 	                                   datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataInicioPrevista}">
 	                        <f:validator validatorId="dateValidator"/>
 	                    </rich:calendar>
@@ -27,7 +36,8 @@
 		        	
 		        	<h:outputText value="Data Fim Prevista: "/>
                     <h:panelGroup>
-                        <rich:calendar id="id_set_Data_Fim_Prevista" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataFimPrevista}"
+                        <rich:calendar id="id_set_Data_Fim_Prevista" enableManualInput="true"  
+                                       disabled="#{pdiControllerBean.currentNodeSelection.disabledDataFimPrevista}"
                                         datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataFimPrevista}">
                             <f:validator validatorId="dateValidator"/>
                         </rich:calendar>
@@ -36,7 +46,8 @@
 		        	
 		        	<h:outputText value="Data Início Efetiva: "/>
                     <h:panelGroup>
-                        <rich:calendar id="id_set_Data_Inicio_Efetiva" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataInicioEfetiva}"
+                        <rich:calendar id="id_set_Data_Inicio_Efetiva" enableManualInput="true"
+                                       disabled="#{pdiControllerBean.currentNodeSelection.disabledDataInicioEfetiva}"
                                         datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataInicioEfetiva}">
                             <f:validator validatorId="dateValidator"/>
                         </rich:calendar>
@@ -45,7 +56,8 @@
                     
 		        	<h:outputText value="Data Fim Efetiva: "/>
 		        	<h:panelGroup>
-                        <rich:calendar id="id_set_Data_Fim_Efetiva" disabled="#{pdiControllerBean.currentNodeSelection.disabledDataFimEfetiva}"
+                        <rich:calendar id="id_set_Data_Fim_Efetiva" enableManualInput="true"
+                                       disabled="#{pdiControllerBean.currentNodeSelection.disabledDataFimEfetiva}"
                                         datePattern="dd/MM/yyyy" value="#{pdiControllerBean.currentNodeSelection.dataFimEfetiva}">
                             <f:validator validatorId="dateValidator"/>
                         </rich:calendar>

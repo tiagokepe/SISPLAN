@@ -1,6 +1,7 @@
 <%@include file="/WEB-INF/jsp/include/cabecalho.jsp" %>
 
 <%@page import="br.ufrn.comum.dominio.LocalizacaoNoticiaPortal"%>
+<%@page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <link rel="stylesheet" media="all" href="/SISPLAN/css/portal_sisplan.css" type="text/css" />
 <f:view>
     <a4j:outputPanel ajaxRendered="true" layout="block" >

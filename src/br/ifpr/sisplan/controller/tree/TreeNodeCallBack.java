@@ -4,19 +4,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javassist.expr.Instanceof;
-
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
-import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.PeriodoPlanControllerBean;
 import br.ifpr.sisplan.controller.bean.SisplanUser;
 import br.ifpr.sisplan.controller.converters.BigDecimalConverter;
@@ -30,6 +30,8 @@ import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
+import br.ifpr.sisplan.model.dao.ResponsavelDao;
+import br.ifpr.sisplan.model.table.Responsavel;
 import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ifpr.sisplan.util.DateUtil;
 
@@ -40,12 +42,25 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	protected boolean changedCustos = false;
 	protected boolean changedDescricao = false;
 	protected boolean changedName = false;
+	protected boolean changedResponsavel = false;
 	protected DateNode dataNode;
+	
+	protected List<Responsavel> responsaveis;
+	protected Responsavel responsavel;
+	protected String responsavelName;
+	protected String oldResName;
 	
 	public TreeNodeCallBack(TreeNodeGeneric parent, DateNode kidNode, int order) {
 		super(parent, kidNode, order);
 		this.dataNode = kidNode;
+		this.setResponsaveis();
+		this.setResponsavel();
 	}
+	
+	protected abstract void setResponsaveis();
+	protected abstract void setResponsavel();
+	protected abstract void setIdResponsavel();
+	protected abstract void updateDBResponsavel();
 	
 	protected void addCallBackMethod(String method, Class paramClazz, Object param) {
 		try {
@@ -294,9 +309,10 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	}
 	
 	public void setCustoEfetivoCallBack(BigDecimal newCusto) {
+		String strOldCusto = this.dataNode.getCustoEfetivo() == null ? "" : this.dataNode.getCustoEfetivo().toString();
 		LogHistory.getInstance().log((TreeNodeInfoIface) this, 
 				(TreeNodeCadastroIface) this, "Custo Efetivo",
-				this.dataNode.getCustoEfetivo().toString(), newCusto.toString());
+				strOldCusto, newCusto.toString());
 		this.dataNode.setCustoEfetivo(newCusto);
 		this.changedCustos = true;
 	}
@@ -315,9 +331,10 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	}
 	
 	public void setCustoPrevistoCallBack(BigDecimal newCusto) {
+		String strOldCusto = this.dataNode.getCustoPrevisto() == null ? "" : this.dataNode.getCustoPrevisto().toString();
 		LogHistory.getInstance().log((TreeNodeInfoIface) this, 
 				(TreeNodeCadastroIface) this, "Custo Previsto",
-				this.dataNode.getCustoPrevisto().toString(), newCusto.toString());
+				strOldCusto, newCusto.toString());
 		this.dataNode.setCustoPrevisto(newCusto);
 		this.changedCustos = true;
 	}
@@ -356,6 +373,10 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		if(this.changedCustos) {
 			this.getDAO(EtapaDao.class).updateCustos(this.dataNode);
 			this.changedCustos = false;
+		}
+		if(this.changedResponsavel) {
+			this.updateDBResponsavel();
+			this.changedResponsavel = false;
 		}
 		
 		this.returnMainPage();
@@ -445,4 +466,50 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	public boolean isProjeto() {
 		return (this instanceof ProjetoTreeNode);
 	}
+	
+	public String getResponsavelNameSelected() {
+		return responsavelName;
+	}
+
+	public void setResponsavelNameSelected(String responsavelNameSelected) {
+		this.responsavelName = responsavelNameSelected;
+	}
+	
+	public List<SelectItem> getResponsaveis() {
+		List<SelectItem> listRes = new ArrayList<SelectItem>();
+		for(Responsavel r: this.responsaveis) {
+			listRes.add(new SelectItem(r.getName()));
+			
+		}
+		return listRes;
+	}
+	
+	public void responsavelSelectedListener(ValueChangeEvent e) {
+		this.setResponsavelName((String)e.getNewValue());
+	}
+	
+    protected Responsavel getResponsavel(String resName) {
+    	for(Responsavel r: this.responsaveis)
+    		if(r.getName().equals(resName))
+    			return r;
+		return null;
+    }
+    
+	public void setResponsavelName(String name) {
+		if(!name.isEmpty() && !name.equals(this.responsavelName) ) {
+			this.oldResName = this.responsavelName;
+			this.addCallBackMethod("setResponsaveNamelCallBack", String.class, name);
+		}
+	}
+    
+	public void setResponsaveNamelCallBack(String newName) {
+		LogHistory.getInstance().log((TreeNodeInfoIface) this, 
+				(TreeNodeCadastroIface) this, "Responsável",
+				oldResName, newName);
+		this.responsavelName = newName;
+		this.responsavel = this.getResponsavel(responsavelName);
+		this.setIdResponsavel();
+		this.changedResponsavel = true;
+	}
+	
 }

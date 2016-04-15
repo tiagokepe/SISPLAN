@@ -1,13 +1,9 @@
 package br.ifpr.sisplan.controller.tree;
 
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.swing.tree.TreeNode;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
 
 import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
@@ -15,12 +11,12 @@ import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ResponsavelDao;
+import br.ifpr.sisplan.model.dao.UnidadeDao;
 import br.ifpr.sisplan.model.table.Etapa;
-import br.ifpr.sisplan.model.table.Responsavel;
+import br.ifpr.sisplan.model.table.Unidade;
 
 public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroIface {
 	private static final long serialVersionUID = -9205942028545960131L;
-	private Responsavel responsavel;
 	
 	public EtapaTreeNode(TreeNodeGeneric parent, Etapa etapa, int order) {
 		super(parent, etapa, order);
@@ -72,7 +68,7 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	}
 
 	public String getName() {
-		return this.dataNode.getDescricao();
+		return "Etapa: " + this.dataNode.getDescricao();
 	}
 	
 	public boolean isProjectNode() {
@@ -88,10 +84,19 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	}
 
 	public String getResponsavelName() {
+		return this.responsavelName;
+	}
+	
+	protected void setResponsavel() {
 		if(responsavel == null) {
 			this.responsavel = ResponsavelDao.getInstance().selectResponsavel(((Etapa)this.dataNode).getIdResponsavel());
+			responsavelName = responsavel.getName();
 		}
-		return this.responsavel.getName();
+	}
+	
+	protected void setResponsaveis() {
+		Unidade unidade = this.getDAO(UnidadeDao.class).selectUnidadeOfResponsavel(((Etapa)dataNode).getIdResponsavel());
+		this.responsaveis = ResponsavelDao.getInstance().selectResponsavelByUnidade(unidade.getId());			
 	}
 
 	public String getCadastroURL() {
@@ -196,6 +201,22 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	@Override
 	public String getStatusStyleClass() {
 		return ProgressStatus.Default.getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	protected void setIdResponsavel() {
+		((Etapa)this.dataNode).setIdResponsavel(this.responsavel.getId());
+	}
+
+	@Override
+	protected void updateDBResponsavel() {
+		this.getDAO(EtapaDao.class).updateResponsavel(this.dataNode.getId(), this.responsavel.getId());		
 	}
 	
 }

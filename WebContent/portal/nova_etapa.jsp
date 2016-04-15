@@ -12,18 +12,19 @@
                     <h:outputText value="#{novaEtapaBean.projetoName}"/>
                     
                     <h:outputText value="Responsável"></h:outputText>
-                    <rich:comboBox id="id_reponsaveis" width="200px" defaultLabel="Responsável pelo projeto"
-                                  value="#{novaEtapaBean.responsavelNameSelected}">
+                    <rich:comboBox id="id_reponsaveis" width="200px" defaultLabel="Responsavel pelo projeto"
+                                   value="#{novaEtapaBean.responsavelNameSelected}"
+                                   valueChangeListener="#{novaEtapaBean.responsavelSelectedListener}">
                         <f:selectItems value="#{novaEtapaBean.responsaveis}"/>
                         <a4j:support event="onchange" reRender="id_reponsaveis"/>                        
                     </rich:comboBox>
 
                     <h:outputText value="Descrição: "/>
-                    <h:inputText value="#{novaEtapaBean.descricao}"/>
+                    <h:inputTextarea style="width:250px" value="#{novaEtapaBean.descricao}"/>
                     
                     <h:outputText value="Data Início Prevista: "/>
                     <h:panelGroup>
-	                    <rich:calendar id="id_Data_Inicio_Prevista" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataInicioPrevista}">
+	                    <rich:calendar id="id_Data_Inicio_Prevista" enableManualInput="true" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataInicioPrevista}">
 	                       <f:validator validatorId="dateValidator"/>
 	                    </rich:calendar>
                         <h:message for="id_Data_Inicio_Prevista" style="color: red;font-weight:bold"/>
@@ -31,7 +32,7 @@
                     
                     <h:outputText value="Data Fim Prevista: " />
                     <h:panelGroup>
-	                    <rich:calendar id="id_Data_Fim_Prevista" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataFimPrevista}">
+	                    <rich:calendar id="id_Data_Fim_Prevista" enableManualInput="true" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataFimPrevista}">
                             <f:validator validatorId="dateValidator"/>
                         </rich:calendar>
 	                    <h:message for="id_Data_Fim_Prevista" style="color: red;font-weight:bold"/>
@@ -39,7 +40,7 @@
                     
                     <h:outputText value="Data Início Efetiva: " />
                     <h:panelGroup>
-                        <rich:calendar id="id_Data_Inicio_Efetiva" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataInicioEfetiva}">
+                        <rich:calendar id="id_Data_Inicio_Efetiva" enableManualInput="true" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataInicioEfetiva}">
                             <f:validator validatorId="dateValidator"/>
                         </rich:calendar>
                         <h:message for="id_Data_Inicio_Efetiva" style="color: red;font-weight:bold"/>
@@ -47,7 +48,7 @@
                     
                     <h:outputText value="Data Fim Efetiva: " />
                     <h:panelGroup>
-                        <rich:calendar id="id_Data_Fim_Efetiva" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataFimEfetiva}">
+                        <rich:calendar id="id_Data_Fim_Efetiva" enableManualInput="true" datePattern="dd/MM/yyyy" value="#{novaEtapaBean.dataFimEfetiva}">
                             <f:validator validatorId="dateValidator"/>
                         </rich:calendar>
                         <h:message for="id_Data_Fim_Efetiva" style="color: red;font-weight:bold"/>

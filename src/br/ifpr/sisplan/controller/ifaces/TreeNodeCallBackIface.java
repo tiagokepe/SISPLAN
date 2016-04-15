@@ -12,4 +12,5 @@ public interface TreeNodeCallBackIface {
 	public void setDataFimEfetivaCallBack(Date newDate);
 	public void setCustoPrevistoCallBack(BigDecimal newCusto);
 	public void setCustoEfetivoCallBack(BigDecimal newCusto);
+	public void setResponsaveNamelCallBack(String newName);
 }

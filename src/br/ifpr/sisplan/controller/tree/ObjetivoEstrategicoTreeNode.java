@@ -37,12 +37,6 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	public void setAllObjetivos() {
 		Unidade unidadeSelected = ((PDIControllerBean)this.getMBean("pdiControllerBean")).getUnidadeSelected();
 		List<ObjetivoEspecifico> objetivos = null;
-/*		if(unidadeSelected == PDIControllerCached.getInstance().getUnidadeAll())
-			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-							selectObjetivosEspByEstrategico(this.nameNode.getId()), ObjetivoEspecifico.class);
-		else
-			objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
-					selectObjetivosByUnidadeObjEstrategico(unidadeSelected.getId(), this.getMyID()), ObjetivoEspecifico.class);*/
 		objetivos = ConverterToList.convertListMappedToList(getDAO(ObjetivoEspecificoDao.class).
 				selectObjetivosEspByEstrategico(this.descriptionNode.getId()), ObjetivoEspecifico.class);
 		int order=0;
@@ -224,5 +218,11 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	@Override
 	public String getStatusStyleClass() {
 		return ProgressStatus.Default.getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

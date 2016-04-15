@@ -11,6 +11,8 @@ import javax.faces.model.SelectItem;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+//import org.richfaces.component.html.HtmlPickList;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -32,10 +34,18 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
     private List<SelectItem> availableObjEst; // +getter (no setter necessary)
     private List<String> selectedObjEst; // +getter +setter
     
+/*    private HtmlPickList pickList;*/
+    
 	private Map<String, ObjetivoEstrategicoTreeNode> mapObjEstrategicoTreeNode;
     
 	public NovoObjetivoBean() {
 		super();
+
+	}
+	
+	private void initPickList() {
+		//this.pickList = new HtmlPickList();
+		//this.pickList.setC
 	}
 	
 	public static NovoObjetivoBean getInstance() {
@@ -58,7 +68,7 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 			final ObjetivoEspecifico objEspecifico = getDAO(ObjetivoEspecificoDao.class).insertObj(this.descricao);
 			
 			for(String strObj: this.selectedObjEst) {
-				ObjetivoEstrategicoTreeNode objEstr = this.mapObjEstrategicoTreeNode.get(strObj);
+				ObjetivoEstrategicoTreeNode objEstr = this.mapObjEstrategicoTreeNode.get(strObj.replace(";", ","));
 				getDAO(ObjetivoEspecificoDao.class).insertUnidadeObjetivos(this.getUnidadeSelected().getId(), objEstr.getMyID(), objEspecifico.getId());
 				
 				ObjetivoEspecificoTreeNode objEsp = new ObjetivoEspecificoTreeNode(objEstr, objEspecifico, objEstr.getChildCount());
@@ -105,7 +115,7 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 			for(DiretrizTreeNode dir: eixo.getDiretrizesTree())
 				for(ObjetivoEstrategicoTreeNode obj: dir.getObjetivosTree()) {
 					this.mapObjEstrategicoTreeNode.put(obj.getDescricao(), obj);
-					this.availableObjEst.add(new SelectItem(obj.getDescricao()));	
+					this.availableObjEst.add(new SelectItem(obj.getDescricao().replace(",", ";")));	
 				}
 	}
 
@@ -116,11 +126,11 @@ public class NovoObjetivoBean extends NovoCadastro<TreeNodeCadastroAbstract> imp
 			addMensagemErro("Descrição está vazia, ela deve ser preenchida.");
 			ret = false;
 		}
-		if(this.unidadeName.isEmpty() || this.unidadeName.equals(SELECIONE_UNIDADE)
+/*		if(this.unidadeName.isEmpty() || this.unidadeName.equals(SELECIONE_UNIDADE)
 				|| this.unidadeName.equals(PDIControllerCached.getInstance().getUnidadeAll())) {
 			addMensagemErro("Unidade não pode ser vazia.");
 			ret = false;
-		}
+		}*/
 		if(!(this.selectedObjEst != null && !this.selectedObjEst.isEmpty())) {
 			addMensagemErro("Nenhum Objetivo Específico foi selecionado.");
 			ret = false;

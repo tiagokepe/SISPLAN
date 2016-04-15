@@ -17,22 +17,24 @@ public class SisplanUser extends AbstractController {
 	private boolean planningManager;
 	private boolean grantedAccess = true;
 	private UsuarioGeral user = this.getUsuarioLogado();
+	private Permission userPermission;
 	
 	public SisplanUser() throws Exception {
-		this.setUnidades();
+		this.setUserInfos();
 	}
 	
 	public List<Unidade> getUnidades() {
 		return unidades;
 	}
-	private void setUnidades() throws Exception {
-		System.out.println("USER ID = "+this.user.getId());
+	private void setUserInfos() throws Exception {
 		UsuarioGeral user = this.getUsuarioLogado();
 		if(Permission.PLANNING_MANAGER.checkPermission(this.user.getPapeis())) {
 			this.unidades = PDIControllerCached.getInstance().getListUnidades();
 			this.setPlanningManager(true);
+			this.userPermission = Permission.PLANNING_MANAGER;
 		}
-		else if (Permission.CAMPUS_MANAGER.checkPermission(this.user.getPapeis())) {
+		else if (Permission.CAMPUS_MANAGER.checkPermission(this.user.getPapeis()) ||
+				 Permission.RESPONSALVEL_PROJETO_ETAPA.checkPermission(this.user.getPapeis())) {
 			this.setPlanningManager(false);
 			final int id_unidade = this.getUsuarioLogado().getUnidade().getId();
 			try {
@@ -42,13 +44,16 @@ public class SisplanUser extends AbstractController {
 				e.printStackTrace();
 				throw new Exception ("The Unidade="+this.getUsuarioLogado().getUnidade().getNome()+" is not registered.");
 			}
-		
-		}
-		else {
+			if(Permission.CAMPUS_MANAGER.checkPermission(this.user.getPapeis()))
+				this.userPermission = Permission.CAMPUS_MANAGER;
+			else
+				this.userPermission = Permission.RESPONSALVEL_PROJETO_ETAPA;		
+		} else {
 			this.setGrantedAccess(false);
 			this.setPlanningManager(false);
 			this.unidades = new ArrayList<Unidade>();
 		}
+		
 	}
 
 	public boolean isPlanningManager() {
@@ -73,5 +78,15 @@ public class SisplanUser extends AbstractController {
 	
 	public String getUserName() {
 		return this.getUsuarioLogado().getNome();
+	}
+	
+	public int getUserID() {
+		return this.getUsuarioLogado().getId();
+	}
+	
+	public boolean isResponsavelProjetoEtapa() {
+		if(userPermission.compareTo(Permission.RESPONSALVEL_PROJETO_ETAPA) == 0)
+			return true;
+		return false;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.Collection;
 import br.ufrn.comum.dominio.Papel;
 
 public enum Permission {
-	PLANNING_MANAGER(21), CAMPUS_MANAGER(22);
+	PLANNING_MANAGER(21), CAMPUS_MANAGER(22), RESPONSALVEL_PROJETO_ETAPA(23);
 	
 	private int idPapel;
 	

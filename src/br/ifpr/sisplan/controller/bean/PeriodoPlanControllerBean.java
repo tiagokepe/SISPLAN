@@ -7,8 +7,10 @@ import org.joda.time.Days;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.model.dao.PeriodoPlanejamentoDao;
 import br.ifpr.sisplan.model.table.PeriodoPlanejamento;
+import br.ifpr.sisplan.model.table.Unidade;
 import br.ufrn.arq.web.jsf.AbstractController;
 
 @Component
@@ -25,7 +27,7 @@ public class PeriodoPlanControllerBean extends AbstractController {
 	
 	private PeriodoPlanejamento periodoPlan;
 	private int barCurrentValue;
-	private String valueMenuShowHide = MenuValues.SHOW.value;;
+	private String valueMenuShowHide = MenuValues.NONE.value;;
 	private boolean showPeriodoPlan;
 	private boolean periodoPlanAtivo;
 	
@@ -35,22 +37,25 @@ public class PeriodoPlanControllerBean extends AbstractController {
 		this.setShowPeriodoPlan();
 	}
 
-	private void setPeriodoPlan() {
+	public void setPeriodoPlan() {
 		final int id_pdi = ((PDIControllerBean)getMBean("pdiControllerBean")).getCurrentPDI().getMyID();
 		this.periodoPlan = this.getDAO(PeriodoPlanejamentoDao.class).selectPeriodoPlanByPDI(id_pdi);
 		
-		final SisplanUser sisplanUser = (SisplanUser)getMBean("sisplanUser");
-		//Check if is a CAMPUS MANAGER user
-		if(!sisplanUser.isPlanningManager() ) {
-			final PeriodoPlanejamento periodoPlanUnidade = this.getDAO(PeriodoPlanejamentoDao.class).selectPeriodoPlanByUnidade(sisplanUser.getUnidade().getId());
-			if(periodoPlanUnidade != null) {
-				DateTime dtFimGeral = new DateTime(this.periodoPlan.getDataFim());
-				DateTime dtFimUnidade = new DateTime(periodoPlanUnidade.getDataFim());
-				
-				int diffDays = Days.daysBetween(new DateTime(dtFimGeral), new DateTime(dtFimUnidade)).getDays();
-				if(diffDays > 0)
-					this.periodoPlan = periodoPlanUnidade;
-			}
+		Unidade unidadeSelected = ((PDIControllerBean)getMBean("pdiControllerBean")).getUnidadeSelected();
+		//Check if was selected a specific Unidade
+		if(!PDIControllerCached.getInstance().equalsToUnidadeAll(unidadeSelected.getName()))
+			this.setPeriodoPlanByUnidade(unidadeSelected);
+	}
+	
+	private void setPeriodoPlanByUnidade(Unidade unidade) {
+		final PeriodoPlanejamento periodoPlanUnidade = this.getDAO(PeriodoPlanejamentoDao.class).selectPeriodoPlanByUnidade(unidade.getId());
+		if(periodoPlanUnidade != null) {
+			DateTime dtFimGeral = new DateTime(this.periodoPlan.getDataFim());
+			DateTime dtFimUnidade = new DateTime(periodoPlanUnidade.getDataFim());
+			
+			int diffDays = Days.daysBetween(new DateTime(dtFimGeral), new DateTime(dtFimUnidade)).getDays();
+			if(diffDays > 0)
+				this.periodoPlan = periodoPlanUnidade;
 		}
 	}
 	
@@ -82,25 +87,42 @@ public class PeriodoPlanControllerBean extends AbstractController {
 		return valueMenuShowHide;
 	}
 	
-	public void setValueMenuShowHide() {
-		if(this.valueMenuShowHide.equals(MenuValues.SHOW.value))
+/*	public void setValueMenuShowHide() {
+		if(this.periodoPlan == null) {
+			this.valueMenuShowHide = MenuValues.NONE.value;
+			return;
+		}
+		
+		if(this.valueMenuShowHide.equals(MenuValues.NONE.value) || this.valueMenuShowHide.equals(MenuValues.))
+		
+		if(this.valueMenuShowHide.equals(MenuValues.SHOW.value) || )
 			this.valueMenuShowHide = MenuValues.HIDE.value;
 		else
 			this.valueMenuShowHide = MenuValues.SHOW.value;
-		
-		if(this.periodoPlan == null)
-			this.valueMenuShowHide = MenuValues.NONE.value;
-	}
+
+	}*/
 	
 	public boolean isShowPeriodoPlan() {
 		return showPeriodoPlan;
 	}
 
 	public void setShowPeriodoPlan() {
-		this.setValueMenuShowHide();
-		if(this.valueMenuShowHide.equals(MenuValues.SHOW.value))
+/*		if(!this.periodoPlanAtivo) {
+			this.valueMenuShowHide = MenuValues.NONE.value;
+			this.showPeriodoPlan = false;
+			return;
+		}*/
+		
+		if(this.valueMenuShowHide.equals(MenuValues.NONE.value)) {
+			this.valueMenuShowHide = MenuValues.SHOW.value;
+			this.showPeriodoPlan = false;
+		} else if(this.valueMenuShowHide.equals(MenuValues.SHOW.value)) {
+			this.valueMenuShowHide = MenuValues.HIDE.value;
 			this.showPeriodoPlan = true;
-		else this.showPeriodoPlan = false;
+		} else {
+			this.valueMenuShowHide = MenuValues.SHOW.value;
+			this.showPeriodoPlan = false;
+		}
 	}
 	
 	public void goToNovoPeriodoPlan() {

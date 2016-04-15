@@ -2,13 +2,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <%@include file="/WEB-INF/jsp/include/cabecalho.jsp" %>
 
-<%-- <%@page import="br.ufrn.comum.dominio.LocalizacaoNoticiaPortal"%>
-<link rel="stylesheet" media="all" href="/SISPLAN/css/portal_sisplan.css" type="text/css" /> --%>
-<%-- <%@page contentType="text/html; charset=UTF-8" %> --%>
+<%@page contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <f:view>
     <h:form id="id_form">
-        <rich:panel style="text-align: center" header="Cadastrar Nova EstratÃ©gia">
-            <rich:panel id="id_pick_list_panel" header="Selecione 1 ou mais Objetivos EspecÃ­ficos">
+        <rich:panel style="text-align: center" header="Cadastrar Nova Estratégia">
+            <rich:panel id="id_pick_list_panel" header="Selecione 1 ou mais Objetivos Específicos">
 	            <rich:pickList sourceListWidth="400px" targetListWidth="400px" id="id_pick_list" value="#{novaEstrategiaBean.selectedObjEsp}"
 	                           listsHeight="300px">
 	                <f:selectItems id="id_items" value="#{novaEstrategiaBean.availableObjEsp}"/>
@@ -19,7 +17,7 @@
             <h:panelGrid columns="2" >
                 <h:outputLabel value=""/>
                 <h:outputLabel value=""/>                
-                <h:outputText style="color:blue" value="Unidade ResponsÃ¡vel: "/>
+                <h:outputText style="color:blue" value="Unidade Responsável: "/>
                 <rich:comboBox rendered="#{sisplanUser.planningManager}"
                                width="200px" value="#{novaEstrategiaBean.unidadeName}"
                                valueChangeListener="#{novaEstrategiaBean.unidadeSelectedListener}">
@@ -28,7 +26,7 @@
                 </rich:comboBox>
                 <h:outputText style="color:blue" value="#{novaEstrategiaBean.unidadeName}" rendered="#{!sisplanUser.planningManager}"/>
                             
-                <h:outputText style="color:blue" value="DescriÃ§Ã£o da EstratÃ©gia: "/>
+                <h:outputText style="color:blue" value="Descrição da Estratégia: "/>
                 <h:inputTextarea id="id_desc" style="width:700px" value="#{novaEstrategiaBean.descricao}"/>
 
             </h:panelGrid>

@@ -34,6 +34,7 @@ public abstract class TreeNodeGeneric extends AbstractController implements Tree
 	}
 	
 	public abstract String getStatusStyleClass();
+	public abstract boolean isShowProgressStatus();
 	
 	public DescriptionNode getDescriptionNode() {
 		return descriptionNode;
@@ -115,16 +116,30 @@ public abstract class TreeNodeGeneric extends AbstractController implements Tree
 		return ((SisplanUser)getMBean("sisplanUser")).isPlanningManager();
 	}
 	
+	protected boolean isResponsvelProjetoEtapa() {
+		return ((SisplanUser)getMBean("sisplanUser")).isResponsavelProjetoEtapa();
+	}
+	
 	public boolean isRenderedCadastrar() {
-		return this.isPeriodoPlanAtivo() || this.isPlanningManager();
+		if(this.isPlanningManager())
+			return true;
+		if(this.isPeriodoPlanAtivo() && !this.isResponsvelProjetoEtapa())
+			return true;
+		return false;
 	}
 	public boolean isRenderedAlterar() {
-		return this.isPeriodoPlanAtivo() || this.isPlanningManager();		
+		if(this.isPlanningManager())
+			return true;
+		if(this.isPeriodoPlanAtivo() && !this.isResponsvelProjetoEtapa())
+			return true;
+		return false;		
 	}
 	public boolean isRenderedExcluir() {
-		return this.isPeriodoPlanAtivo();
+		if(this.isPeriodoPlanAtivo() && !this.isResponsvelProjetoEtapa())
+			return true;
+		return false;
 	}
 	public boolean isRenderedCancelar() {
-		return !this.isPeriodoPlanAtivo();
+		return !this.isPeriodoPlanAtivo() && !this.isResponsvelProjetoEtapa();
 	}
 }

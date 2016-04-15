@@ -7,17 +7,23 @@ import java.util.List;
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.ProgressStatus;
+import br.ifpr.sisplan.controller.bean.SisplanUser;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
+import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
 import br.ifpr.sisplan.model.dao.EixoDao;
+import br.ifpr.sisplan.model.dao.PDIDao;
 import br.ifpr.sisplan.model.table.Eixo;
 import br.ifpr.sisplan.model.table.PDI;
 import br.ifpr.sisplan.util.ConverterToList;
 
 import com.google.common.collect.Iterators;
 
-public class PDITreeNode extends TreeNodeGeneric {
+public class PDITreeNode extends TreeNodeCadastroAbstract {
 	private static final long serialVersionUID = -1835441558926237938L;
 
 	private List<EixoTreeNode> eixosTree = new ArrayList<EixoTreeNode>();
+	private String newDescricao;
 
 	public PDITreeNode(PDI pdi, int order) {
 		super(null, pdi, order);
@@ -111,7 +117,7 @@ public class PDITreeNode extends TreeNodeGeneric {
 	}
 
 	public boolean isRenderedAlterar() {
-		return false;
+		return ((SisplanUser)getMBean("sisplanUser")).isPlanningManager();
 	}
 
 	public boolean isRenderedExcluir() {
@@ -129,5 +135,69 @@ public class PDITreeNode extends TreeNodeGeneric {
 	@Override
 	public String getStatusStyleClass() {
 		return ProgressStatus.Default.getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public String getCadastroURL() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getCadastroTitle() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getAlterarURL() {
+		return "/SISPLAN/portal/alterar_descricao.jsf";
+	}
+
+	public void addTreeNodeChild(TreeNodeGeneric child) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeTreeNodeChild(TreeNodeGeneric child) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void delete() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void deleteFromDB() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void setDescricao(String descricao) {
+		this.newDescricao = descricao;
+	}
+
+	public void save() {
+		this.descriptionNode.setDescricao(newDescricao);
+		LogHistory.getInstance().log((TreeNodeInfoIface) this,
+				(TreeNodeCadastroIface) this, "Descrição",
+				this.descriptionNode.getDescricao(),
+				newDescricao);
+		this.getDAO(PDIDao.class).updatePDI(this.getDescriptionNode());
+
+		this.returnMainPage();		
+	}
+
+	public void cancel() {
+		this.returnMainPage();		
+	}
+
+	public String getUnidadeName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

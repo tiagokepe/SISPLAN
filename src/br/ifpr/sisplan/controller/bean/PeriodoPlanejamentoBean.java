@@ -15,7 +15,7 @@ import br.ifpr.sisplan.model.dao.PeriodoPlanejamentoDao;
 import br.ifpr.sisplan.model.table.PeriodoPlanejamento;
 
 @Component
-@Scope("request")
+@Scope("session")
 public class PeriodoPlanejamentoBean extends NovoCadastro<PeriodoPlanejamento> {
 	private Date dataIni, dataFim;
 	

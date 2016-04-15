@@ -111,4 +111,10 @@ public class EtapaDao extends GenericDAOImpl {
 		
 		this.sisplanDao.update(update);
 	}
+	
+	public void updateResponsavel(int id_etapa, int id_responsavel) {
+		String sql = "UPDATE " + TABLE_NAME + " SET id_responsavel=" +id_responsavel
+				   + " WHERE id="+id_etapa;
+		this.sisplanDao.update(sql);
+	}
 }

@@ -120,4 +120,10 @@ public class UnidadeTreeNode extends TreeNodeGeneric {
 	public String getStatusStyleClass() {
 		return ProgressStatus.Default.getStyleClass();
 	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

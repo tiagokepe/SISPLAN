@@ -9,6 +9,7 @@ import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
+import br.ifpr.sisplan.controller.bean.SisplanUser;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
@@ -62,7 +63,15 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	}
 	
 	public void setProjetosTree() {
-		final List<Projeto> projetos = ConverterToList.convertListMappedToList(getDAO(ProjetoDao.class).selectProjetosByEstrategia(this.descriptionNode.getId()), Projeto.class);
+		final List<Projeto> projetos;
+		SisplanUser sisplanUser = (SisplanUser)getMBean("sisplanUser");
+		if(sisplanUser.isResponsavelProjetoEtapa() )
+			projetos = ConverterToList.convertListMappedToList(getDAO(ProjetoDao.class).
+										selectProjetosByEstrategiaAndResponsavel(this.descriptionNode.getId(), sisplanUser.getUserID()), Projeto.class);
+		else
+			projetos = ConverterToList.convertListMappedToList(getDAO(ProjetoDao.class).
+										selectProjetosByEstrategia(this.descriptionNode.getId()), Projeto.class);
+		
 		int i=0;
 		for(Projeto p: projetos) {
 			this.setDataProjeto(p);
@@ -221,5 +230,11 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	@Override
 	public String getStatusStyleClass() {
 		return ProgressStatus.Default.getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

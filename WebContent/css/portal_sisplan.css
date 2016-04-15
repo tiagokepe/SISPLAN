@@ -192,22 +192,22 @@ table tr.nivel td{
 }
 
 .redStatus {
- 	background-color: rgb(255, 77, 77) !important;
+ 	background-color: #fe0000 !important;
  	background-image: none !important;
  	
 }
 
 .greenStatus {
-    background-color: rgb(52, 178, 87) !important;
+    background-color: #91d800 !important;
     background-image: none !important; 
 }
 
 .blueStatus {
-    background-color: rgb(31, 128, 224) !important;
+    background-color: #34a7d4 !important;
     background-image: none !important; 
 }
 
 .orangeStatus {
-    background-color: rgb(245, 174, 61) !important;
+    background-color: #ffa200 !important;
     background-image: none !important; 
 }

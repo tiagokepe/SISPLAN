@@ -117,6 +117,10 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract impleme
 		this.unidade = getDAO(UnidadeDao.class).selectUnidadeByObjEspecifico(this.getMyID());
 	}
 	
+	public Unidade getUnidade() {
+		return this.unidade;
+	}
+	
 	public String getUnidadeName() {
 		return this.unidade.getName();
 	}
@@ -224,5 +228,11 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract impleme
 	@Override
 	public String getStatusStyleClass() {
 		return ProgressStatus.Default.getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
