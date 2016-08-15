@@ -24,7 +24,7 @@ public class EtapaDao extends GenericDAOImpl {
 	
 	public List selectEtapaByProject(int project_id) {
 		String sql = "SELECT * FROM sisplan.etapa "
-					+ "	WHERE id_projeto="+project_id + " AND ativo=true";
+					+ "	WHERE id_projeto="+project_id + " AND ativo=true ORDER BY id";
 		return sisplanDao.queryForList(sql);
 	}
 	
@@ -94,19 +94,23 @@ public class EtapaDao extends GenericDAOImpl {
 	
 	public void updateCustos(DateNode etapa) {
 		String update = "UPDATE "+TABLE_NAME+" SET ";
+		String custos = "";
 		if( etapa.getCustoPrevisto() != null &&
 		    !etapa.getCustoPrevisto().equals(BigDecimalConverter.bigDecEmpty) ) {
 			
-			update += " custo_previsto="+etapa.getCustoPrevisto() + " ,";
+			custos += " custo_previsto="+etapa.getCustoPrevisto();
 		}
 		
 		if( etapa.getCustoEfetivo() != null &&
 		    !etapa.getCustoEfetivo().equals(BigDecimalConverter.bigDecEmpty) ) {
 			
-			update += " custo_efetivo="+etapa.getCustoEfetivo();
+			if(custos.isEmpty())
+				custos = " custo_efetivo="+etapa.getCustoEfetivo();
+			else
+				custos += " , custo_efetivo="+etapa.getCustoEfetivo(); 
 		}
 		
-		update += " WHERE id="+etapa.getId();
+		update += custos + " WHERE id="+etapa.getId();
 		
 		this.sisplanDao.update(update);
 	}
@@ -118,7 +122,7 @@ public class EtapaDao extends GenericDAOImpl {
 	}
 	
 	public void updateDescricao(DateNode p) {
-		String update = "UPDATE "+TABLE_NAME+" SET name='"+p.getDescricao()+"' WHERE id="+p.getId();
+		String update = "UPDATE "+TABLE_NAME+" SET descricao='"+p.getDescricao()+"' WHERE id="+p.getId();
 		sisplanDao.update(update);
 	}
 }
