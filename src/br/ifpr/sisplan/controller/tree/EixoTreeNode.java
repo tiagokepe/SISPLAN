@@ -124,4 +124,16 @@ public class EixoTreeNode extends TreeNodeGeneric {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public ProgressStatus getProgressStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getLegenda() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

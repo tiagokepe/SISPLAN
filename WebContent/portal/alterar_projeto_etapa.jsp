@@ -82,6 +82,14 @@
                         </h:inputText>
                         <h:outputText value="Ex: 510.00" style="text-colour:gray;"/>
                     </h:panelGroup>
+
+                    <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.enabledObservacao}">
+                        <h:outputText value="Observação: " />
+                    </h:panelGroup>                    
+                    <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.enabledObservacao}">
+	                    <h:inputTextarea styleClass="descricao"
+	                                     value="#{pdiControllerBean.currentNodeSelection.observacao}"/>
+                    </h:panelGroup>
                     
 				</h:panelGrid>
 	

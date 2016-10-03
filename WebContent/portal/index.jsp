@@ -34,9 +34,19 @@
 				                reRender="id_tool_bar" />
 			    
 			    <rich:menuItem rendered="#{periodoPlanControllerBean.periodoPlanAtivo or sisplanUser.planningManager}"
-			                   value="Pendências"
+			                   value="Pendências Diretrizes"
 			                   disabled="#{not sisplanUser.planningManager}"
-			                   action="#{pendenciesControllerBean.gotToPendencias}"/>
+			                   action="#{diretrizPendenciesControllerBean.gotToPendencias}"/>
+			                   
+                <rich:menuItem rendered="#{periodoPlanControllerBean.periodoPlanAtivo or sisplanUser.planningManager}"
+                               value="Pendências Objetivos Estratégicos"
+                               disabled="#{not sisplanUser.planningManager}"
+                               action="#{objetivoEstrategicoPendenciesControllerBean.gotToPendencias}"/>
+                               
+                <rich:menuItem rendered="#{periodoPlanControllerBean.periodoPlanAtivo or sisplanUser.planningManager}"
+                               value="Pendências por Unidade"
+                               disabled="#{not sisplanUser.planningManager}"
+                               action="#{unidadePendenciesControllerBean.gotToPendencias}"/>
 				
             </rich:dropDownMenu>
             
@@ -67,7 +77,7 @@
 		            	   reRender="id_detalhes" >
 		            	   
 	                <rich:treeNode changeExpandListener="#{node.processExpansion}" type="#{node.type}">
-	            		<h:outputText value="#{node.name}" />
+	            		<h:outputText value="#{node.name}  " />
 	            		<h:graphicImage rendered="#{node.showProgressStatus}"
 	            		                value="#{node.imgStatus}"
 	            		                style="width:25px; height:25px"
@@ -88,10 +98,14 @@
 	                                header="#{pdiControllerBean.currentNodeSelection.name}">
 
 <!--                                           style="width: 460px; overflow-x: scroll; display: block;"  -->
-	                       <pre style="text-align:left !important; white-space: pre-line; font-family: Arial,Verdana,sans-serif !important;" >
-	                        <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedDescricao}"
-	                                      value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}"/>
-	                       </pre>
+<!-- 	                       <pre style="text-align:left !important; white-space: pre-line; font-family: Arial,Verdana,sans-serif !important;" > -->
+                            <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.renderedDescricao}">
+	                           <h:outputText value="Descrição: #{pdiControllerBean.currentNodeSelection.descricao}"/>
+	                           </br>
+	                           </br>
+	                        </h:panelGroup>
+<!-- 	                       </pre> -->
+                            
 	                        
 	                        <h:outputText rendered="#{pdiControllerBean.currentNodeSelection.renderedUnidade}"
 	                                      value="Unidade: #{pdiControllerBean.currentNodeSelection.unidadeName}">
@@ -108,10 +122,18 @@
 	                        </rich:panel>
 	                                                
 	                        <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.renderedProjetoOrEtapa}">
-	                            <h:outputText value="Responsável: #{pdiControllerBean.currentNodeSelection.responsavelName}"/>
-	                            <br/>
+                                <h:panelGroup rendered="#{pdiControllerBean.currentNodeSelection.enabledObservacao and
+                                                        not empty pdiControllerBean.currentNodeSelection.observacao}">
+                                                        
+	                                <h:outputText value="Observação: #{pdiControllerBean.currentNodeSelection.observacao}"/>
+	                                <br/>
+	                                <br/>
+	                                
+                               </h:panelGroup>
+	                           <h:outputText value="Responsável: #{pdiControllerBean.currentNodeSelection.responsavelName}"/>
+	                           <br/>
 	                            
-	                            <rich:panel>
+	                           <rich:panel>
 		                            <f:facet name="header">
 		                                <h:outputText value="Custos" />
 		                            </f:facet>
@@ -130,7 +152,6 @@
 				                            <rich:panel>
 				                                <f:facet name="header">
 				                                    <h:outputText value="Data Início"/>
-				
 				                                </f:facet>
 				                                
 				                                <h:outputText value="Prevista: #{pdiControllerBean.currentNodeSelection.strDataInicioPrevista}"/>
@@ -154,7 +175,6 @@
 			                
 	                        <h:panelGroup style="text-align: center;" >
 	                            <br/>
-	                            <br/>
 	                            <h:outputLink rendered="#{pdiControllerBean.currentNodeSelection.renderedCadastrar}"
 	                                          title="#{pdiControllerBean.currentNodeSelection.cadastroTitle}"
 	                                          value="#{pdiControllerBean.currentNodeSelection.cadastroURL}" >
@@ -177,6 +197,38 @@
 	                                <a4j:support reRender="id_tree, id_detalhes" />
 	                            </h:commandButton>
 	                        </h:panelGroup>
+	                        
+                            <br/>
+                            <br/>
+                            <rich:panel rendered="#{pdiControllerBean.currentNodeSelection.renderedUnidadeStatus}">
+                                <f:facet name="header">
+                                    <h:outputText value="Status dos Camps" />
+                                </f:facet>
+                                <rich:dataTable rowClasses="whiteRow, grayRow" id="mytable" value="#{pdiControllerBean.currentNodeSelection.listUnidadeStatus}"
+                                                var="uniStatus" style="align:center; width:100%;" >
+                                    <rich:column>
+                                        <h:graphicImage value="#{uniStatus.status.iconPath}"
+                                                        style="width:25px; height:25px"/>
+                                        <h:outputText value="  #{uniStatus.unidade}" />
+                                    </rich:column>
+                        
+<%--                                     <rich:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Campus" />
+                                        </f:facet>
+                                        <h:outputText value="#{uniStatus.unidade}" />
+                                    </rich:column>
+                                    
+                                    <rich:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Status" />
+                                        </f:facet>
+                                       <h:graphicImage value="#{uniStatus.status.iconPath}"
+                                                       style="width:25px; height:25px">
+                                        </h:graphicImage>
+                                    </rich:column> --%>
+                               </rich:dataTable>
+                            </rich:panel>
 		                    		                
 			            </rich:panel>
 	

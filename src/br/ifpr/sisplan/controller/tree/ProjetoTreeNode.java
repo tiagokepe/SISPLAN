@@ -38,7 +38,7 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	public final static String PROJ_LEGENDA_GREEN="Projeto concluído em dia.";
 	public final static String PROJ_LEGENDA_BLUE="Projeto em andamento.";
 	public final static String PROJ_LEGENDA_ORANGE="Projeto concluído em atraso.";
-	public final static String PROJ_LEGENDA_RED="Projeto concluído sem data efetiva de fim.";
+	public final static String PROJ_LEGENDA_RED="Projeto concluído sem data efetiva de fim ou existe alguma etapa em atraso.";
 	
 	private List<EtapaTreeNode> etapasTree = new ArrayList<EtapaTreeNode>();
 	
@@ -292,20 +292,30 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 		DateTime dtFimPrev = new DateTime(this.getDataFimPrevista());
 		DateTime dtToday = new DateTime(new Date());
 		int days = Days.daysBetween(dtToday, dtFimPrev).getDays();
+		ProgressStatus progress;
 		if(days >= 0)
-			return ProgressStatus.Blue;
+			progress = ProgressStatus.EXEC_Blue;
 		else 
 			if(this.getDataFimEfetiva() == null)
-				return ProgressStatus.Red;
+				progress = ProgressStatus.EXEC_Red;
 			else {
 				DateTime dtFimEfe = new DateTime(this.getDataFimEfetiva());
 				days = Days.daysBetween(dtFimPrev, dtFimEfe).getDays();
 				if(days <= 0)
-					return ProgressStatus.Green;
+					progress = ProgressStatus.EXEC_Green;
 				else
-					return ProgressStatus.Orange;
+					progress = ProgressStatus.EXEC_Yellow;
 				
 			}
+		
+		//Check if any etapa surpass the "data prevista fim do projeto"
+		for(EtapaTreeNode etapa: etapasTree) {
+			if( etapa.getProgressStatus() == ProgressStatus.EXEC_Red) {
+				progress = ProgressStatus.EXEC_Red;
+				break;
+			}
+		}
+		return progress;
 	}
 
 	@Override
@@ -334,5 +344,19 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	@Override
 	protected void updateDBResponsavel() {
 		this.getDAO(ProjetoDao.class).updateResponsavel(this.dataNode.getId(), this.responsavel.getId());
+	}
+
+	public boolean validateDate() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabledObservacao() {
+		return false;
+	}
+
+	public void setObservacaoCallBack() {
+		// TODO Auto-generated method stub
+		
 	}
 }

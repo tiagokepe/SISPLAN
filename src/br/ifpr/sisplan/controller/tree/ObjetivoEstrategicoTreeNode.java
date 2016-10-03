@@ -3,11 +3,13 @@ package br.ifpr.sisplan.controller.tree;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.swing.tree.TreeNode;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
 import br.ifpr.sisplan.controller.ProgressStatus;
+import br.ifpr.sisplan.controller.UnidadeStatus;
 import br.ifpr.sisplan.controller.bean.NovoObjetivoBean;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeCadastroAbstract;
@@ -24,11 +26,13 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	private List<ObjetivoEspecificoTreeNode> allObjetivos = new ArrayList<ObjetivoEspecificoTreeNode>();
 	private List<ObjetivoEspecificoTreeNode> filteredObjetivos = new ArrayList<ObjetivoEspecificoTreeNode>();
 	private String unidadeSelected = PDIControllerCached.getInstance().getUnidadeAll().getName();
+	private List<UnidadeStatus> listUnidadeStatus;
 	
 	public ObjetivoEstrategicoTreeNode(TreeNodeGeneric diretrizParent, ObjetivoEstrategico myObjetivo, int order) {
 		super(diretrizParent, myObjetivo, order);
 		try {
 			this.setAllObjetivos();
+			this.buildPendenciasTree();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -222,7 +226,62 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 
 	@Override
 	public boolean isShowProgressStatus() {
-		// TODO Auto-generated method stub
+		String unidadeSelected = ((PDIControllerBean)this.getMBean("pdiControllerBean")).getUnidadeSelected().getName();
+		if(PDIControllerCached.getInstance().equalsToUnidadeAll(unidadeSelected))
+			return false;
+		return true;
+	}
+
+	@Override
+	public ProgressStatus getProgressStatus() {
+		if(filteredObjetivos.isEmpty())
+			return ProgressStatus.PLAN_Red;
+		for(ObjetivoEspecificoTreeNode obj: filteredObjetivos) {
+			if(obj.getProgressStatus() == ProgressStatus.PLAN_Red)
+				return ProgressStatus.PLAN_Red;
+		}
+		return ProgressStatus.PLAN_Green;
+	}
+
+	@Override
+	public String getLegenda() {
+		return "";
+	}
+	
+	public boolean isRenderedUnidadeStatus() {
+		String unidadeSelected = ((PDIControllerBean)this.getMBean("pdiControllerBean")).getUnidadeSelected().getName();
+		if(PDIControllerCached.getInstance().equalsToUnidadeAll(unidadeSelected))
+			return true;
 		return false;
+	}
+	
+	public void buildPendenciasTree() {
+		TreeSet<Unidade> unidadesGreen = new TreeSet<Unidade>();
+		TreeSet<Unidade> unidadesRed = new TreeSet<Unidade>();
+		for(ObjetivoEspecificoTreeNode objEsp: this.getAllObjetivos()) {
+			if(objEsp.getProgressStatus().compareTo(ProgressStatus.PLAN_Green) == 0)
+				unidadesGreen.add(objEsp.getUnidade());
+			else
+				unidadesRed.add(objEsp.getUnidade());
+		}
+		
+		TreeSet<Unidade> allUnidades = new TreeSet<Unidade>(PDIControllerCached.getInstance().getListUnidades());
+		this.listUnidadeStatus = new ArrayList<UnidadeStatus>();
+		
+		for(Unidade u: allUnidades) {
+			UnidadeStatus us = new UnidadeStatus(u);
+			if(unidadesRed.contains(u))
+				us.setStatus(ProgressStatus.EXEC_Red);
+			else if(unidadesGreen.contains(u))
+				us.setStatus(ProgressStatus.EXEC_Green);
+			else
+				us.setStatus(ProgressStatus.PLAN_Red);
+			this.listUnidadeStatus.add(us);
+		}
+		
+	}
+	
+	public List<UnidadeStatus> getListUnidadeStatus() {
+		return listUnidadeStatus;
 	}
 }

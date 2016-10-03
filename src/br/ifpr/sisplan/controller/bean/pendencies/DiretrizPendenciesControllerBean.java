@@ -1,8 +1,8 @@
-package br.ifpr.sisplan.controller.bean;
+package br.ifpr.sisplan.controller.bean.pendencies;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map; 
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -13,23 +13,25 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import br.ifpr.sisplan.controller.PDIControllerCached;
-import br.ifpr.sisplan.controller.tree.DiretrizPendenteTreeNode;
+import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.tree.DiretrizTreeNode;
 import br.ifpr.sisplan.controller.tree.EixoTreeNode;
 import br.ifpr.sisplan.controller.tree.EstrategiaTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEspecificoTreeNode;
 import br.ifpr.sisplan.controller.tree.ObjetivoEstrategicoTreeNode;
-import br.ifpr.sisplan.controller.tree.UnidadePendenteTreeNode;
+import br.ifpr.sisplan.controller.tree.PendenteTreeNode;
+import br.ifpr.sisplan.controller.tree.pendencies.DiretrizPendenteTreeNode;
+import br.ifpr.sisplan.controller.tree.pendencies.RootPendenteTreeNode;
 import br.ifpr.sisplan.model.table.Diretriz;
 import br.ifpr.sisplan.model.table.Unidade;
 import br.ufrn.arq.web.jsf.AbstractController;
 
 @Component
 @Scope("request")
-public class PendenciesControllerBean extends AbstractController {
+public class DiretrizPendenciesControllerBean extends AbstractController {
 	private List<TreeNode> pendenciasTree;
 	
-	public PendenciesControllerBean() {
+	public DiretrizPendenciesControllerBean() {
 		this.buildPendenciasTree();
 	}
 
@@ -78,22 +80,22 @@ public class PendenciesControllerBean extends AbstractController {
 		
 		//Building Unidade Tree...
 		for(SortedMap.Entry<Unidade, TreeSet<Diretriz>> entry: mapUnidadeDiretrizes.entrySet()) {
-			List<DiretrizPendenteTreeNode> diretrizes = new ArrayList<DiretrizPendenteTreeNode>();
+			List<PendenteTreeNode> diretrizes = new ArrayList<PendenteTreeNode>();
 			for(Diretriz dir: entry.getValue()) {
 				DiretrizPendenteTreeNode diretrizNode = new DiretrizPendenteTreeNode(dir);
 				diretrizes.add(diretrizNode);
 			}
-			UnidadePendenteTreeNode unidadeNode = new UnidadePendenteTreeNode(entry.getKey(), diretrizes);
+			RootPendenteTreeNode unidadeNode = new RootPendenteTreeNode(entry.getKey(), diretrizes);
 			pendenciasTree.add(unidadeNode);
 		}
 	}
 	
 	public String getPendenciasURL() {
-		return "/SISPLAN/portal/pendencias_unidade.jsf";
+		return "/SISPLAN/portal/pendencias_diretriz.jsf";
 	}
 	
 	public void gotToPendencias() {
-		this.redirect("/portal/pendencias_unidade.jsf");
+		this.redirect("/portal/pendencias_diretriz.jsf");
 	}
 
 }

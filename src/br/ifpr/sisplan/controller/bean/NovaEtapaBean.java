@@ -247,6 +247,23 @@ public class NovaEtapaBean extends NovoCadastro<ProjetoTreeNode> {
 				addMensagemErro("Data fim prevista é mais antiga que a data de início.");
 				ret = false;
 			}
+			
+			DateTime dtIniPrevProjeto = new DateTime(((ProjetoTreeNode)this.parent).getDataNode().getData().getDataInicioPrevista());
+			days = Days.daysBetween(dtIniPrevProjeto, dtIniPrev).getDays();
+			if(days < 0) {
+				addMensagemErro("Data início prevista da etapa (" + DateUtil.dateToString(this.dataInicioPrevista)
+						+ ") é anterior a data de início do projeto (" + DateUtil.dateToString(dtIniPrevProjeto.toDate()) + ").");
+				ret = false;
+			}
+			
+			DateTime dtFimPrevProjeto = new DateTime(((ProjetoTreeNode)this.parent).getDataNode().getData().getDataFimPrevista());
+			
+			days = Days.daysBetween(dtFimPrev, dtFimPrevProjeto).getDays();
+			if(days < 0) {
+				addMensagemErro("Data fim prevista da etapa (" + DateUtil.dateToString(this.dataFimPrevista)
+						+ ") é posterior a data fim prevista do projeto (" + DateUtil.dateToString(dtFimPrevProjeto.toDate()) + ").");
+				ret =  false;
+			}
 		}
 		
 		if(this.dataInicioEfetiva != null && this.dataFimEfetiva != null) {

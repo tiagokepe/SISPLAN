@@ -8,4 +8,5 @@ public interface RenderedJSFComponentsIface {
 	public boolean isRenderedExcluir();
 	public boolean isRenderedCancelar();
 	public boolean isRenderedProjetoOrEtapa();
+	public boolean isRenderedUnidadeStatus();
 }

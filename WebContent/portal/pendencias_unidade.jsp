@@ -7,23 +7,21 @@
 <f:view>
     <h:form id="id_main_form">
         <h:panelGroup>
-            <h2>Diretrizes pendentes por unidade</h2>
+            <h2>Unidades pendentes por Objetivo Estratégico</h2>
         </h:panelGroup>
         <h:panelGrid columns="2" columnClasses="columnTop, columnTop" width="100%">
-	        <rich:tree id="id_tree" var="node" ajaxSubmitSelection="true" switchType="ajax"
-		               value="#{pendenciesControllerBean.pendenciasTree}">
-		               
-		        <rich:treeNode>
-		            <h:outputText value="#{node.name}" />
-		        </rich:treeNode>
-		        
-		    </rich:tree>
-<%--             <h:panelGrid columns="2">
-                <h:outputText value="Diretriz 1: "/>
-                <h:outputText value="BlaBla..."/>
-            </h:panelGrid> --%>		    
-
-	    </h:panelGrid>
+            <rich:tree id="id_tree" var="node" ajaxSubmitSelection="true" switchType="ajax"
+                       value="#{unidadePendenciesControllerBean.pendenciasTree}">
+                       
+                <rich:treeNode>
+                    <h:outputText value="#{node.name} " />
+<%--                     <rich:progressBar enabled="#{node.enabled}" minValue="0" maxValue="#{node.maxValue}">
+                        <h:outputText value="#{node.currentValue} / #{node.maxValue}" />
+                    </rich:progressBar> --%>
+                </rich:treeNode>
+                
+            </rich:tree>
+        </h:panelGrid>
     
     </h:form>
 </f:view>

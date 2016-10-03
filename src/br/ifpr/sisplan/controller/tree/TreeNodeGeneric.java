@@ -12,6 +12,7 @@ import org.richfaces.event.NodeExpandedEvent;
 import org.richfaces.event.NodeExpandedListener;
 import org.richfaces.model.TreeRowKey;
 
+import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
 import br.ifpr.sisplan.controller.bean.PeriodoPlanControllerBean;
 import br.ifpr.sisplan.controller.bean.SisplanUser;
@@ -35,6 +36,12 @@ public abstract class TreeNodeGeneric extends AbstractController implements Tree
 	
 	public abstract String getStatusStyleClass();
 	public abstract boolean isShowProgressStatus();
+	public abstract ProgressStatus getProgressStatus();
+	public abstract String getLegenda();
+	
+	public String getImgStatus() {
+		return this.getProgressStatus().getIconPath();
+	}
 	
 	public DescriptionNode getDescriptionNode() {
 		return descriptionNode;
@@ -141,5 +148,9 @@ public abstract class TreeNodeGeneric extends AbstractController implements Tree
 	}
 	public boolean isRenderedCancelar() {
 		return !this.isPeriodoPlanAtivo() && !this.isResponsvelProjetoEtapa();
+	}
+	
+	public boolean isRenderedUnidadeStatus() {
+		return false;
 	}
 }

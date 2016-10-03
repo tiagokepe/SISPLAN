@@ -232,7 +232,22 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract impleme
 
 	@Override
 	public boolean isShowProgressStatus() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	@Override
+	public ProgressStatus getProgressStatus() {
+		if(estrategiasTree.isEmpty())
+			return ProgressStatus.PLAN_Red;
+		for(EstrategiaTreeNode estrategia: estrategiasTree) {
+			if(estrategia.getProgressStatus() == ProgressStatus.PLAN_Red)
+				return ProgressStatus.PLAN_Red;
+		}
+		return ProgressStatus.PLAN_Green;
+	}
+
+	@Override
+	public String getLegenda() {
+		return "";
 	}
 }

@@ -1,9 +1,13 @@
 package br.ifpr.sisplan.controller.tree;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.swing.tree.TreeNode;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 import br.ifpr.sisplan.controller.ProgressStatus;
 import br.ifpr.sisplan.controller.bean.PDIControllerBean;
@@ -14,9 +18,13 @@ import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.dao.UnidadeDao;
 import br.ifpr.sisplan.model.table.Etapa;
 import br.ifpr.sisplan.model.table.Unidade;
+import br.ifpr.sisplan.util.DateUtil;
 
 public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroIface {
 	private static final long serialVersionUID = -9205942028545960131L;
+	public final static String ETAPA_LEGENDA_BLUE="Etapa em andamento.";
+	public final static String ETAPA_LEGENDA_GREEN="Etapa concluída.";
+	public final static String ETAPA_LEGENDA_RED="Etapa em atraso.";
 	
 	public EtapaTreeNode(TreeNodeGeneric parent, Etapa etapa, int order) {
 		super(parent, etapa, order);
@@ -199,17 +207,6 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	}
 
 	@Override
-	public String getStatusStyleClass() {
-		return ProgressStatus.Default.getStyleClass();
-	}
-
-	@Override
-	public boolean isShowProgressStatus() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
-	@Override
 	protected void setIdResponsavel() {
 		((Etapa)this.dataNode).setIdResponsavel(this.responsavel.getId());
 	}
@@ -218,5 +215,57 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	protected void updateDBResponsavel() {
 		this.getDAO(EtapaDao.class).updateResponsavel(this.dataNode.getId(), this.responsavel.getId());		
 	}
+
+	public boolean validateDate() {
+		DateTime dtIniPrevProjeto = new DateTime(((ProjetoTreeNode)this.parentNode).getDataNode().getData().getDataInicioPrevista());
+		DateTime dtIniPrevEtapa = new DateTime(this.dataNode.getData().getDataInicioPrevista());
+		int days = Days.daysBetween(dtIniPrevProjeto, dtIniPrevEtapa).getDays();
+		if(days < 0) {
+			addMensagemErro("Data início prevista da etapa (" + DateUtil.dateToString(dtIniPrevEtapa.toDate())
+					+ ") é anterior a data de início do projeto (" + DateUtil.dateToString(dtIniPrevProjeto.toDate()) + ").");
+			return false;
+		}
+		
+		DateTime dtFimPrevProjeto = new DateTime(((ProjetoTreeNode)this.parentNode).getDataNode().getData().getDataFimPrevista());
+		DateTime dtFimPrevEtapa = new DateTime(this.dataNode.getData().getDataFimPrevista());
+		
+		days = Days.daysBetween(dtFimPrevEtapa, dtFimPrevProjeto).getDays();
+		if(days < 0) {
+			addMensagemErro("Data fim prevista da etapa (" + DateUtil.dateToString(dtFimPrevEtapa.toDate())
+					+ ") é posterior a data fim prevista do projeto (" + DateUtil.dateToString(dtFimPrevProjeto.toDate()) + ").");
+			return false;
+		}
+		return true;
+	}
 	
+	@Override
+	public String getStatusStyleClass() {
+		return this.getProgressStatus().getStyleClass();
+	}
+
+	@Override
+	public boolean isShowProgressStatus() {
+		return true;
+	}
+	
+	public String getLegenda() {
+		return this.getProgressStatus().getEtapaLegenda();
+	}
+	
+	public ProgressStatus getProgressStatus() {
+		if(getDataFimEfetiva() != null)
+			return ProgressStatus.EXEC_Green;
+		DateTime dtFimPrev = new DateTime(this.getDataFimPrevista());
+		DateTime dtToday = new DateTime(new Date());
+		int days = Days.daysBetween(dtToday, dtFimPrev).getDays();
+		if(days < 0)
+			return ProgressStatus.EXEC_Red;
+		else
+			return ProgressStatus.EXEC_Blue;
+	}
+
+	@Override
+	public boolean isEnabledObservacao() {
+		return true;
+	}
 }

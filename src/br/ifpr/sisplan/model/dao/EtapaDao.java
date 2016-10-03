@@ -125,4 +125,9 @@ public class EtapaDao extends GenericDAOImpl {
 		String update = "UPDATE "+TABLE_NAME+" SET descricao='"+p.getDescricao()+"' WHERE id="+p.getId();
 		sisplanDao.update(update);
 	}
+	
+	public void updateObservacao(DateNode p) {
+		String update = "UPDATE "+TABLE_NAME+" SET observacao='"+p.getObservacao()+"' WHERE id="+p.getId();
+		sisplanDao.update(update);
+	}
 }

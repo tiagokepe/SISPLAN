@@ -6,6 +6,7 @@ public class DescriptionNode extends NameNode {
 	protected String descricao;
 	protected BigDecimal custoPrevisto;
 	protected BigDecimal custoEfetivo;
+	protected String observacao;
 
 	public String getDescricao() {
 		return descricao;
@@ -29,5 +30,13 @@ public class DescriptionNode extends NameNode {
 
 	public void setCustoEfetivo(BigDecimal custoEfetivo) {
 		this.custoEfetivo = custoEfetivo;
+	}
+
+	public String getObservacao() {
+		return observacao;
+	}
+
+	public void setObservacao(String observacao) {
+		this.observacao = observacao;
 	}
 }

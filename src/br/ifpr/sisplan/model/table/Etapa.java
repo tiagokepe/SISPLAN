@@ -11,6 +11,7 @@ public class Etapa extends DateNode implements Serializable {
 	private int idResponsavel;
 	private BigDecimal custoPrevisto;
 	private BigDecimal custoEfetivo;
+	private String descricao;
 	
 	
 	public Etapa() {
@@ -49,6 +50,14 @@ public class Etapa extends DateNode implements Serializable {
 		this.custoEfetivo = custoEfetivo;
 	}
 	
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 	@Override
 	public String toString() {
 		return this.name;

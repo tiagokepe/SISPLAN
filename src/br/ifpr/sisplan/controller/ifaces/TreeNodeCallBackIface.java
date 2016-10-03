@@ -13,4 +13,6 @@ public interface TreeNodeCallBackIface {
 	public void setCustoPrevistoCallBack(BigDecimal newCusto);
 	public void setCustoEfetivoCallBack(BigDecimal newCusto);
 	public void setResponsaveNamelCallBack(String newName);
+	public void setObservacaoCallBack(String obs);
+	public boolean validateDate();
 }

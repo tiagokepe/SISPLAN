@@ -1,5 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br" xml:lang="pt-br">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" media="all" href="/SISPLAN/css/portal_sisplan.css" type="text/css" />
 
 <%@include file="/WEB-INF/jsp/include/cabecalho.jsp" %>
     <f:view>

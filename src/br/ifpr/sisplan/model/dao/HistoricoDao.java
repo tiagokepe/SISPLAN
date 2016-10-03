@@ -14,7 +14,7 @@ public class HistoricoDao extends GenericDAOImpl {
 	}
 
 	public List selectAll() {
-		String sql = "SELECT * FROM "+TABLE_NAME;
+		String sql = "SELECT * FROM "+ TABLE_NAME + " ORDER BY time_stamp DESC";
 		return sisplanDao.queryForList(sql);
 	}
 	

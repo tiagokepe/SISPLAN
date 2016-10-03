@@ -163,7 +163,7 @@ public class DiretrizTreeNode extends TreeNodeGeneric {
 	
 	@Override
 	public boolean isShowProgressStatus() {
-		return true;
+		return false;
 	}
 	
 	public String getImgStatus() {

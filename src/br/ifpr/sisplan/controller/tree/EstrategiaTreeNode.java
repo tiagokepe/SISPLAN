@@ -234,7 +234,19 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 
 	@Override
 	public boolean isShowProgressStatus() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
+	}
+
+	@Override
+	public ProgressStatus getProgressStatus() {
+		if(projetosTree.isEmpty())
+			return ProgressStatus.PLAN_Red;
+		else
+			return ProgressStatus.PLAN_Green;
+	}
+
+	@Override
+	public String getLegenda() {
+		return "";
 	}
 }

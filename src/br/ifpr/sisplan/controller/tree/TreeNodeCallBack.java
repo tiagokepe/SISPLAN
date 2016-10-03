@@ -30,7 +30,6 @@ import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
 import br.ifpr.sisplan.model.dao.DataDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
-import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.table.Responsavel;
 import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ifpr.sisplan.util.DateUtil;
@@ -43,6 +42,7 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	protected boolean changedDescricao = false;
 	protected boolean changedName = false;
 	protected boolean changedResponsavel = false;
+	protected boolean changedObs = false;
 	protected DateNode dataNode;
 	
 	protected List<Responsavel> responsaveis;
@@ -61,6 +61,7 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	protected abstract void setResponsavel();
 	protected abstract void setIdResponsavel();
 	protected abstract void updateDBResponsavel();
+	public abstract boolean isEnabledObservacao();
 	
 	protected void addCallBackMethod(String method, Class paramClazz, Object param) {
 		try {
@@ -102,6 +103,14 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		this.dataNode.setDescricao(desc);
 		this.descriptionNode.setDescricao(desc);
 		this.changedDescricao = true;
+	}
+	
+	public void setObservacaoCallBack(String obs) {
+		LogHistory.getInstance().log((TreeNodeInfoIface) this, 
+				(TreeNodeCadastroIface) this, "Observação",
+				this.dataNode.getObservacao(),obs);
+		this.dataNode.setObservacao(obs);
+		this.changedObs = true;
 	}
 	
 	public void setNameCallBack(String name) {
@@ -171,6 +180,16 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	public void setDescricao(String desc) {
 		if(!desc.isEmpty() && !desc.equals(this.dataNode.getDescricao())) {
 			this.addCallBackMethod("setDescricaoCallBack", String.class, desc);
+		}
+	}
+	
+	public String getObservacao() {
+		return this.dataNode.getObservacao();
+	}
+	
+	public void setObservacao(String obs) {
+		if(!obs.isEmpty() && !obs.equals(this.dataNode.getObservacao())) {
+			this.addCallBackMethod("setObservacaoCallBack", String.class, obs);
 		}
 	}
 	
@@ -370,8 +389,15 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 				this.getDAO(EtapaDao.class).updateDescricao(this.dataNode);
 			this.changedDescricao = false;
 		}
+		if(this.changedObs) {
+			if(this instanceof EtapaTreeNode)
+				this.getDAO(EtapaDao.class).updateObservacao(this.dataNode);
+			this.changedObs = false;
+		}
 		if(this.changedDatas) {
-			this.getDAO(DataDao.class).updateData(this.dataNode.getData());
+			if(this.validateDate()) {
+				this.getDAO(DataDao.class).updateData(this.dataNode.getData());
+			}
 			this.changedDatas = false;
 		}
 		if(this.changedCustos) {
