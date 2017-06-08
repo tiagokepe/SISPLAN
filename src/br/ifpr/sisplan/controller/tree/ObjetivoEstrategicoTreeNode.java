@@ -284,4 +284,9 @@ public class ObjetivoEstrategicoTreeNode extends TreeNodeCadastroAbstract {
 	public List<UnidadeStatus> getListUnidadeStatus() {
 		return listUnidadeStatus;
 	}
+
+	public int getUnidadeID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

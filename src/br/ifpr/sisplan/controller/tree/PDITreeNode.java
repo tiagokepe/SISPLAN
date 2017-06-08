@@ -212,4 +212,9 @@ public class PDITreeNode extends TreeNodeCadastroAbstract {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public int getUnidadeID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

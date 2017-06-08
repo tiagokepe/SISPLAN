@@ -30,8 +30,8 @@ public class ObjetivoEspecificoTreeNode extends TreeNodeCadastroAbstract impleme
 	
 	public ObjetivoEspecificoTreeNode(TreeNodeGeneric parent, ObjetivoEspecifico objetivo, int order) {
 		super(parent, objetivo, order);
-		this.setEstrategiasTree();
 		this.setUnidade();
+		this.setEstrategiasTree();
 	}
 
 	public TreeNode getChildAt(int paramInt) {

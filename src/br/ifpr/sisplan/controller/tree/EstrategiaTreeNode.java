@@ -77,8 +77,14 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 			this.setDataProjeto(p);
 			final ProjetoTreeNode projetoTree = new ProjetoTreeNode(this, p, i++);
 			this.projetosTree.add(projetoTree);
+			
+			if(projetosTree.get(i-1).isLate()) {
+				projetosTree.get(i-1).setSentEmail(true);
+				projetosTree.get(i-1).fireEmail();
+				projetosTree.get(i-1).fireUpdateSentEmail();
+			}
 		}
-		this.projetosTree = projetosTree;
+		//this.projetosTree = projetosTree;
 	}
 	
 	public List<ProjetoTreeNode> getProjetosTree() {
@@ -248,5 +254,9 @@ public class EstrategiaTreeNode extends TreeNodeCadastroAbstract {
 	@Override
 	public String getLegenda() {
 		return "";
+	}
+
+	public int getUnidadeID() {
+		return ((TreeNodeCadastroIface)this.parentNode).getUnidadeID();
 	}
 }

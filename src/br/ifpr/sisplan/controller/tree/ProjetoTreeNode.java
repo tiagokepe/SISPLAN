@@ -97,6 +97,13 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 			}
 			else
 				this.addEtapa(e, i++);
+			
+			if(etapasTree.get(i-1).isLate()) {
+				etapasTree.get(i-1).setSentEmail(true);
+				etapasTree.get(i-1).fireEmail();
+				etapasTree.get(i-1).fireUpdateSentEmail();
+			}
+			
 		}
 	}
 	
@@ -358,5 +365,13 @@ public class ProjetoTreeNode extends TreeNodeCallBack implements TreeNodeCadastr
 	public void setObservacaoCallBack() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getUnidadeID() {
+		return ((TreeNodeCadastroIface)this.parentNode).getUnidadeID();
+	}
+	
+	public void setSentEmail(boolean bool) {
+		((Projeto)this.dataNode).setSentEmail(bool);
 	}
 }

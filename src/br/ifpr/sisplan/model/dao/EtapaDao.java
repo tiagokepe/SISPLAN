@@ -3,6 +3,7 @@ package br.ifpr.sisplan.model.dao;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -129,5 +130,17 @@ public class EtapaDao extends GenericDAOImpl {
 	public void updateObservacao(DateNode p) {
 		String update = "UPDATE "+TABLE_NAME+" SET observacao='"+p.getObservacao()+"' WHERE id="+p.getId();
 		sisplanDao.update(update);
+	}
+	
+	public void updateSentEmail(int id_etapa, boolean sentEmail) {
+		String sql = "UPDATE " + TABLE_NAME + " SET sent_email='" +sentEmail + "' "
+				   + "WHERE id="+id_etapa;
+		this.sisplanDao.update(sql);
+	}
+	
+	public void updateFirstEmail(int id_etapa, Date dt) {
+		String sql = "UPDATE " + TABLE_NAME + " SET first_email='" +dt + "' "
+				   + "WHERE id="+id_etapa;
+		this.sisplanDao.update(sql);
 	}
 }

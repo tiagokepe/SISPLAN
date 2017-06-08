@@ -13,4 +13,5 @@ public interface TreeNodeCadastroIface {
 	public void save();
 	public void cancel();
 	public String getUnidadeName();
+	public int getUnidadeID();
 }

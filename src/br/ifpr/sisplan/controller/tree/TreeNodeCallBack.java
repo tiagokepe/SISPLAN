@@ -27,9 +27,13 @@ import br.ifpr.sisplan.controller.ifaces.TreeNodeCallBackIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeDetailsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeEventsIface;
 import br.ifpr.sisplan.controller.ifaces.TreeNodeInfoIface;
+import br.ifpr.sisplan.controller.mensagens.EmailSender;
 import br.ifpr.sisplan.model.dao.DataDao;
+import br.ifpr.sisplan.model.dao.EmailDao;
 import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ProjetoDao;
+import br.ifpr.sisplan.model.table.Etapa;
+import br.ifpr.sisplan.model.table.Projeto;
 import br.ifpr.sisplan.model.table.Responsavel;
 import br.ifpr.sisplan.model.table.parent.DateNode;
 import br.ifpr.sisplan.util.DateUtil;
@@ -62,6 +66,8 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 	protected abstract void setIdResponsavel();
 	protected abstract void updateDBResponsavel();
 	public abstract boolean isEnabledObservacao();
+	public abstract String getUnidadeName();
+	public abstract void setSentEmail(boolean bool);
 	
 	protected void addCallBackMethod(String method, Class paramClazz, Object param) {
 		try {
@@ -542,4 +548,81 @@ public abstract class TreeNodeCallBack extends TreeNodeGeneric implements TreeNo
 		this.changedResponsavel = true;
 	}
 	
+	public boolean isLate() {
+		DateTime dtFimPrev = new DateTime(this.getDataFimPrevista());
+		DateTime dtToday = new DateTime(new Date());
+		int days = Days.daysBetween(dtToday, dtFimPrev).getDays();
+		if(days < 0 && (this.getDataFimEfetiva() == null))
+			return true;
+		return false;
+	}
+	
+	public void fireEmail() {
+		String msg = null;
+		if(this instanceof EtapaTreeNode)
+			msg = this.getEtapaEmailMsg();
+		else
+			msg = this.getProjetoEmailMsg();
+		String subject = "Atraso na execução do planejamento - SISPlan";
+		int unidadeID = ((TreeNodeCadastroIface)this.parentNode).getUnidadeID();
+		String email = getDAO(EmailDao.class).selectEmailPlanningDirector(unidadeID);
+		
+		EmailSender sender = new EmailSender(subject, msg, email);
+		Thread emailSenderThread = new Thread(sender);
+		emailSenderThread.run();
+	}
+	
+	private String getEtapaEmailMsg() {
+		String msg = "A etapa está atrasada, pois a data de fim prevista expirou"
+				   + " e não foi cadastrada data efetiva de fim.\n";
+		msg += "Nome: " + ((EtapaTreeNode)this).getName() + "\n";
+		msg += "Data Fim Prevista: " + ((EtapaTreeNode)this).getDataFimPrevista().toString() + "\n";
+		msg += "Projeto: " + ((ProjetoTreeNode)this.parentNode).getName();
+		return msg;
+	}
+	
+	private String getProjetoEmailMsg() {
+		String msg = "O projeto está atrasado, pois a data de fim prevista expirou"
+				   + " e não foi cadastrada data efetiva de fim.\n";
+		msg += "Nome: " + ((ProjetoTreeNode)this).getName() + "\n";
+		msg += "Data Fim Prevista: " + ((ProjetoTreeNode)this).getDataFimPrevista().toString() + "\n";
+		msg += "Estratégia: " + ((EstrategiaTreeNode)this.parentNode).getName();
+		return msg;
+	}
+	
+	public void fireUpdateSentEmail() {
+		final boolean isProject = (this instanceof ProjetoTreeNode)? true: false;
+		final int id = this.getMyID();
+		final Date firstEmail = (isProject)? ((Projeto)this.dataNode).getFirstEmail(): ((Etapa)this.dataNode).getFirstEmail(); 
+		final boolean isFirstEmail = (firstEmail == null)? true: false;
+		if(isFirstEmail) {
+			if(isProject)
+				((Projeto)this.dataNode).setFirstEmail(new Date());
+			else
+				((Etapa)this.dataNode).setFirstEmail(new Date());
+		}
+			
+			
+		Thread updateDBThread = new Thread(new Runnable() {
+			public void run() {
+				if(isProject) {
+					getDAO(ProjetoDao.class).updateSentEmail(id, true);
+					if(isFirstEmail) {
+						Date dt = new Date();
+						getDAO(ProjetoDao.class).updateFirstEmail(id, dt);
+					}
+				}
+				else {
+					getDAO(EtapaDao.class).updateSentEmail(id, true);
+					if(isFirstEmail) {
+						Date dt = new Date();
+						getDAO(EtapaDao.class).updateFirstEmail(id, dt);
+					}
+				}
+				
+			}
+		});
+		
+		updateDBThread.run();
+	}
 }

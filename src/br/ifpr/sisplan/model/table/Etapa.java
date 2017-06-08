@@ -2,6 +2,7 @@ package br.ifpr.sisplan.model.table;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import br.ifpr.sisplan.model.table.parent.DateNode;
 
@@ -12,7 +13,8 @@ public class Etapa extends DateNode implements Serializable {
 	private BigDecimal custoPrevisto;
 	private BigDecimal custoEfetivo;
 	private String descricao;
-	
+	private boolean sentEmail;
+	private Date firstEmail;
 	
 	public Etapa() {
 		this.setType("etapa");
@@ -56,6 +58,22 @@ public class Etapa extends DateNode implements Serializable {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	public boolean isSentEmail() {
+		return sentEmail;
+	}
+
+	public void setSentEmail(boolean sent_email) {
+		this.sentEmail = sent_email;
+	}
+
+	public Date getFirstEmail() {
+		return firstEmail;
+	}
+
+	public void setFirstEmail(Date firstEmail) {
+		this.firstEmail = firstEmail;
 	}
 
 	@Override

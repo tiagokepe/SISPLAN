@@ -2,6 +2,7 @@ package br.ifpr.sisplan.model.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
@@ -86,6 +87,18 @@ public class ProjetoDao extends GenericDAOImpl {
 	
 	public void updateResponsavel(int id_projeto, int id_responsavel) {
 		String sql = "UPDATE " + TABLE_NAME + " SET id_responsavel=" +id_responsavel
+				   + "WHERE id="+id_projeto;
+		this.sisplanDao.update(sql);
+	}
+	
+	public void updateSentEmail(int id_projeto, boolean sentEmail) {
+		String sql = "UPDATE " + TABLE_NAME + " SET sent_email='" +sentEmail + "' "
+				   + "WHERE id="+id_projeto;
+		this.sisplanDao.update(sql);
+	}
+	
+	public void updateFirstEmail(int id_projeto, Date dt) {
+		String sql = "UPDATE " + TABLE_NAME + " SET first_email='" +dt + "' "
 				   + "WHERE id="+id_projeto;
 		this.sisplanDao.update(sql);
 	}

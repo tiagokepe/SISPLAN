@@ -17,6 +17,7 @@ import br.ifpr.sisplan.model.dao.EtapaDao;
 import br.ifpr.sisplan.model.dao.ResponsavelDao;
 import br.ifpr.sisplan.model.dao.UnidadeDao;
 import br.ifpr.sisplan.model.table.Etapa;
+import br.ifpr.sisplan.model.table.Projeto;
 import br.ifpr.sisplan.model.table.Unidade;
 import br.ifpr.sisplan.util.DateUtil;
 
@@ -267,5 +268,13 @@ public class EtapaTreeNode extends TreeNodeCallBack implements TreeNodeCadastroI
 	@Override
 	public boolean isEnabledObservacao() {
 		return true;
+	}
+
+	public int getUnidadeID() {
+		return ((TreeNodeCadastroIface)this.parentNode).getUnidadeID();
+	}
+	
+	public void setSentEmail(boolean bool) {
+		((Etapa)this.dataNode).setSentEmail(bool);
 	}
 }
